@@ -6,9 +6,9 @@ export default defineConfig({
     ...nxE2EPreset(__filename, {
       cypressDir: 'src',
       webServerCommands: {
-        default: 'npx nx run MapMemory:dev',
+        default: 'npx nx run front:dev',
       },
-      ciWebServerCommand: 'npx nx run MapMemory:serve-static',
+      ciWebServerCommand: 'npx nx run front:serve-static',
       ciBaseUrl: 'http://localhost:3000',
     }),
     baseUrl: 'http://127.0.0.1:3000',

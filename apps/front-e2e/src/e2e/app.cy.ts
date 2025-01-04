@@ -1,6 +1,6 @@
 import { getGreeting } from '../support/app.po';
 
-describe('MapMemory-e2e', () => {
+describe('front-e2e', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {

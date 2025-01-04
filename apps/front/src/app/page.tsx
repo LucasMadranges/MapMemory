@@ -11,7 +11,7 @@ export default function Index() {
           <div id="welcome">
             <h1>
               <span> Hello there, </span>
-              Welcome MapMemory 👋
+              Welcome front 👋
             </h1>
           </div>
 
@@ -395,7 +395,7 @@ export default function Index() {
                 </svg>
                 View project details
               </summary>
-              <pre>nx show project MapMemory --web</pre>
+              <pre>nx show project front --web</pre>
             </details>
             <details>
               <summary>

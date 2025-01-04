@@ -47,3 +47,7 @@ out
 
 # Nx
 .nx
+
+# Prettier
+.prettierrc
+.prettierignore
