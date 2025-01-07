@@ -45,9 +45,8 @@ Thumbs.db
 .next
 out
 
-# Nx
-.nx
+# Front
+apps/front/.env.local
 
-# Prettier
-.prettierrc
-.prettierignore
+# API
+apps/api/.env
