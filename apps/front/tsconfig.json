@@ -30,10 +30,10 @@
     ]
   },
   "include": [
-    "**/*.js",
-    "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
     "../../apps/front/.next/types/**/*.ts",
     "../../dist/apps/front/.next/types/**/*.ts",
     "next-env.d.ts",
