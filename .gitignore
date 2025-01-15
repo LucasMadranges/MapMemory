@@ -48,5 +48,6 @@ out
 # Front
 apps/front/.env.local
 
-# API
+# Back
 apps/api/.env
+apps/**/.env
