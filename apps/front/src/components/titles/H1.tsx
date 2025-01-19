@@ -8,6 +8,6 @@ const montserrat = Montserrat({
 
 export default function H1({children}: { children: React.ReactNode }) {
   return (
-    <h1 className={`${montserrat.className} text-4xl text-center`}>{children}</h1>
+    <h1 className={`${montserrat.className} text-3xl md:text-4xl text-center`}>{children}</h1>
   );
 }
