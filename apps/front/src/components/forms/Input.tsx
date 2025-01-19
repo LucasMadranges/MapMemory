@@ -3,6 +3,7 @@ import React, {useRef, useState} from "react";
 import {gsap} from "gsap";
 
 export default function Input({
+                                name,
                                 label,
                                 placeholder,
                                 type,
@@ -14,6 +15,7 @@ export default function Input({
                                 inputClassName,
                                 onChange,
                               }: {
+  name: string,
   label: string,
   placeholder: string,
   type: string,
@@ -59,9 +61,12 @@ export default function Input({
 
   return (
     <div className={containerClassName}>
-      <label className={"inline-block pb-2"}>{label}</label>
+      <label htmlFor={name}
+             className={"inline-block pb-2"}>{label}</label>
       <div className={"relative"}>
-        <input ref={refInput}
+        <input id={name}
+               name={name}
+               ref={refInput}
                onFocus={handleFocus}
                onBlur={handleBlur}
                onChange={onChange}
