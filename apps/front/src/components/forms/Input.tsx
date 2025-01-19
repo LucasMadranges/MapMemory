@@ -1,6 +1,7 @@
 "use client";
 import React, {useRef, useState} from "react";
 import {gsap} from "gsap";
+import Button from "../buttons/Button";
 
 export default function Input({
                                 name,
@@ -47,13 +48,13 @@ export default function Input({
   }
 
   // Password disable / enable
-  function handleEnabledPassword(event: React.MouseEvent<HTMLButtonElement>) {
+  function handleEnabledPassword(event: React.MouseEvent<Element>) {
     event.preventDefault();
     setTypeInput("text");
     setIsPasswordHidden(false);
   }
 
-  function handleDisabledPassword(event: React.MouseEvent<HTMLButtonElement>) {
+  function handleDisabledPassword(event: React.MouseEvent<Element>) {
     event.preventDefault();
     setTypeInput("password");
     setIsPasswordHidden(true);
@@ -78,9 +79,13 @@ export default function Input({
           {type === "password" &&
             <>
               {isPasswordHidden &&
-                <button onClick={(event) => handleEnabledPassword(event)}>{disabledPasswordIcon}</button>}
+                <Button type={"tertiary"}
+                        className={"p-1 text-black"}
+                        onClick={(event) => handleEnabledPassword(event)}>{disabledPasswordIcon}</Button>}
               {!isPasswordHidden &&
-                <button onClick={(event) => handleDisabledPassword(event)}>{enabledPasswordIcon}</button>}
+                <Button type={"tertiary"}
+                        className={"p-1 text-black"}
+                        onClick={(event) => handleDisabledPassword(event)}>{enabledPasswordIcon}</Button>}
             </>
           }
           {type !== "password" && icon}
