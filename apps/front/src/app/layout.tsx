@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={`h-svh flex items-center justify-center bg-blue-500 px-4 md:px-0 ${roboto.className}`}>
+      <body className={`min-h-svh flex items-center justify-center bg-blue-500 p-4 md:p-0 ${roboto.className}`}>
         {children}
       </body>
     </html>
