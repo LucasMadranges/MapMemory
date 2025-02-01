@@ -73,18 +73,18 @@ export default function Input({
                onChange={onChange}
                value={value}
                type={typeInput}
-               className={`border border-gray-300 rounded-lg w-full p-2 focus-visible:outline-0 ${inputClassName}`}
+               className={`border border-gray-300 rounded-lg w-full p-2 ${icon && "pr-10"} ${type === "password" && "pr-10"} focus-visible:outline-0 ${inputClassName}`}
                placeholder={placeholder}/>
         <div className={"absolute top-1/2 right-2 -translate-y-1/2 flex items-center justify-center"}>
           {type === "password" &&
             <>
               {isPasswordHidden &&
                 <Button type={"tertiary"}
-                        className={"p-1 text-black"}
+                        className={`p-1 text-black`}
                         onClick={(event) => handleEnabledPassword(event)}>{disabledPasswordIcon}</Button>}
               {!isPasswordHidden &&
                 <Button type={"tertiary"}
-                        className={"p-1 text-black"}
+                        className={`p-1 text-black`}
                         onClick={(event) => handleDisabledPassword(event)}>{enabledPasswordIcon}</Button>}
             </>
           }
