@@ -53,7 +53,8 @@
         "apps/api-e2e/**/*",
         "users-e2e/**/*",
         "apps/users-e2e/**/*",
-        "apps/gateway-e2e/**/*"
+        "apps/gateway-e2e/**/*",
+        "apps/users-e2e/**/*"
       ]
     },
     {
@@ -71,13 +72,8 @@
     },
     "@nx/js:tsc": {
       "cache": true,
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "production",
-        "^production"
-      ]
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "generators": {
