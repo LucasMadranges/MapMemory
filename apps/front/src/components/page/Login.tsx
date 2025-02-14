@@ -2,12 +2,12 @@
 
 import H1 from "../titles/H1";
 import HorizontalBar from "../ui/HorizontalBar";
-import Input from "../forms/Input";
+import Input from "../inputs/Input";
 import {useState} from "react";
 import {User} from "../icons/User";
 import {Eye} from "../icons/Eye";
 import {DisabledEye} from "../icons/DisabledEye";
-import Checkbox from "../forms/Checkbox";
+import Checkbox from "../inputs/Checkbox";
 import Button from "../buttons/Button";
 import ContainerSM from "../containers/ContainerSM";
 
@@ -18,7 +18,6 @@ export default function Login() {
   // WIP Change any type
   function handleSubmit(event: any) {
     event.preventDefault();
-    console.log("submit");
   }
 
   return (
