@@ -36,14 +36,12 @@ export default function Input({
   function handleFocus() {
     gsap.to(refInput.current, {
       borderColor: "#1e3a8a",
-      duration: 0.5,
     });
   }
 
   function handleBlur() {
     gsap.to(refInput.current, {
       borderColor: "#d1d5db",
-      duration: 0.5,
     });
   }
 
@@ -80,11 +78,11 @@ export default function Input({
             <>
               {isPasswordHidden &&
                 <Button type={"tertiary"}
-                        className={`p-1 text-black`}
+                        className={`p-1`}
                         onClick={(event) => handleEnabledPassword(event)}>{disabledPasswordIcon}</Button>}
               {!isPasswordHidden &&
                 <Button type={"tertiary"}
-                        className={`p-1 text-black`}
+                        className={`p-1`}
                         onClick={(event) => handleDisabledPassword(event)}>{enabledPasswordIcon}</Button>}
             </>
           }
