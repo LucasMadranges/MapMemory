@@ -32,7 +32,7 @@ export default function Checkbox({
                appearance-none rounded border border-blue-500
                ${check ? "bg-blue-500" : "bg-white"}`}/>
         {check && <Check onClick={handleClick}
-                         className={"cursor-pointer absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white"}/>}
+                         className={"cursor-pointer w-3 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white"}/>}
       </div>
       <label htmlFor={name}
              className={"inline-block"}>{label}</label>
