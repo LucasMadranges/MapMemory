@@ -45,9 +45,6 @@ Thumbs.db
 .next
 out
 
-# Front
-apps/front/.env.local
-
-# Back
-apps/api/.env
+# Env file
 apps/**/.env
+apps/**/.env.local
