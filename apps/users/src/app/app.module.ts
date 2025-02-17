@@ -1,8 +1,9 @@
 import {Module} from "@nestjs/common";
-import {AppController} from "./app.controller";
+import {AppResolver} from "./app.resolver";
 import {AppService} from "./app.service";
 import {GraphQLModule} from "@nestjs/graphql";
 import {ApolloFederationDriver, ApolloFederationDriverConfig} from "@nestjs/apollo";
+import {PrismaModule} from "@org/prisma";
 
 @Module({
   imports: [
@@ -12,9 +13,9 @@ import {ApolloFederationDriver, ApolloFederationDriverConfig} from "@nestjs/apol
         federation: 2,
       },
     }),
+    PrismaModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [AppResolver, AppService],
 })
 export class AppModule {
 }
