@@ -1,0 +1,13 @@
+services:
+  database-users:
+    image: postgres:16
+    container_name: db_users
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_users_data:/var/lib/postgresql/data
+    env_file:
+      - ./apps/users/.env
+
+volumes:
+  db_users_data:
