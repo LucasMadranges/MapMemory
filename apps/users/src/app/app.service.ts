@@ -6,6 +6,8 @@ import {CreateUserDto, UpdateUserDto, User} from "@org/models";
 export class AppService {
   constructor(private readonly prisma: PrismaService) {}
 
+  /* Query */
+
   async getUsers(): Promise<User[]> {
     return this.prisma.users.findMany();
   }
@@ -25,6 +27,8 @@ export class AppService {
       },
     });
   }
+
+  /* Mutation */
 
   async createUser(data: CreateUserDto): Promise<User> {
     return this.prisma.users.create({
