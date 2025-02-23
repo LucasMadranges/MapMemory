@@ -19,8 +19,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@org/graphql": [
-        "libs/graphql/src/index.ts"
+      "@org/models": [
+        "libs/models/src/index.ts"
       ],
       "@org/prisma": [
         "libs/prisma/src/index.ts"
