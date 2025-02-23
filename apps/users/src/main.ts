@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet({
-    contentSecurityPolicy: process.env.NODE_ENV === "production",
+    contentSecurityPolicy: process.env.NODE === "production",
   }));
 
   app.useGlobalPipes(
