@@ -1,7 +1,6 @@
 import {AppService} from "./app.service";
 import {Args, Mutation, Query, Resolver} from "@nestjs/graphql";
-import {User} from "@org/models";
-import {CreateUserDto} from "../../../../libs/models/src/schemas/users/create-user.dto";
+import {CreateUserDto, User} from "@org/models";
 
 @Resolver(() => User)
 export class AppResolver {
