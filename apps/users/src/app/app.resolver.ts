@@ -1,6 +1,6 @@
 import {AppService} from "./app.service";
 import {Args, Mutation, Query, Resolver} from "@nestjs/graphql";
-import {CreateUserDto, User} from "@org/models";
+import {CreateUserDto, UpdateUserDto, User} from "@org/models";
 
 @Resolver(() => User)
 export class AppResolver {
@@ -30,5 +30,13 @@ export class AppResolver {
   @Mutation(() => User)
   createUser(@Args("data") data: CreateUserDto): Promise<User> {
     return this.appService.createUser(data);
+  }
+
+  @Mutation(() => User)
+  updateUser(
+    @Args("id") id: string,
+    @Args("data") data: UpdateUserDto,
+  ): Promise<User> {
+    return this.appService.updateUser(id, data);
   }
 }
