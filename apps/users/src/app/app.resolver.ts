@@ -11,24 +11,24 @@ export class AppResolver {
   /* Query */
 
   @Query(() => [User])
-  getUsers(): Promise<User[]> {
+  getUsers(): Promise<User[] | boolean> {
     return this.appService.getUsers();
   }
 
   @Query(() => User, {nullable: true})
-  getUserById(@Args("id") id: string): Promise<User | null> {
+  getUserById(@Args("id") id: string): Promise<User | null | boolean> {
     return this.appService.getUserById(id);
   }
 
   @Query(() => User, {nullable: true})
-  getUserByEmail(@Args("email") email: string): Promise<User | null> {
+  getUserByEmail(@Args("email") email: string): Promise<User | null | boolean> {
     return this.appService.getUserByEmail(email);
   }
 
   /* Mutation */
 
   @Mutation(() => User)
-  createUser(@Args("data") data: CreateUserDto): Promise<User> {
+  createUser(@Args("data") data: CreateUserDto): Promise<User | boolean> {
     return this.appService.createUser(data);
   }
 
@@ -36,7 +36,7 @@ export class AppResolver {
   updateUser(
     @Args("id") id: string,
     @Args("data") data: UpdateUserDto,
-  ): Promise<User> {
+  ): Promise<User | boolean> {
     return this.appService.updateUser(id, data);
   }
 

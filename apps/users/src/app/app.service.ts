@@ -1,58 +1,99 @@
-import {Injectable} from "@nestjs/common";
+import {Inject, Injectable} from "@nestjs/common";
 import {PrismaService} from "@org/prisma";
 import {CreateUserDto, UpdateUserDto, User} from "@org/models";
+import {WINSTON_MODULE_PROVIDER} from "nest-winston";
+import {Logger} from "winston";
 
 @Injectable()
 export class AppService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+  ) {}
 
   /* Query */
 
-  async getUsers(): Promise<User[]> {
-    return this.prisma.users.findMany();
+  async getUsers(): Promise<User[] | boolean> {
+    try {
+      this.logger.log("info", "Récupération de tous les utilisateurs");
+      return this.prisma.users.findMany();
+    } catch (error) {
+      this.logger.error("error", "Une erreur est survenu lors de la récupération de tous les utilisateurs: " + error);
+      return false;
+    }
   }
 
-  async getUserById(id: string): Promise<User | null> {
-    return this.prisma.users.findUnique({
-      where: {
-        id,
-      },
-    });
+  async getUserById(id: string): Promise<User | null | boolean> {
+    try {
+      this.logger.log("info", "Récupération de l'utilisateur avec l'id: " + id);
+      return this.prisma.users.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      this.logger.error("error", "Erreur lors de la récupération de l'utilisateur avec l'id: " + id + ": " + error);
+      return false;
+    }
   }
 
-  async getUserByEmail(email: string): Promise<User | null> {
-    return this.prisma.users.findUnique({
-      where: {
-        email,
-      },
-    });
+  async getUserByEmail(email: string): Promise<User | null | boolean> {
+    try {
+      this.logger.log("info", "Récupération de l'utilisateur avec l'email: " + email);
+      return this.prisma.users.findUnique({
+        where: {
+          email,
+        },
+      });
+    } catch (error) {
+      this.logger.error("error", "Erreur lors de la récupération de l'utilisateur avec l'email: " + email + ": " + error);
+      return false;
+    }
   }
 
   /* Mutation */
 
-  async createUser(data: CreateUserDto): Promise<User> {
-    return this.prisma.users.create({
-      data,
-    });
+  async createUser(data: CreateUserDto): Promise<User | boolean> {
+    try {
+      this.logger.log("info", "Création d'un utilisateur");
+      return this.prisma.users.create({
+        data,
+      });
+    } catch (error) {
+      this.logger.error("error", "Erreur lors de la création d'un utilisateur: " + error);
+      return false;
+    }
   }
 
-  async updateUser(id: string, data: UpdateUserDto): Promise<User> {
-    return this.prisma.users.update({
-      where: {
-        id,
-      },
-      data,
-    });
+  async updateUser(id: string, data: UpdateUserDto): Promise<User | boolean> {
+    try {
+      this.logger.log("info", "Modification de l'utilisateur: " + id);
+      return this.prisma.users.update({
+        where: {
+          id,
+        },
+        data,
+      });
+    } catch (error) {
+      this.logger.error("error", "Erreur lors de la modification de l'utilisateur: " + id + ": " + error);
+      return false;
+    }
   }
 
   async deleteUser(id: string): Promise<boolean> {
-    const user = await this.getUserById(id);
-    if (!user) return false;
+    try {
+      this.logger.log("info", "Suppression de l'utilisateur: " + id);
+      const user = await this.getUserById(id);
+      if (!user) return false;
 
-    await this.prisma.users.delete({
-      where: {id},
-    });
+      await this.prisma.users.delete({
+        where: {id},
+      });
 
-    return true;
+      return true;
+    } catch (error) {
+      this.logger.error("error", "Erreur lors de la suppression de l'utilisateur: " + id + ": " + error);
+      return false;
+    }
   }
 }
