@@ -1,6 +1,7 @@
 import {AppService} from "./app.service";
-import {Query, Resolver} from "@nestjs/graphql";
-import {User} from "@org/graphql";
+import {Args, Mutation, Query, Resolver} from "@nestjs/graphql";
+import {User} from "@org/models";
+import {CreateUserDto} from "../../../../libs/models/src/schemas/users/create-user.dto";
 
 @Resolver(() => User)
 export class AppResolver {
@@ -8,8 +9,27 @@ export class AppResolver {
     private readonly appService: AppService,
   ) {}
 
+  /* Query */
+
   @Query(() => [User])
   getUsers(): Promise<User[]> {
     return this.appService.getUsers();
+  }
+
+  @Query(() => User, {nullable: true})
+  getUserById(@Args("id") id: string): Promise<User | null> {
+    return this.appService.getUserById(id);
+  }
+
+  @Query(() => User, {nullable: true})
+  getUserByEmail(@Args("email") email: string): Promise<User | null> {
+    return this.appService.getUserByEmail(email);
+  }
+
+  /* Mutation */
+
+  @Mutation(() => User)
+  createUser(@Args("data") data: CreateUserDto): Promise<User> {
+    return this.appService.createUser(data);
   }
 }
