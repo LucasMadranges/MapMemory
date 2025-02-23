@@ -1,5 +1,0 @@
-{"level":"error","message":"Une erreur est survenu lors de la récupération de tous les utilisateurs: TypeError: Cannot create property 'Symbol(level)' on string 'Récupération de tous les utilisateurs'","timestamp":"2025-02-23T11:12:10.855Z"}
-{"level":"error","message":"Une erreur est survenu lors de la récupération de tous les utilisateurs: TypeError: Cannot create property 'Symbol(level)' on string 'Récupération de tous les utilisateurs'","timestamp":"2025-02-23T11:12:13.785Z"}
-{"level":"error","message":"Une erreur est survenu lors de la récupération de tous les utilisateurs: TypeError: Cannot create property 'Symbol(level)' on string 'Récupération de tous les utilisateurs'","timestamp":"2025-02-23T11:12:55.325Z"}
-{"level":"error","message":"Une erreur est survenu lors de la récupération de tous les utilisateurs: TypeError: Cannot create property 'Symbol(level)' on string 'Récupération de tous les utilisateurs'","timestamp":"2025-02-23T11:12:55.732Z"}
-{"level":"info","message":"Récupération de tous les utilisateurs","timestamp":"2025-02-23T11:13:46.841Z"}
