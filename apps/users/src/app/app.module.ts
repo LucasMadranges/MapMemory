@@ -4,6 +4,8 @@ import {AppService} from "./app.service";
 import {GraphQLModule} from "@nestjs/graphql";
 import {ApolloFederationDriver, ApolloFederationDriverConfig} from "@nestjs/apollo";
 import {PrismaModule} from "@org/prisma";
+import {WinstonModule} from "nest-winston";
+import {loggerConfig} from "@org/utils";
 
 interface ValidationError {
   field: string;
@@ -38,6 +40,7 @@ interface BadRequestError {
       },
     }),
     PrismaModule,
+    WinstonModule.forRoot(loggerConfig),
   ],
   providers: [AppResolver, AppService],
 })
