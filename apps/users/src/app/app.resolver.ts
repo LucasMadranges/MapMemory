@@ -39,4 +39,9 @@ export class AppResolver {
   ): Promise<User> {
     return this.appService.updateUser(id, data);
   }
+
+  @Mutation(() => Boolean)
+  deleteUser(@Args("id") id: string): Promise<boolean> {
+    return this.appService.deleteUser(id);
+  }
 }

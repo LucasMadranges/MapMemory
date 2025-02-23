@@ -44,4 +44,15 @@ export class AppService {
       data,
     });
   }
+
+  async deleteUser(id: string): Promise<boolean> {
+    const user = await this.getUserById(id);
+    if (!user) return false;
+
+    await this.prisma.users.delete({
+      where: {id},
+    });
+
+    return true;
+  }
 }
