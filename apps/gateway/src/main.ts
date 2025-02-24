@@ -10,7 +10,21 @@ import helmet from "helmet";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(helmet());
+
+  app.use(
+    helmet({
+      crossOriginEmbedderPolicy: false,
+      contentSecurityPolicy: process.env.NODE_ENV === "production" ? {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", "data:", "https:"],
+        },
+      } : false,
+    }),
+  );
+
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT_GATEWAY || 4000;

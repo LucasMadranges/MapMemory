@@ -6,9 +6,19 @@ import {AppModule} from "./app/app.module";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(helmet({
-    contentSecurityPolicy: process.env.NODE === "production",
-  }));
+  app.use(
+    helmet({
+      crossOriginEmbedderPolicy: false,
+      contentSecurityPolicy: process.env.NODE_ENV === "production" ? {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", "data:", "https:"],
+        },
+      } : false,
+    }),
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({
