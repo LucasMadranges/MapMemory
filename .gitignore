@@ -49,6 +49,3 @@ out
 # Env file
 **/.env
 **/.env.local
-
-# Migrations
-**/migrations
