@@ -10,10 +10,10 @@ import {IntrospectAndCompose} from "@apollo/gateway";
       driver: ApolloGatewayDriver,
       server: {
         csrfPrevention: false,
-        debug: process.env.NODE_ENV === "dev",
-        nodeEnv: process.env.NODE_ENV,
+        debug: process.env.NODE === "development",
+        nodeEnv: process.env.NODE,
         introspection: true,
-        playground: false,
+        playground: true,
       },
       gateway: {
         supergraphSdl: new IntrospectAndCompose({

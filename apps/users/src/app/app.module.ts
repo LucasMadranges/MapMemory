@@ -6,6 +6,7 @@ import {ApolloFederationDriver, ApolloFederationDriverConfig} from "@nestjs/apol
 import {PrismaModule} from "@org/prisma";
 import {WinstonModule} from "nest-winston";
 import {loggerConfig} from "@org/utils";
+import * as process from "node:process";
 
 interface ValidationError {
   field: string;
@@ -24,7 +25,11 @@ interface BadRequestError {
       driver: ApolloFederationDriver,
       autoSchemaFile: {
         federation: 2,
+        path: "../assets/schema.gql",
       },
+      playground: true,
+      debug: process.env.NODE === "development",
+      introspection: true,
       formatError: (error) => {
         const originalError = error.extensions?.originalError as BadRequestError;
 
