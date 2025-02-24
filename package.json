@@ -5,6 +5,7 @@
   "scripts": {},
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.13.1",
     "@apollo/gateway": "^2.10.0",
     "@apollo/subgraph": "^2.10.0",
     "@gsap/react": "^2.1.2",
