@@ -15,38 +15,38 @@ export class AppService {
 
   async getUsers(): Promise<User[] | boolean> {
     try {
-      this.logger.log("info", "Récupération de tous les utilisateurs");
+      this.logger.log("info", "ℹ️ User service: Récupération de tous les utilisateurs");
       return this.prisma.users.findMany();
     } catch (error) {
-      this.logger.error("error", "Une erreur est survenu lors de la récupération de tous les utilisateurs: " + error);
+      this.logger.error("error", "🚨 User service: Une erreur est survenu lors de la récupération de tous les utilisateurs: " + error);
       return false;
     }
   }
 
   async getUserById(id: string): Promise<User | null | boolean> {
     try {
-      this.logger.log("info", "Récupération de l'utilisateur avec l'id: " + id);
+      this.logger.log("info", "ℹ️ User service: Récupération de l'utilisateur avec l'id: " + id);
       return this.prisma.users.findUnique({
         where: {
           id,
         },
       });
     } catch (error) {
-      this.logger.error("error", "Erreur lors de la récupération de l'utilisateur avec l'id: " + id + ": " + error);
+      this.logger.error("error", "🚨 User service: Erreur lors de la récupération de l'utilisateur avec l'id: " + id + ": " + error);
       return false;
     }
   }
 
   async getUserByEmail(email: string): Promise<User | null | boolean> {
     try {
-      this.logger.log("info", "Récupération de l'utilisateur avec l'email: " + email);
+      this.logger.log("info", "ℹ️ User service: Récupération de l'utilisateur avec l'email: " + email);
       return this.prisma.users.findUnique({
         where: {
           email,
         },
       });
     } catch (error) {
-      this.logger.error("error", "Erreur lors de la récupération de l'utilisateur avec l'email: " + email + ": " + error);
+      this.logger.error("error", "🚨 User service: Erreur lors de la récupération de l'utilisateur avec l'email: " + email + ": " + error);
       return false;
     }
   }
@@ -55,19 +55,19 @@ export class AppService {
 
   async createUser(data: CreateUserDto): Promise<User | boolean> {
     try {
-      this.logger.log("info", "Création d'un utilisateur");
+      this.logger.log("info", "ℹ️ User service: Création d'un utilisateur");
       return this.prisma.users.create({
         data,
       });
     } catch (error) {
-      this.logger.error("error", "Erreur lors de la création d'un utilisateur: " + error);
+      this.logger.error("error", "🚨 User service: Erreur lors de la création d'un utilisateur: " + error);
       return false;
     }
   }
 
   async updateUser(id: string, data: UpdateUserDto): Promise<User | boolean> {
     try {
-      this.logger.log("info", "Modification de l'utilisateur: " + id);
+      this.logger.log("info", "ℹ️ User service: Modification de l'utilisateur: " + id);
       return this.prisma.users.update({
         where: {
           id,
@@ -75,14 +75,14 @@ export class AppService {
         data,
       });
     } catch (error) {
-      this.logger.error("error", "Erreur lors de la modification de l'utilisateur: " + id + ": " + error);
+      this.logger.error("error", "🚨 User service: Erreur lors de la modification de l'utilisateur: " + id + ": " + error);
       return false;
     }
   }
 
   async deleteUser(id: string): Promise<boolean> {
     try {
-      this.logger.log("info", "Suppression de l'utilisateur: " + id);
+      this.logger.log("info", "ℹ️ User service: Suppression de l'utilisateur: " + id);
       const user = await this.getUserById(id);
       if (!user) return false;
 
@@ -92,7 +92,7 @@ export class AppService {
 
       return true;
     } catch (error) {
-      this.logger.error("error", "Erreur lors de la suppression de l'utilisateur: " + id + ": " + error);
+      this.logger.error("error", "🚨 User service: Erreur lors de la suppression de l'utilisateur: " + id + ": " + error);
       return false;
     }
   }
