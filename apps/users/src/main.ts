@@ -9,7 +9,7 @@ async function bootstrap() {
   app.use(
     helmet({
       crossOriginEmbedderPolicy: false,
-      contentSecurityPolicy: process.env.NODE_ENV === "production" ? {
+      contentSecurityPolicy: process.env.NODE === "production" ? {
         directives: {
           defaultSrc: ["'self'"],
           scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
