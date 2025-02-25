@@ -1,5 +1,5 @@
 {
-  "name": "@org/graphql",
+  "name": "@org/models",
   "version": "0.0.1",
   "dependencies": {
     "@nestjs/graphql": "^13.0.2",
