@@ -2,37 +2,43 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: String
+input CreateUserDto {
+  email: String!
   firstname: String!
   lastname: String!
-  email: String!
   password: String!
 }
 
-type Query {
-  getUsers: [User!]!
-  getUserById(id: String!): User
-  getUserByEmail(email: String!): User
+input LoginUserDto {
+  email: String!
+  password: String!
 }
 
 type Mutation {
   createUser(data: CreateUserDto!): User!
-  updateUser(id: String!, data: UpdateUserDto!): User!
   deleteUser(id: String!): Boolean!
+  updateUser(data: UpdateUserDto!, id: String!): User!
 }
 
-input CreateUserDto {
-  firstname: String!
-  lastname: String!
-  email: String!
-  password: String!
+type Query {
+  getUserByEmail(email: String!): User
+  getUserById(id: String!): User
+  getUsers: [User!]!
+  loginUser(data: LoginUserDto!): User
 }
 
 input UpdateUserDto {
-  firstname: String
-  lastname: String
   email: String
-  password: String
+  firstname: String
   id: String
+  lastname: String
+  password: String
+}
+
+type User {
+  email: String!
+  firstname: String!
+  id: String
+  lastname: String!
+  password: String!
 }

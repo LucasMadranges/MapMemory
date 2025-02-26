@@ -1,6 +1,6 @@
 import {Inject, Injectable} from "@nestjs/common";
 import {PrismaService} from "@org/prisma";
-import {CreateUserDto, UpdateUserDto, User} from "@org/models";
+import {CreateUserDto, LoginUserDto, UpdateUserDto, User} from "@org/models";
 import {WINSTON_MODULE_PROVIDER} from "nest-winston";
 import {Logger} from "winston";
 
@@ -10,6 +10,8 @@ export class AppService {
     private readonly prisma: PrismaService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
+
+  /* Users */
 
   /* Query */
 
@@ -95,5 +97,22 @@ export class AppService {
       this.logger.error("error", "🚨 User service: Erreur lors de la suppression de l'utilisateur: " + id + ": " + error);
       return false;
     }
+  }
+
+  /* Authentication */
+
+  /* Query */
+
+  async loginUser(login: LoginUserDto): Promise<User | boolean> {
+    this.logger.log("info", "ℹ️ Auth service: Tentative de connexion pour: " + login.email);
+
+    const user = await this.getUserByEmail(login.email);
+
+    if (!user) {
+      this.logger.warn("warn", "⚠️ Auth service: Tentative de connexion échouée - Utilisateur non trouvé");
+      return false;
+    }
+
+    return user;
   }
 }

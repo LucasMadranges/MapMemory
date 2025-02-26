@@ -1,12 +1,14 @@
 import {AppService} from "./app.service";
 import {Args, Mutation, Query, Resolver} from "@nestjs/graphql";
-import {CreateUserDto, UpdateUserDto, User} from "@org/models";
+import {CreateUserDto, LoginUserDto, UpdateUserDto, User} from "@org/models";
 
 @Resolver(() => User)
 export class AppResolver {
   constructor(
     private readonly appService: AppService,
   ) {}
+
+  /* User */
 
   /* Query */
 
@@ -43,5 +45,17 @@ export class AppResolver {
   @Mutation(() => Boolean)
   deleteUser(@Args("id") id: string): Promise<boolean> {
     return this.appService.deleteUser(id);
+  }
+
+  /* Authentication */
+
+  /* Query */
+
+  @Query(() => User, {nullable: true})
+  loginUser(
+    @Args("data", {type: () => LoginUserDto})
+    loginData: LoginUserDto,
+  ): Promise<User | boolean> {
+    return this.appService.loginUser(loginData);
   }
 }

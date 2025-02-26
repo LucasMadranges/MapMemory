@@ -7,6 +7,7 @@ import {PrismaModule} from "@org/prisma";
 import {WinstonModule} from "nest-winston";
 import {loggerConfig} from "@org/utils";
 import * as process from "node:process";
+import {join} from "path";
 
 interface ValidationError {
   field: string;
@@ -25,8 +26,9 @@ interface BadRequestError {
       driver: ApolloFederationDriver,
       autoSchemaFile: {
         federation: 2,
-        path: "../assets/schema.gql",
+        path: join(process.cwd(), "schema.gql"),
       },
+      sortSchema: true,
       playground: true,
       debug: process.env.NODE === "development",
       introspection: true,
