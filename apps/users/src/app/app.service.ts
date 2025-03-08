@@ -3,7 +3,7 @@ import {PrismaService} from "@org/prisma";
 import {CreateUserDto, LoginUserDto, UpdateUserDto, User} from "@org/models";
 import {WINSTON_MODULE_PROVIDER} from "nest-winston";
 import {Logger} from "winston";
-import Bcrypt from "../../../../libs/utils/src/security/bcrypt";
+import {Bcrypt} from "@org/utils";
 
 @Injectable()
 export class AppService {
