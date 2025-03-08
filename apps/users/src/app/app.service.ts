@@ -3,6 +3,7 @@ import {PrismaService} from "@org/prisma";
 import {CreateUserDto, LoginUserDto, UpdateUserDto, User} from "@org/models";
 import {WINSTON_MODULE_PROVIDER} from "nest-winston";
 import {Logger} from "winston";
+import Bcrypt from "../../../../libs/utils/src/security/bcrypt";
 
 @Injectable()
 export class AppService {
@@ -58,8 +59,23 @@ export class AppService {
   async createUser(data: CreateUserDto): Promise<User | boolean> {
     try {
       this.logger.log("info", "ℹ️ User service: Création d'un utilisateur");
+
+      const user = await this.getUserByEmail(data.email);
+
+      if (user) {
+        this.logger.warn("warn", "⚠️ Auth service: Tentative de création échouée - Utilisateur déjà existant");
+        return false;
+      }
+
+      const item: CreateUserDto = {
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email,
+        password: await Bcrypt.hash(data.password),
+      };
+
       return this.prisma.users.create({
-        data,
+        data: item,
       });
     } catch (error) {
       this.logger.error("error", "🚨 User service: Erreur lors de la création d'un utilisateur: " + error);
