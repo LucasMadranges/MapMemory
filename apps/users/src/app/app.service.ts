@@ -63,7 +63,7 @@ export class AppService {
       const user = await this.getUserByEmail(data.email);
 
       if (user) {
-        this.logger.warn("warn", "⚠️ Auth service: Tentative de création échouée - Utilisateur déjà existant");
+        this.logger.log("warn", "⚠️ Auth service: Tentative de création échouée - Utilisateur déjà existant");
         return false;
       }
 
@@ -124,8 +124,15 @@ export class AppService {
 
     const user = await this.getUserByEmail(login.email);
 
-    if (!user) {
-      this.logger.warn("warn", "⚠️ Auth service: Tentative de connexion échouée - Utilisateur non trouvé");
+    if (!user || typeof user === "boolean") {
+      this.logger.log("warn", "⚠️ Auth service: Tentative de connexion échouée - Utilisateur non trouvé");
+      return false;
+    }
+
+    const verifPassword = await Bcrypt.compare(login.password, user.password);
+
+    if (!verifPassword) {
+      this.logger.log("warn", "⚠️ Auth service: Tentative de connexion échouée - Le mot de passe est incorrect");
       return false;
     }
 
