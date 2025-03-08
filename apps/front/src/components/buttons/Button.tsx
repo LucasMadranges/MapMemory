@@ -1,9 +1,10 @@
 import React, {MouseEventHandler} from "react";
 
-export default function Button({children, type, onClick, className}: {
+export default function Button({children, type, onClick, isLoading, className}: {
   children: React.ReactNode,
   type: "primary" | "secondary" | "tertiary",
   onClick: MouseEventHandler
+  isLoading?: boolean,
   className?: string
 }) {
   return (

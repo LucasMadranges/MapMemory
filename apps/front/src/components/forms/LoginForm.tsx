@@ -13,6 +13,7 @@ type LoginFormProps = {
   password: string;
   setEmail: Dispatch<SetStateAction<string>>;
   setPassword: Dispatch<SetStateAction<string>>;
+  isLoading: boolean;
   handleSubmit: MouseEventHandler;
 }
 
@@ -21,6 +22,7 @@ export default function LoginForm({
                                     password,
                                     setEmail,
                                     setPassword,
+                                    isLoading,
                                     handleSubmit,
                                   }: LoginFormProps) {
   return (
@@ -52,6 +54,7 @@ export default function LoginForm({
       <HorizontalBar/>
       <Button type={"primary"}
               className={"py-2"}
+              isLoading={isLoading}
               onClick={handleSubmit}>
         Se connecter
       </Button>
