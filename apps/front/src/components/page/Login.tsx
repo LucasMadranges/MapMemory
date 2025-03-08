@@ -2,8 +2,9 @@
 import ContainerSM from "../containers/ContainerSM";
 import LoginForm from "../forms/LoginForm";
 import {useState} from "react";
-import {getUsers} from "@org/graphql";
 import {client} from "../../../apollo-client";
+import {loginUser} from "@org/graphql";
+import {loginUserSchema} from "@org/clients";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,8 +14,18 @@ export default function Login() {
   async function handleSubmit(event: any) {
     try {
       event.preventDefault();
+
+      /* Validation avec Zod */
+      const {success, error} = loginUserSchema.safeParse({email, password});
+
+      if (!success) {
+        console.log(error);
+        return;
+      }
+
       const {data} = await client.query({
-        query: getUsers,
+        query: loginUser,
+        variables: {email, password},
       });
       console.log("Users:", data);
     } catch (error) {
