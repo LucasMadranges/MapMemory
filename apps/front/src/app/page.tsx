@@ -1,7 +1,5 @@
-import Login from "../components/page/Login";
-
 export default function Index() {
   return (
-    <Login/>
+    <h1>Hello World!</h1>
   );
 }

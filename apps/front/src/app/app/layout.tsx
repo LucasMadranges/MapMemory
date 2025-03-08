@@ -1,10 +1,10 @@
-import "./global.css";
+import "../global.css";
 import React from "react";
 import {Roboto} from "next/font/google";
 
 export const metadata = {
-  title: "MapMemory",
-  description: "Welcome to MapMemory!",
+  title: "MapMemory | App",
+  description: "Have fun!",
 };
 
 const roboto = Roboto({
@@ -18,10 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
-      <body className={`${roboto.className}`}>
-        {children}
-      </body>
-    </html>
+    <div className="min-h-svh flex items-center justify-center p-4">
+      {children}
+    </div>
   );
 }
