@@ -5,11 +5,13 @@ import {useState} from "react";
 import {client} from "../../../apollo-client";
 import {loginUser} from "@org/graphql";
 import {loginUserSchema} from "@org/clients";
+import {useRouter} from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   // WIP Change any type
   async function handleSubmit(event: any) {
@@ -33,6 +35,7 @@ export default function Login() {
 
       console.log("Users:", data);
       setIsLoading(false);
+      await router.push("/app");
     } catch (error) {
       console.error(error);
       setIsLoading(false);
