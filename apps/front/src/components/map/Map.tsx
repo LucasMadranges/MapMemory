@@ -16,6 +16,14 @@ export default function Map() {
       center: [0, 0],
       zoom: 1,
     });
+
+    map.current.on("load", () => {
+      // Disable map rotation using right click + drag
+      map.current.dragRotate.disable();
+
+      // Disable map rotation using touch rotation gesture
+      map.current.touchZoomRotate.disableRotation();
+    });
   }, []);
 
   return (
