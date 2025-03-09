@@ -12,27 +12,27 @@ export default function Navigation() {
     <div className={"h-full flex flex-col items-center justify-center gap-2 p-4"}>
       <NavigationLink text={"Home"}
                       href={"/"}>
-        <Home className={"w-8 h-8"}/>
+        <Home className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Map"}
                       href={"/"}>
-        <Map className={"w-8 h-8"}/>
+        <Map className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Notes"}
                       href={"/"}>
-        <Notes className={"w-8 h-8"}/>
+        <Notes className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Todo"}
                       href={"/"}>
-        <Todo className={"w-8 h-8"}/>
+        <Todo className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Résolutions"}
                       href={"/"}>
-        <Calendar className={"w-8 h-8"}/>
+        <Calendar className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Back"}
                       href={"/"}>
-        <Settings className={"w-8 h-8"}/>
+        <Settings className={"w-8 h-8 text-white"}/>
       </NavigationLink>
     </div>
   );
