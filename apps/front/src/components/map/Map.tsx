@@ -3,7 +3,8 @@ import mapboxgl from "mapbox-gl";
 import React, {useEffect, useRef} from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import ProfileMenu from "./ProfileMenu";
-import InitPopup from "./Popup";
+import initPopup from "./initPopup";
+import createPopup from "./createPopup";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
@@ -22,8 +23,8 @@ export default function Map() {
 
     map.current.on("load", () => {
       // TODO: Delete any
-      const popup: any = InitPopup({
-        title: "Je m'appelle Lucas",
+      const popup: any = createPopup({
+        title: "Ajouter un événement",
       }).createPopupInstance();
 
       // TODO: Delete any
@@ -41,6 +42,31 @@ export default function Map() {
 
       map.current.dragRotate.disable();
       map.current.touchZoomRotate.disableRotation();
+    });
+
+    // TODO: Delete any
+    map.current.on("click", (event: any) => {
+      const target = event.originalEvent.target as HTMLElement;
+      if (target.closest(".mapboxgl-marker")) {
+        return;
+      }
+
+      // TODO: Delete any
+      const popup: any = initPopup({
+        title: "Je m'appelle Lucas",
+      }).createPopupInstance();
+
+      const markerInstance: any = new mapboxgl.Marker({color: "#3b82f6"})
+        .setLngLat([event.lngLat.lng, event.lngLat.lat])
+        .addTo(map.current)
+        .setPopup(popup);
+
+      setTimeout(() => {
+        const closeBtn = popup._content.getElementsByClassName("close-button")[0];
+        closeBtn?.addEventListener("click", () => {
+          markerInstance.getPopup().remove();
+        });
+      }, 0);
     });
 
     // Cleanup function
