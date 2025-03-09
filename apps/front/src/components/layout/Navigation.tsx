@@ -4,34 +4,34 @@ import {Todo} from "../icons/Todo";
 import {SimpleCalendar} from "../icons/SimpleCalendar";
 import {Settings} from "../icons/Settings";
 import NavigationLink from "./NavigationLink";
-import {Home} from "../icons/Home";
 import React from "react";
 
 export default function Navigation() {
   return (
-    <div className={"sm:h-full flex sm:flex-col flex-row items-center justify-center gap-2 p-4"}>
-      <NavigationLink text={"Home"}
-                      href={"/"}>
-        <Home className={"w-8 h-8 text-white"}/>
-      </NavigationLink>
+    <div className={"sm:h-full flex sm:flex-col flex-row items-center justify-center gap-4 sm:gap-2 p-4"}>
       <NavigationLink text={"Map"}
-                      href={"/"}>
+                      href={"/"}
+                      textDirection={"right"}>
         <Map className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Notes"}
-                      href={"/"}>
+                      href={"/"}
+                      textDirection={"right"}>
         <Notes className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Todo"}
-                      href={"/"}>
+                      href={"/"}
+                      textDirection={"right"}>
         <Todo className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Résolutions"}
-                      href={"/"}>
+                      href={"/"}
+                      textDirection={"right"}>
         <SimpleCalendar className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Back"}
-                      href={"/"}>
+                      href={"/"}
+                      textDirection={"right"}>
         <Settings className={"w-8 h-8 text-white"}/>
       </NavigationLink>
     </div>
