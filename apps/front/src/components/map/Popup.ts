@@ -1,11 +1,7 @@
 import mapboxgl from "mapbox-gl";
 
-export default function InitPopup({title}: { title: string }) {
-  return new mapboxgl.Popup({
-    offset: 25,
-    closeButton: false,
-  }) // désactive le bouton de fermeture par défaut
-    .setHTML(`
+export default function createPopup({title}: { title: string }) {
+  const popupContent = `
                         <div class="rounded-lg overflow-hidden w-64 sm:w-80">
                           <div class="relative">
                             <img src="/popup-image.jpg" class="h-48 w-64 sm:w-80 object-cover" alt="Image"/>
@@ -52,5 +48,14 @@ export default function InitPopup({title}: { title: string }) {
                               </div>
                             </div>
                         </div>
-                    `);
+                    `;
+
+  return {
+    createPopupInstance: () => {
+      return new mapboxgl.Popup({
+        offset: 25,
+        closeButton: false,
+      }).setHTML(popupContent);
+    },
+  };
 }

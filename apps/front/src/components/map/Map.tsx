@@ -1,7 +1,8 @@
 "use client";
 import mapboxgl from "mapbox-gl";
-import {useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
+import ProfileMenu from "./ProfileMenu";
 import InitPopup from "./Popup";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
@@ -10,9 +11,6 @@ export default function Map() {
   // TODO: Delete any
   const mapRef: any = useRef(null);
   const map: any = useRef(null);
-  const popup: any = InitPopup({
-    title: "Je m'appelle Lucas",
-  });
 
   useEffect(() => {
     map.current = new mapboxgl.Map({
@@ -23,6 +21,10 @@ export default function Map() {
     });
 
     map.current.on("load", () => {
+      // TODO: Delete any
+      const popup: any = InitPopup({
+        title: "Je m'appelle Lucas",
+      }).createPopupInstance();
 
       // TODO: Delete any
       const markerInstance: any = new mapboxgl.Marker({color: "#3b82f6"})
@@ -30,16 +32,14 @@ export default function Map() {
         .addTo(map.current)
         .setPopup(popup);
 
-      const closeBtn = popup._content.getElementsByClassName("close-button")[0];
-      // Ajoute un gestionnaire d'événements au bouton de fermeture
-      closeBtn.addEventListener("click", () => {
-        markerInstance.getPopup().remove();
-      });
+      setTimeout(() => {
+        const closeBtn = popup._content.getElementsByClassName("close-button")[0];
+        closeBtn?.addEventListener("click", () => {
+          markerInstance.getPopup().remove();
+        });
+      }, 0);
 
-      // Disable map rotation using right click + drag
       map.current.dragRotate.disable();
-
-      // Disable map rotation using touch rotation gesture
       map.current.touchZoomRotate.disableRotation();
     });
 
@@ -50,9 +50,11 @@ export default function Map() {
   return (
     <div className={"w-full h-full pt-2 pb-0 sm:pb-2 pr-2 sm:pl-0 pl-2"}>
       <div ref={mapRef}
-           className={`w-full h-full overflow-hidden rounded-xl z-0
+           className={`relative w-full h-full overflow-hidden rounded-xl z-0
             [&_.mapboxgl-popup]:!max-w-80
-            [&_.mapboxgl-popup-content]:p-0 [&_.mapboxgl-popup-content]:rounded-lg`}></div>
+            [&_.mapboxgl-popup-content]:p-0 [&_.mapboxgl-popup-content]:rounded-lg`}>
+        <ProfileMenu/>
+      </div>
     </div>
   );
 }
