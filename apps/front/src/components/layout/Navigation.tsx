@@ -1,7 +1,7 @@
 import {Map} from "../icons/Map";
 import {Notes} from "../icons/Notes";
 import {Todo} from "../icons/Todo";
-import {Calendar} from "../icons/Calendar";
+import {SimpleCalendar} from "../icons/SimpleCalendar";
 import {Settings} from "../icons/Settings";
 import NavigationLink from "./NavigationLink";
 import {Home} from "../icons/Home";
@@ -28,7 +28,7 @@ export default function Navigation() {
       </NavigationLink>
       <NavigationLink text={"Résolutions"}
                       href={"/"}>
-        <Calendar className={"w-8 h-8 text-white"}/>
+        <SimpleCalendar className={"w-8 h-8 text-white"}/>
       </NavigationLink>
       <NavigationLink text={"Back"}
                       href={"/"}>
