@@ -1,5 +1,5 @@
 "use client";
-import ContainerSM from "../containers/ContainerSM";
+import ContainerSM from "../layout/ContainerSM";
 import LoginForm from "../forms/LoginForm";
 import {useState} from "react";
 import {client} from "../../../apollo-client";
