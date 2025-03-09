@@ -9,7 +9,7 @@ import React from "react";
 
 export default function Navigation() {
   return (
-    <div className={"h-full flex flex-col items-center justify-center gap-2 p-4"}>
+    <div className={"sm:h-full flex sm:flex-col flex-row items-center justify-center gap-2 p-4"}>
       <NavigationLink text={"Home"}
                       href={"/"}>
         <Home className={"w-8 h-8 text-white"}/>
