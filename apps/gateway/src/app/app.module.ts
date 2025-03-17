@@ -19,6 +19,7 @@ import {IntrospectAndCompose} from "@apollo/gateway";
         supergraphSdl: new IntrospectAndCompose({
           subgraphs: [
             {name: "users", url: `http://localhost:${process.env.PORT_USER}/graphql`},
+            {name: "memory", url: `http://localhost:${process.env.PORT_MEMORY}/graphql`},
           ],
           pollIntervalInMs: 1000,
         }),
