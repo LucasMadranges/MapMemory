@@ -5,10 +5,10 @@ import {Friends} from "../friends/friends.model";
 @InputType()
 export class CreateMemoryDto {
 
-  @Field()
+  @Field(() => [String])
   @IsArray({message: "Les images doivent être dans un tableau."})
   @IsNotEmpty({message: "Les images sont obligatoires."})
-  images!: string;
+  images!: string[];
 
   @Field()
   @IsString({message: "Le titre doit être un texte."})
@@ -20,10 +20,9 @@ export class CreateMemoryDto {
   @IsNotEmpty({message: "La description est obligatoire."})
   description!: string;
 
-  @Field()
+  @Field(() => [Friends], {defaultValue: []})
   @IsArray({message: "Les amis doivent être dans un tableau."})
-  @IsNotEmpty({message: "Les amis sont obligatoires."})
-  friends?: Friends[];
+  friends!: Friends[];
 
   @Field()
   @IsString({message: "Le lieu doit être un texte."})

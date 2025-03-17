@@ -1,6 +1,6 @@
 import {AppService} from "./app.service";
 import {Query, Resolver} from "@nestjs/graphql";
-import {User} from "@org/models";
+import {Memory, User} from "@org/models";
 
 @Resolver(() => User)
 export class AppResolver {
@@ -8,12 +8,12 @@ export class AppResolver {
     private readonly appService: AppService,
   ) {}
 
-  /* User */
+  /* Memory */
 
   /* Query */
 
-  @Query(() => [User])
-  getMemorys(): Promise<User[] | boolean> {
-    return this.appService.getMemorys();
+  @Query(() => [Memory])
+  getMemories(): Promise<Memory[] | boolean> {
+    return this.appService.getMemories();
   }
 }

@@ -6,7 +6,7 @@ export class Memory {
   @Field(() => String, {nullable: true})
   id?: string;
 
-  @Field()
+  @Field(() => [String])
   images!: string[];
 
   @Field()
@@ -15,12 +15,12 @@ export class Memory {
   @Field()
   description!: string;
 
-  @Field()
+  @Field(() => [Friends])
   friends!: Friends[];
 
   @Field()
   place!: string;
 
   @Field()
-  date!: string;
+  date!: Date;
 }

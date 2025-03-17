@@ -2,7 +2,7 @@ import {Inject, Injectable} from "@nestjs/common";
 import {PrismaService} from "@org/prisma";
 import {WINSTON_MODULE_PROVIDER} from "nest-winston";
 import {Logger} from "winston";
-import {memory} from "@prisma/client";
+import {Memory} from "@org/models";
 
 @Injectable()
 export class AppService {
@@ -15,12 +15,16 @@ export class AppService {
 
   /* Query */
 
-  async getMemorys(): Promise<memory[] | boolean> {
+  async getMemories(): Promise<Memory[] | boolean> {
     try {
       this.logger.log("info", "ℹ️ User service: Récupération de tous les utilisateurs");
-      return this.prisma.memory.findMany();
+      return this.prisma.memory.findMany({
+        include: {
+          friends: true,
+        },
+      });
     } catch (error) {
-      this.logger.error("error", "🚨 User service: Une erreur est survenu lors de la récupération de tous les utilisateurs: " + error);
+      this.logger.error("error", "🚨 Memory service: Une erreur est survenu lors de la récupération de toutes les memorys : " + error);
       return false;
     }
   }
