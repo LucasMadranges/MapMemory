@@ -55,7 +55,8 @@
         "apps/users-e2e/**/*",
         "apps/gateway-e2e/**/*",
         "apps/users-e2e/**/*",
-        "apps/gateway-e2e/**/*"
+        "apps/gateway-e2e/**/*",
+        "apps/memory-e2e/**/*"
       ]
     },
     {
