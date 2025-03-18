@@ -5,10 +5,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL_USERS")
+  url      = env("DATABASE_URL")
 }
 
-model users {
+model Users {
   id        String @id @default(uuid())
   firstname String
   lastname  String
@@ -16,20 +16,31 @@ model users {
   password  String
 }
 
-model memory {
-  id          String    @id @default(uuid())
+model Memory {
+  id          String          @id @default(uuid())
   images      String[]
   title       String
   description String
-  friends     friends[]
   place       String
   date        DateTime
+  friends     MemoryFriends[]
 }
 
-model friends {
-  id        String  @id @default(uuid())
+model Friends {
+  id        String          @id @default(uuid())
   firstname String
   lastname  String
-  memory    memory? @relation(fields: [memoryId], references: [id])
-  memoryId  String?
+  memories  MemoryFriends[]
+}
+
+/**
+ * Table de liaison pour Memory | Friends
+ */
+model MemoryFriends {
+  memory   Memory  @relation(fields: [memoryId], references: [id])
+  memoryId String
+  friend   Friends @relation(fields: [friendId], references: [id])
+  friendId String
+
+  @@id([memoryId, friendId])
 }

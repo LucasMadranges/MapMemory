@@ -1,13 +1,13 @@
 services:
-  database-users:
+  database-mapmemory:
     image: postgres:16
-    container_name: db_users
+    container_name: db_mapmemory
     ports:
       - "5432:5432"
     volumes:
       - db_users_data:/var/lib/postgresql/data
     env_file:
-      - ./apps/users/.env
+      - .env
 
 volumes:
   db_users_data:

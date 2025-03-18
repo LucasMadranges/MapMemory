@@ -1,6 +1,5 @@
 import {IsArray, IsNotEmpty, IsString} from "class-validator";
 import {Field, InputType} from "@nestjs/graphql";
-import {Friends} from "../friends/friends.model";
 
 @InputType()
 export class CreateMemoryDto {
@@ -20,9 +19,9 @@ export class CreateMemoryDto {
   @IsNotEmpty({message: "La description est obligatoire."})
   description!: string;
 
-  @Field(() => [Friends], {defaultValue: []})
+  @Field(() => [String], {nullable: true})
   @IsArray({message: "Les amis doivent être dans un tableau."})
-  friends!: Friends[];
+  friendIds?: string[];
 
   @Field()
   @IsString({message: "Le lieu doit être un texte."})

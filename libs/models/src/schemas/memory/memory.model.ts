@@ -15,7 +15,7 @@ export class Memory {
   @Field()
   description!: string;
 
-  @Field(() => [Friends])
+  @Field(() => [Friends], {nullable: true})
   friends!: Friends[];
 
   @Field()
