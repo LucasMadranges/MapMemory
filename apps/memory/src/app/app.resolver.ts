@@ -19,7 +19,7 @@ export class AppResolver {
 
   /* Mutation */
   @Mutation(() => Memory)
-  createFriend(@Args("data") data: CreateMemoryDto): Promise<Memory | boolean> {
+  createMemory(@Args("data") data: CreateMemoryDto): Promise<Memory | boolean> {
     return this.appService.createMemory(data);
   }
 }

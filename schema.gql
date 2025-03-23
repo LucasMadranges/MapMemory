@@ -33,7 +33,7 @@ type Memory {
 }
 
 type Mutation {
-  createFriend(data: CreateMemoryDto!): Memory!
+  createMemory(data: CreateMemoryDto!): Memory!
 }
 
 type Query {

@@ -78,7 +78,7 @@ export class AppService {
         data: item,
       });
     } catch (error) {
-      this.logger.error("error", "🚨 User service: Erreur lors de la création d'un utilisateur: " + error);
+      this.logger.log("error", "🚨 User service: Erreur lors de la création d'un utilisateur: " + error);
       return false;
     }
   }
@@ -93,7 +93,7 @@ export class AppService {
         data,
       });
     } catch (error) {
-      this.logger.error("error", "🚨 User service: Erreur lors de la modification de l'utilisateur: " + id + ": " + error);
+      this.logger.log("error", "🚨 User service: Erreur lors de la modification de l'utilisateur: " + id + ": " + error);
       return false;
     }
   }
@@ -110,7 +110,7 @@ export class AppService {
 
       return true;
     } catch (error) {
-      this.logger.error("error", "🚨 User service: Erreur lors de la suppression de l'utilisateur: " + id + ": " + error);
+      this.logger.log("error", "🚨 User service: Erreur lors de la suppression de l'utilisateur: " + id + ": " + error);
       return false;
     }
   }

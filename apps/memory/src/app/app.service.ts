@@ -38,7 +38,7 @@ export class AppService {
         friends: memory.friends.map(f => f.friend),
       }));
     } catch (error) {
-      this.logger.error("error", "🚨 Memory service: Une erreur est survenu lors de la récupération de toutes les memories : " + error);
+      this.logger.log("error", "🚨 Memory service: Une erreur est survenu lors de la récupération de toutes les memories : " + error);
       return false;
     }
   }
@@ -48,19 +48,21 @@ export class AppService {
     try {
       this.logger.log("info", "ℹ️ Memory service: Création d'une memory");
 
-      const {friendIds, ...memoryData} = data;
-
       const memory = await this.prisma.memory.create({
         data: {
-          ...memoryData,
+          images: data.images,
+          title: data.title,
+          description: data.description,
+          place: data.place,
+          date: data.date,
           friends: {
-            create: friendIds?.map(friendId => ({
+            create: data.friendIds?.map(friendId => ({
               friend: {
                 connect: {
                   id: friendId,
                 },
               },
-            })) || [],
+            })),
           },
         },
         include: {
@@ -71,8 +73,7 @@ export class AppService {
           },
         },
       });
-
-      // Transformation pour correspondre au type Memory
+      
       return {
         id: memory.id,
         images: memory.images,
@@ -83,7 +84,7 @@ export class AppService {
         friends: memory.friends.map(f => f.friend),
       };
     } catch (error) {
-      this.logger.error("error", "🚨 Memory service: Une erreur est survenu lors de la création d'une memory : " + error);
+      this.logger.log("error", "🚨 Memory service: Une erreur est survenu lors de la création d'une memory : " + error);
       return false;
     }
   }

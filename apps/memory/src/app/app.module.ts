@@ -8,6 +8,7 @@ import {WinstonModule} from "nest-winston";
 import {loggerConfig} from "@org/utils";
 import * as process from "node:process";
 import {join} from "path";
+import {Friends} from "@org/models";
 
 interface ValidationError {
   field: string;
@@ -27,6 +28,9 @@ interface BadRequestError {
       autoSchemaFile: {
         federation: 2,
         path: join(process.cwd(), "schema.gql"),
+      },
+      buildSchemaOptions: {
+        orphanedTypes: [Friends],
       },
       sortSchema: true,
       playground: true,

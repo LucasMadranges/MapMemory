@@ -20,7 +20,7 @@ import {IntrospectAndCompose} from "@apollo/gateway";
           subgraphs: [
             {name: "users", url: `http://localhost:${process.env.PORT_USERS}/graphql`},
             {name: "memory", url: `http://localhost:${process.env.PORT_MEMORY}/graphql`},
-            {name: "memory", url: `http://localhost:${process.env.PORT_MEMORY}/graphql`},
+            {name: "friends", url: `http://localhost:${process.env.PORT_FRIENDS}/graphql`},
           ],
           pollIntervalInMs: 1000,
         }),

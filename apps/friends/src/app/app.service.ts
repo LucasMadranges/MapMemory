@@ -20,7 +20,7 @@ export class AppService {
       this.logger.log("info", "ℹ️ Friends service: Récupération de tous les friends");
       return this.prisma.friends.findMany();
     } catch (error) {
-      this.logger.error("error", "🚨 Friends service: Une erreur est survenu lors de la récupération de tous les friends : " + error);
+      this.logger.log("error", "🚨 Friends service: Une erreur est survenu lors de la récupération de tous les friends : " + error);
       return false;
     }
   }
@@ -33,7 +33,7 @@ export class AppService {
         data,
       });
     } catch (error) {
-      this.logger.error("error", "🚨 Friends service: Une erreur est survenu lors de la création d'un friend : " + error);
+      this.logger.log("error", "🚨 Friends service: Une erreur est survenu lors de la création d'un friend : " + error);
       return false;
     }
   }
