@@ -9,10 +9,11 @@ datasource db {
 }
 
 model Users {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
+  avatar    String?
   firstname String
   lastname  String
-  email     String @unique
+  email     String  @unique
   password  String
 }
 
@@ -23,11 +24,13 @@ model Memory {
   description String
   place       String
   date        DateTime
+  type        MemoryType      @default(Autres)
   friends     MemoryFriends[]
 }
 
 model Friends {
   id        String          @id @default(uuid())
+  avatar    String?
   firstname String
   lastname  String
   memories  MemoryFriends[]
@@ -43,4 +46,11 @@ model MemoryFriends {
   friendId String
 
   @@id([memoryId, friendId])
+}
+
+enum MemoryType {
+  Vacances
+  Sorties
+  Evenements
+  Autres
 }

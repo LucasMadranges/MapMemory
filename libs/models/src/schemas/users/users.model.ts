@@ -5,6 +5,9 @@ export class User {
   @Field(() => String, {nullable: true})
   id?: string;
 
+  @Field(() => String, {nullable: true})
+  avatar?: string | null;
+
   @Field()
   firstname!: string;
 

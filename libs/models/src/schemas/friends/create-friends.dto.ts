@@ -5,6 +5,10 @@ import {Field, InputType} from "@nestjs/graphql";
 export class CreateFriendsDto {
 
   @Field()
+  @IsString({message: "L'avatar doit être un lien."})
+  avatar?: string;
+
+  @Field()
   @IsString({message: "Le prénom doit être un texte."})
   @IsNotEmpty({message: "Le prénom est obligatoire."})
   firstname!: string;

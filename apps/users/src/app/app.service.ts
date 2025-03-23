@@ -68,6 +68,7 @@ export class AppService {
       }
 
       const item: CreateUserDto = {
+        avatar: data.avatar,
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
