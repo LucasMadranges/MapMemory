@@ -2,7 +2,7 @@ import mapboxgl from "mapbox-gl";
 
 export default function initPopup({title}: { title: string }) {
   const popupContent = `
-                        <div class="rounded-lg overflow-hidden w-64 sm:w-80">
+                        <div class="rounded-lg overflow-hidden">
                           <div class="relative">
                             <img src="/popup-image.jpg" class="h-48 w-64 sm:w-80 object-cover" alt="Image"/>
                             <span class="absolute top-2 left-2 bg-green-400 text-black rounded-md text-md px-1">Vacances</span>

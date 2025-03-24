@@ -1,5 +1,19 @@
-import {IsArray, IsNotEmpty, IsString} from "class-validator";
+import {IsArray, IsNotEmpty, IsNumber, IsString, ValidateNested} from "class-validator";
 import {Field, InputType} from "@nestjs/graphql";
+import {Type} from "class-transformer";
+
+@InputType()
+export class CoordinatesInput {
+  @Field(() => Number)
+  @IsNumber()
+  @IsNotEmpty({message: "La latitude est obligatoire."})
+  lat!: number;
+
+  @Field(() => Number)
+  @IsNumber()
+  @IsNotEmpty({message: "La longitude est obligatoire."})
+  lng!: number;
+}
 
 @InputType()
 export class CreateMemoryDto {
@@ -32,4 +46,11 @@ export class CreateMemoryDto {
   @IsString({message: "La date doit être une date."})
   @IsNotEmpty({message: "La date est obligatoire."})
   date!: string;
+
+  @Field(() => CoordinatesInput)
+  @ValidateNested()
+  @Type(() => CoordinatesInput)
+  @IsNotEmpty({message: "Les coordonnées sont obligatoires."})
+  coordinates!: CoordinatesInput;
 }
+

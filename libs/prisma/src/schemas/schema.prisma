@@ -8,6 +8,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/**
+ * Model
+ */
+
 model Users {
   id        String  @id @default(uuid())
   avatar    String?
@@ -26,6 +30,7 @@ model Memory {
   date        DateTime
   type        MemoryType      @default(Autres)
   friends     MemoryFriends[]
+  coordinates Json
 }
 
 model Friends {
@@ -47,6 +52,10 @@ model MemoryFriends {
 
   @@id([memoryId, friendId])
 }
+
+/**
+ * Enum
+ */
 
 enum MemoryType {
   Vacances
