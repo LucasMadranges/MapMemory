@@ -2,7 +2,18 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Coordinates {
+  lat: Float!
+  lng: Float!
+}
+
+input CoordinatesInput {
+  lat: Float!
+  lng: Float!
+}
+
 input CreateMemoryDto {
+  coordinates: CoordinatesInput!
   date: String!
   description: String!
   friendIds: [String!]
@@ -24,6 +35,7 @@ type Friends {
 }
 
 type Memory {
+  coordinates: Coordinates!
   date: DateTime!
   description: String!
   friends: [Friends!]
@@ -39,4 +51,10 @@ type Mutation {
 
 type Query {
   getMemories: [Memory!]!
+}ring
+  email: String!
+  firstname: String!
+  id: String
+  lastname: String!
+  password: String!
 }

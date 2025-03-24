@@ -1,5 +1,16 @@
-import {Field, ObjectType} from "@nestjs/graphql";
+import {Directive, Field, ObjectType} from "@nestjs/graphql";
 import {Friends} from "../friends/friends.model";
+
+@ObjectType()
+export class Coordinates {
+  @Field(() => Number)
+  @Directive("@shareable")
+  lat!: number;
+
+  @Field(() => Number)
+  @Directive("@shareable")
+  lng!: number;
+}
 
 @ObjectType()
 export class Memory {
@@ -23,4 +34,7 @@ export class Memory {
 
   @Field()
   date!: Date;
+
+  @Field(() => Coordinates)
+  coordinates!: Coordinates;
 }

@@ -36,6 +36,7 @@ export class AppService {
         place: memory.place,
         date: memory.date,
         friends: memory.friends.map(f => f.friend),
+        coordinates: memory.coordinates as { lat: number, lng: number },
       }));
     } catch (error) {
       this.logger.log("error", "🚨 Memory service: Une erreur est survenu lors de la récupération de toutes les memories : " + error);
@@ -55,6 +56,10 @@ export class AppService {
           description: data.description,
           place: data.place,
           date: data.date,
+          coordinates: {
+            lat: data.coordinates.lat,
+            lng: data.coordinates.lng,
+          },
           friends: {
             create: data.friendIds?.map(friendId => ({
               friend: {
@@ -73,7 +78,7 @@ export class AppService {
           },
         },
       });
-      
+
       return {
         id: memory.id,
         images: memory.images,
@@ -82,6 +87,7 @@ export class AppService {
         place: memory.place,
         date: memory.date,
         friends: memory.friends.map(f => f.friend),
+        coordinates: memory.coordinates as { lat: number, lng: number },
       };
     } catch (error) {
       this.logger.log("error", "🚨 Memory service: Une erreur est survenu lors de la création d'une memory : " + error);
