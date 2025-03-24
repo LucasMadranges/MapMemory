@@ -4,8 +4,8 @@ import Map from "../map/Map";
 
 export default function App() {
   return (
-    <Container2XL className={"h-svh sm:h-[calc(100svh-32px)]"}>
-      <div className={"bg-blue-500 h-full sm:rounded-2xl flex flex-col-reverse sm:flex-row"}>
+    <Container2XL className={"h-svh"}>
+      <div className={"relative h-full flex flex-col-reverse sm:flex-row"}>
         <Navigation/>
         <Map/>
       </div>

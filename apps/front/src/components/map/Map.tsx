@@ -74,10 +74,10 @@ export default function Map() {
   }, []);
 
   return (
-    <div className={"w-full h-full pt-2 pb-0 sm:pb-2 pr-2 sm:pl-0 pl-2"}>
+    <div className={"w-full h-full"}>
       <div ref={mapRef}
-           className={`relative w-full h-full overflow-hidden rounded-xl z-0
-            [&_.mapboxgl-popup]:!max-w-80
+           className={`relative w-full h-full overflow-hidden z-0
+            [&_.mapboxgl-popup]:!max-w-100
             [&_.mapboxgl-popup-content]:p-0 [&_.mapboxgl-popup-content]:rounded-lg`}>
         <ProfileMenu/>
       </div>
