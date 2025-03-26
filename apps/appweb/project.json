@@ -1,9 +1,9 @@
 {
-  "name": "front",
+  "name": "appweb",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/front",
+  "sourceRoot": "apps/appweb",
   "projectType": "application",
   "tags": [],
-  "// targets": "to see all targets run: nx show project front --web",
+  "// targets": "to see all targets run: nx show project appweb --web",
   "targets": {}
 }
