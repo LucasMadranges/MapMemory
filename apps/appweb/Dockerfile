@@ -8,12 +8,12 @@ RUN apk add --no-cache dumb-init
 ENV NODE_ENV=production
 ENV PORT=3000
 WORKDIR /usr/src/app
-COPY apps/front/next.config.js ./
-COPY apps/front/public ./public
-COPY apps/front/.next/standalone/apps/front ./
-COPY apps/front/.next/standalone/package.json ./
-COPY apps/front/.next/standalone/node_modules ./node_modules
-COPY apps/front/.next/static ./.next/static
+COPY apps/appweb/next.config.js ./
+COPY apps/appweb/public ./public
+COPY apps/appweb/.next/standalone/apps/appweb ./
+COPY apps/appweb/.next/standalone/package.json ./
+COPY apps/appweb/.next/standalone/node_modules ./node_modules
+COPY apps/appweb/.next/static ./.next/static
 # RUN npm i sharp
 RUN chown -R node:node .
 USER node

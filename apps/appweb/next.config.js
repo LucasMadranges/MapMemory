@@ -16,6 +16,7 @@ const nextConfig = {
     NEXT_PUBLIC_PORT_GATEWAY: process.env.PORT_GATEWAY,
     NEXT_PUBLIC_ACCESS_TOKEN: process.env.MAPBOX_PUBLIC_TOKEN,
   },
+  output: "standalone",
 };
 
 const plugins = [
