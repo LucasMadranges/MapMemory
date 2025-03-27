@@ -6,6 +6,9 @@ WORKDIR /usr/src/app
 COPY dist/apps/memory/package*.json ./
 RUN npm install --omit=dev
 
+# External dependencies
+RUN npm install "winston-daily-rotate-file"
+
 # Production image, copy all the files and run nest
 FROM docker.io/node:lts-alpine AS runner
 RUN apk add --no-cache dumb-init
