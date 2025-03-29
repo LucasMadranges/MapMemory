@@ -1,10 +1,10 @@
-"use client";
-import mapboxgl from "mapbox-gl";
-import React, {useEffect, useRef} from "react";
-import "mapbox-gl/dist/mapbox-gl.css";
-import ProfileMenu from "./ProfileMenu";
-import initPopup from "./initPopup";
-import createPopup from "./createPopup";
+'use client';
+import mapboxgl from 'mapbox-gl';
+import React, { useEffect, useRef } from 'react';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import ProfileMenu from './ProfileMenu';
+import initPopup from './initPopup';
+import createPopup from './createPopup';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
@@ -16,26 +16,27 @@ export default function Map() {
   useEffect(() => {
     map.current = new mapboxgl.Map({
       container: mapRef.current,
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: 'mapbox://styles/mapbox/streets-v11',
       center: [2.3522, 48.8566],
       zoom: 12,
     });
 
-    map.current.on("load", () => {
+    map.current.on('load', () => {
       // TODO: Delete any
       const popup: any = createPopup({
-        title: "Ajouter un événement",
+        title: 'Ajouter un événement',
       }).createPopupInstance();
 
       // TODO: Delete any
-      const markerInstance: any = new mapboxgl.Marker({color: "#3b82f6"})
+      const markerInstance: any = new mapboxgl.Marker({ color: '#3b82f6' })
         .setLngLat([2.3522, 48.8566])
         .addTo(map.current)
         .setPopup(popup);
 
       setTimeout(() => {
-        const closeBtn = popup._content.getElementsByClassName("close-button")[0];
-        closeBtn?.addEventListener("click", () => {
+        const closeBtn =
+          popup._content.getElementsByClassName('close-button')[0];
+        closeBtn?.addEventListener('click', () => {
           markerInstance.getPopup().remove();
         });
       }, 0);
@@ -45,9 +46,9 @@ export default function Map() {
     });
 
     // TODO: Delete any
-    map.current.on("click", (event: any) => {
+    map.current.on('click', (event: any) => {
       const target = event.originalEvent.target as HTMLElement;
-      if (target.closest(".mapboxgl-marker")) {
+      if (target.closest('.mapboxgl-marker')) {
         return;
       }
 
@@ -56,14 +57,15 @@ export default function Map() {
         title: "Je m'appelle Lucas",
       }).createPopupInstance();
 
-      const markerInstance: any = new mapboxgl.Marker({color: "#3b82f6"})
+      const markerInstance: any = new mapboxgl.Marker({ color: '#3b82f6' })
         .setLngLat([event.lngLat.lng, event.lngLat.lat])
         .addTo(map.current)
         .setPopup(popup);
 
       setTimeout(() => {
-        const closeBtn = popup._content.getElementsByClassName("close-button")[0];
-        closeBtn?.addEventListener("click", () => {
+        const closeBtn =
+          popup._content.getElementsByClassName('close-button')[0];
+        closeBtn?.addEventListener('click', () => {
           markerInstance.getPopup().remove();
         });
       }, 0);
@@ -74,12 +76,14 @@ export default function Map() {
   }, []);
 
   return (
-    <div className={"w-full h-full"}>
-      <div ref={mapRef}
-           className={`relative w-full h-full overflow-hidden z-0
+    <div className={'w-full h-full'}>
+      <div
+        ref={mapRef}
+        className={`relative w-full h-full overflow-hidden z-0
             [&_.mapboxgl-popup]:!max-w-100
-            [&_.mapboxgl-popup-content]:p-0 [&_.mapboxgl-popup-content]:rounded-lg`}>
-        <ProfileMenu/>
+            [&_.mapboxgl-popup-content]:p-0 [&_.mapboxgl-popup-content]:rounded-lg`}
+      >
+        <ProfileMenu />
       </div>
     </div>
   );

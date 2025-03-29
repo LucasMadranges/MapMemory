@@ -1,12 +1,10 @@
-import {AppService} from "./app.service";
-import {Args, Mutation, Query, Resolver} from "@nestjs/graphql";
-import {CreateFriendsDto, Friends} from "@org/models";
+import { AppService } from './app.service';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateFriendsDto, Friends } from '@org/models';
 
 @Resolver(() => Friends)
 export class AppResolver {
-  constructor(
-    private readonly appService: AppService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   /* Friends */
 
@@ -20,7 +18,9 @@ export class AppResolver {
   /* Mutation */
 
   @Mutation(() => Friends)
-  createFriend(@Args("data") data: CreateFriendsDto): Promise<Friends | boolean> {
+  createFriend(
+    @Args('data') data: CreateFriendsDto
+  ): Promise<Friends | boolean> {
     return this.appService.createFriend(data);
   }
 }

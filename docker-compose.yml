@@ -3,7 +3,7 @@ services:
     image: appweb:dev
     container_name: appweb-mapmemory
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - .env
     restart: unless-stopped
@@ -16,7 +16,7 @@ services:
     image: gateway:dev
     container_name: gateway-mapmemory
     ports:
-      - "4000:4000"
+      - '4000:4000'
     env_file:
       - .env
     restart: unless-stopped
@@ -31,7 +31,7 @@ services:
     image: users:dev
     container_name: users-mapmemory
     ports:
-      - "4001:4001"
+      - '4001:4001'
     env_file:
       - .env
     restart: unless-stopped
@@ -44,7 +44,7 @@ services:
     image: memory:dev
     container_name: memory-mapmemory
     ports:
-      - "4002:4002"
+      - '4002:4002'
     env_file:
       - .env
     restart: unless-stopped
@@ -57,7 +57,7 @@ services:
     image: friends:dev
     container_name: friends-mapmemory
     ports:
-      - "4003:4003"
+      - '4003:4003'
     env_file:
       - .env
     restart: unless-stopped
@@ -70,7 +70,7 @@ services:
     image: postgres:16
     container_name: db-mapmemory
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - db_users_data:/var/lib/postgresql/data
     env_file:

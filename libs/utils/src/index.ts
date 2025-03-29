@@ -1,5 +1,5 @@
 /* Logs */
-export * from "./logs/logger.config";
+export * from './logs/logger.config';
 
 /* Bcrypt */
-export * from "./security/bcrypt";
+export * from './security/bcrypt';

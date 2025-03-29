@@ -51,7 +51,6 @@ type Mutation {
 
 type Query {
   getMemories: [Memory!]!
-}ring
   email: String!
   firstname: String!
   id: String

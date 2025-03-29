@@ -1,20 +1,20 @@
-import {Directive, Field, ObjectType} from "@nestjs/graphql";
-import {Friends} from "../friends/friends.model";
+import { Directive, Field, ObjectType } from '@nestjs/graphql';
+import { Friends } from '../friends/friends.model';
 
 @ObjectType()
 export class Coordinates {
   @Field(() => Number)
-  @Directive("@shareable")
+  @Directive('@shareable')
   lat!: number;
 
   @Field(() => Number)
-  @Directive("@shareable")
+  @Directive('@shareable')
   lng!: number;
 }
 
 @ObjectType()
 export class Memory {
-  @Field(() => String, {nullable: true})
+  @Field(() => String, { nullable: true })
   id?: string;
 
   @Field(() => [String])
@@ -26,7 +26,7 @@ export class Memory {
   @Field()
   description!: string;
 
-  @Field(() => [Friends], {nullable: true})
+  @Field(() => [Friends], { nullable: true })
   friends!: Friends[];
 
   @Field()
