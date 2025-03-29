@@ -1,13 +1,14 @@
-LABEL org.opencontainers.image.source="https://github.com/LucasMadranges/MapMemory"
-LABEL org.opencontainers.image.description="AppWeb for MapMemory"
-LABEL org.opencontainers.image.licenses="MIT"
-
 # This template uses Automatically Copying Traced Files feature
 # so you need to setup your Next Config file to use `output: 'standalone'`
 # Please read this for more information https://nextjs.org/docs/pages/api-reference/next-config-js/output
 
 # Production image, copy all the files and run next
 FROM docker.io/node:lts-alpine AS runner
+
+LABEL org.opencontainers.image.source="https://github.com/LucasMadranges/MapMemory"
+LABEL org.opencontainers.image.description="AppWeb for MapMemory"
+LABEL org.opencontainers.image.licenses="MIT"
+
 RUN apk add --no-cache dumb-init
 ENV NODE_ENV=production
 ENV PORT=3000

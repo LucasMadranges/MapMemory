@@ -4,6 +4,28 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { CreateMemoryDto, Memory } from '@org/models';
 
+interface MemoryFromPrisma {
+  id: string;
+  images: string[];
+  title: string;
+  description: string;
+  place: string;
+  date: Date;
+  friends: FriendRelation[];
+  coordinates: unknown;
+}
+
+interface Friends {
+  id?: string;
+  avatar?: string | null;
+  firstname: string;
+  lastname: string;
+}
+
+interface FriendRelation {
+  friend: Friends;
+}
+
 @Injectable()
 export class AppService {
   constructor(
@@ -31,14 +53,14 @@ export class AppService {
         },
       });
 
-      return memories.map((memory) => ({
+      return memories.map((memory: MemoryFromPrisma) => ({
         id: memory.id,
         images: memory.images,
         title: memory.title,
         description: memory.description,
         place: memory.place,
         date: memory.date,
-        friends: memory.friends.map((f) => f.friend),
+        friends: memory.friends.map((f: FriendRelation) => f.friend),
         coordinates: memory.coordinates as { lat: number; lng: number },
       }));
     } catch (error) {
@@ -93,7 +115,7 @@ export class AppService {
         description: memory.description,
         place: memory.place,
         date: memory.date,
-        friends: memory.friends.map((f) => f.friend),
+        friends: memory.friends.map((f: FriendRelation) => f.friend),
         coordinates: memory.coordinates as { lat: number; lng: number },
       };
     } catch (error) {

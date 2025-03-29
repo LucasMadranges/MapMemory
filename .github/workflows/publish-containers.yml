@@ -4,8 +4,6 @@ on:
   push:
     branches: [main]
     tags: ['v*.*.*']
-  # Optionnel : permettre le lancement manuel
-  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io

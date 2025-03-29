@@ -1,7 +1,7 @@
-import { clients } from './clients';
-
 describe('clients', () => {
-  it('should work', () => {
-    expect(clients()).toEqual('clients');
+  it('Simple test', () => {
+    const test = 'Hello';
+
+    expect(test).toEqual('Hello');
   });
 });

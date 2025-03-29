@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "@nestjs/graphql": "^13.0.2",
-    "class-validator": "^0.14.0"
+    "class-validator": "^0.14.0",
+    "class-transformer": "^0.5.1",
+    "tslib": "^2.3.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",

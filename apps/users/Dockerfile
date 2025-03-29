@@ -1,10 +1,11 @@
+# Install dependencies only when needed
+FROM docker.io/node:lts-alpine AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+
 LABEL org.opencontainers.image.source="https://github.com/LucasMadranges/MapMemory"
 LABEL org.opencontainers.image.description="Users microservice for MapMemory"
 LABEL org.opencontainers.image.licenses="MIT"
 
-# Install dependencies only when needed
-FROM docker.io/node:lts-alpine AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY dist/apps/users/package*.json ./
