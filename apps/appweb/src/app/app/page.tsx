@@ -1,7 +1,5 @@
-import App from "../../components/page/App";
+import App from '../../components/page/App';
 
 export default function Page() {
-  return (
-    <App/>
-  );
+  return <App />;
 }

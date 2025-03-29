@@ -1,2 +1,2 @@
 /* Zod */
-export * from "./schemas/loginUserSchema";
+export * from './schemas/loginUserSchema';

@@ -1,20 +1,20 @@
-import "../global.css";
-import React from "react";
-import {Roboto} from "next/font/google";
+import '../global.css';
+import React from 'react';
+import { Roboto } from 'next/font/google';
 
 export const metadata = {
-  title: "MapMemory | Login",
-  description: "Connexion",
+  title: 'MapMemory | Login',
+  description: 'Connexion',
 };
 
 const roboto = Roboto({
-  weight: "400",
-  subsets: ["latin"],
+  weight: '400',
+  subsets: ['latin'],
 });
 
 export default function RootLayout({
-                                     children,
-                                   }: {
+  children,
+}: {
   children: React.ReactNode;
 }) {
   return (

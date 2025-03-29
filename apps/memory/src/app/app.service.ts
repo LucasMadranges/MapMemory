@@ -1,14 +1,14 @@
-import {Inject, Injectable} from "@nestjs/common";
-import {PrismaService} from "@org/prisma";
-import {WINSTON_MODULE_PROVIDER} from "nest-winston";
-import {Logger} from "winston";
-import {CreateMemoryDto, Memory} from "@org/models";
+import { Inject, Injectable } from '@nestjs/common';
+import { PrismaService } from '@org/prisma';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+import { CreateMemoryDto, Memory } from '@org/models';
 
 @Injectable()
 export class AppService {
   constructor(
     private readonly prisma: PrismaService,
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger
   ) {}
 
   /* Users */
@@ -17,7 +17,10 @@ export class AppService {
 
   async getMemories(): Promise<Memory[] | boolean> {
     try {
-      this.logger.log("info", "ℹ️ Memory service: Récupération de toutes les memories");
+      this.logger.log(
+        'info',
+        'ℹ️ Memory service: Récupération de toutes les memories'
+      );
       const memories = await this.prisma.memory.findMany({
         include: {
           friends: {
@@ -28,18 +31,22 @@ export class AppService {
         },
       });
 
-      return memories.map(memory => ({
+      return memories.map((memory) => ({
         id: memory.id,
         images: memory.images,
         title: memory.title,
         description: memory.description,
         place: memory.place,
         date: memory.date,
-        friends: memory.friends.map(f => f.friend),
-        coordinates: memory.coordinates as { lat: number, lng: number },
+        friends: memory.friends.map((f) => f.friend),
+        coordinates: memory.coordinates as { lat: number; lng: number },
       }));
     } catch (error) {
-      this.logger.log("error", "🚨 Memory service: Une erreur est survenu lors de la récupération de toutes les memories : " + error);
+      this.logger.log(
+        'error',
+        '🚨 Memory service: Une erreur est survenu lors de la récupération de toutes les memories : ' +
+          error
+      );
       return false;
     }
   }
@@ -47,7 +54,7 @@ export class AppService {
   /* Mutation */
   async createMemory(data: CreateMemoryDto): Promise<Memory | boolean> {
     try {
-      this.logger.log("info", "ℹ️ Memory service: Création d'une memory");
+      this.logger.log('info', "ℹ️ Memory service: Création d'une memory");
 
       const memory = await this.prisma.memory.create({
         data: {
@@ -61,7 +68,7 @@ export class AppService {
             lng: data.coordinates.lng,
           },
           friends: {
-            create: data.friendIds?.map(friendId => ({
+            create: data.friendIds?.map((friendId) => ({
               friend: {
                 connect: {
                   id: friendId,
@@ -86,11 +93,15 @@ export class AppService {
         description: memory.description,
         place: memory.place,
         date: memory.date,
-        friends: memory.friends.map(f => f.friend),
-        coordinates: memory.coordinates as { lat: number, lng: number },
+        friends: memory.friends.map((f) => f.friend),
+        coordinates: memory.coordinates as { lat: number; lng: number },
       };
     } catch (error) {
-      this.logger.log("error", "🚨 Memory service: Une erreur est survenu lors de la création d'une memory : " + error);
+      this.logger.log(
+        'error',
+        "🚨 Memory service: Une erreur est survenu lors de la création d'une memory : " +
+          error
+      );
       return false;
     }
   }

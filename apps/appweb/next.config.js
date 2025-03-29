@@ -1,7 +1,7 @@
 //@ts-check
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const {composePlugins, withNx} = require("@nx/next");
+const { composePlugins, withNx } = require('@nx/next');
 
 /**
  * @type {import("@nx/next/plugins/with-nx").WithNxOptions}
@@ -16,7 +16,7 @@ const nextConfig = {
     NEXT_PUBLIC_PORT_GATEWAY: process.env.PORT_GATEWAY,
     NEXT_PUBLIC_ACCESS_TOKEN: process.env.MAPBOX_PUBLIC_TOKEN,
   },
-  output: "standalone",
+  output: 'standalone',
 };
 
 const plugins = [

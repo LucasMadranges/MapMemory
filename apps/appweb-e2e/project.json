@@ -4,9 +4,7 @@
   "projectType": "application",
   "sourceRoot": "apps/appweb-e2e/src",
   "tags": [],
-  "implicitDependencies": [
-    "appweb"
-  ],
+  "implicitDependencies": ["appweb"],
   "// targets": "to see all targets run: nx show project appweb-e2e --web",
   "targets": {}
 }

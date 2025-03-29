@@ -1,6 +1,6 @@
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 
-export default function initPopup({title}: { title: string }) {
+export default function initPopup({ title }: { title: string }) {
   const popupContent = `
                         <div class="rounded-lg overflow-hidden">
                           <div class="relative">

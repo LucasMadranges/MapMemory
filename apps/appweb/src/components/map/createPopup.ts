@@ -1,6 +1,6 @@
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 
-export default function createPopup({title}: { title: string }) {
+export default function createPopup({ title }: { title: string }) {
   const popupContent = `
                         <div class="rounded-lg overflow-hidden w-64 sm:w-80">
                           <div class="relative p-2 flex flex-col items-center justify-center">
@@ -64,45 +64,49 @@ export default function createPopup({title}: { title: string }) {
 
   const popup = new mapboxgl.Popup({
     closeButton: false,
-    maxWidth: "none",
+    maxWidth: 'none',
   });
 
   popup.setHTML(popupContent);
 
-  popup.on("open", () => {
-    const select = document.getElementById("peopleSelect") as HTMLSelectElement;
-    const selectedContainer = document.getElementById("selectedPeople") as HTMLElement;
+  popup.on('open', () => {
+    const select = document.getElementById('peopleSelect') as HTMLSelectElement;
+    const selectedContainer = document.getElementById(
+      'selectedPeople'
+    ) as HTMLElement;
     const selectedOptions = new Set();
 
-    select?.addEventListener("change", function () {
+    select?.addEventListener('change', function () {
       const value = this.value;
       const text = this.options[this.selectedIndex].text;
 
       if (value && !selectedOptions.has(value)) {
         // Afficher le conteneur lorsqu'on ajoute le premier élément
-        selectedContainer?.classList.remove("hidden");
+        selectedContainer?.classList.remove('hidden');
 
-        const div = document.createElement("div");
-        div.className = "flex items-center gap-2 mt-1";
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2 mt-1';
         div.innerHTML = `
           <input type="checkbox" id="${value}" checked class="form-checkbox" />
           <label for="${value}">${text}</label>
         `;
 
-        const checkbox = div.querySelector("input");
-        checkbox?.addEventListener("change", function () {
+        const checkbox = div.querySelector('input');
+        checkbox?.addEventListener('change', function () {
           if (!this.checked) {
             div.remove();
             selectedOptions.delete(value);
 
-            const option = document.createElement("option") as HTMLOptionElement;
+            const option = document.createElement(
+              'option'
+            ) as HTMLOptionElement;
             option.value = value;
             option.text = text;
             select.add(option);
 
             // Cacher le conteneur s'il n'y a plus d'éléments sélectionnés
             if (selectedOptions.size === 0) {
-              selectedContainer?.classList.add("hidden");
+              selectedContainer?.classList.add('hidden');
             }
           }
         });
@@ -111,7 +115,7 @@ export default function createPopup({title}: { title: string }) {
         selectedOptions.add(value);
 
         select.remove(this.selectedIndex);
-        select.value = "";
+        select.value = '';
       }
     });
   });

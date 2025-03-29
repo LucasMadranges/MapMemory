@@ -1,12 +1,10 @@
-import {AppService} from "./app.service";
-import {Args, Mutation, Query, Resolver} from "@nestjs/graphql";
-import {CreateMemoryDto, Memory} from "@org/models";
+import { AppService } from './app.service';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateMemoryDto, Memory } from '@org/models';
 
 @Resolver(() => Memory)
 export class AppResolver {
-  constructor(
-    private readonly appService: AppService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   /* Memory */
 
@@ -19,7 +17,7 @@ export class AppResolver {
 
   /* Mutation */
   @Mutation(() => Memory)
-  createMemory(@Args("data") data: CreateMemoryDto): Promise<Memory | boolean> {
+  createMemory(@Args('data') data: CreateMemoryDto): Promise<Memory | boolean> {
     return this.appService.createMemory(data);
   }
 }
