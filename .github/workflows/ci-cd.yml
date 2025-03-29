@@ -1,44 +1,90 @@
-name: Publish Docker images
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [main]
     tags: ['v*.*.*']
+  pull_request:
+    branches: [main]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ github.repository }}
+permissions:
+  actions: read
+  contents: read
+  packages: write
 
 jobs:
-  build-and-push:
+  # Premier job - CI avec tests, lint et build
+  ci:
+    name: CI Tests & Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Configuration de Node.js et cache
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # Installation des dépendances
+      - run: npm ci --legacy-peer-deps
+      - run: npx cypress install
+      - uses: nrwl/nx-set-shas@v4
+
+      # Exécution des tests et build
+      - run: npx nx affected -t lint test build e2e
+
+      # Archiver les builds pour le job suivant
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  # Second job - Publication des images Docker
+  publish-containers:
+    name: Build & Push Docker Images
+    needs: ci # Ce job s'exécute seulement si le job ci réussit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
 
     strategy:
       matrix:
         service: [appweb, gateway, users, memory, friends]
         include:
           - service: appweb
-            context: ./apps/appweb
+            context: .
             dockerfile: ./apps/appweb/Dockerfile
           - service: gateway
-            context: ./apps/gateway
+            context: .
             dockerfile: ./apps/gateway/Dockerfile
           - service: users
-            context: ./apps/users
+            context: .
             dockerfile: ./apps/users/Dockerfile
           - service: memory
-            context: ./apps/memory
+            context: .
             dockerfile: ./apps/memory/Dockerfile
           - service: friends
-            context: ./apps/friends
+            context: .
             dockerfile: ./apps/friends/Dockerfile
+
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_PREFIX: ${{ github.repository }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      # Télécharger les artefacts du build
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
