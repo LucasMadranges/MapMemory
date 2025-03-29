@@ -1,3 +1,7 @@
+LABEL org.opencontainers.image.source="https://github.com/LucasMadranges/MapMemory"
+LABEL org.opencontainers.image.description="AppWeb for MapMemory"
+LABEL org.opencontainers.image.licenses="MIT"
+
 # This template uses Automatically Copying Traced Files feature
 # so you need to setup your Next Config file to use `output: 'standalone'`
 # Please read this for more information https://nextjs.org/docs/pages/api-reference/next-config-js/output
