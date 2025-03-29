@@ -4,7 +4,12 @@ FROM docker.io/node:lts-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY dist/apps/users/package*.json ./
+COPY libs/prisma/src ./prisma
+COPY ./../../node_modules/.prisma /usr/src/app/node_modules/.prisma
 RUN npm install --omit=dev
+
+# Generate prisma client
+RUN npx prisma generate --schema=prisma/schemas/schema.prisma
 
 # External dependencies
 RUN npm install "winston-daily-rotate-file"
@@ -17,6 +22,7 @@ ENV PORT=3000
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=deps /usr/src/app/package.json ./package.json
+COPY --from=deps /usr/src/app/node_modules/.prisma ./node_modules/.prisma
 COPY dist/apps/users .
 RUN chown -R node:node .
 USER node
