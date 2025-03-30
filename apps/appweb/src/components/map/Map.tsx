@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ProfileMenu from './ProfileMenu';
 import initPopup from './initPopup';
-import createPopup from './createPopup';
+import AddEvent from './AddEvent';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
@@ -23,7 +23,7 @@ export default function Map() {
 
     map.current.on('load', () => {
       // TODO: Delete any
-      const popup: any = createPopup({
+      const popup: any = initPopup({
         title: 'Ajouter un événement',
       }).createPopupInstance();
 
@@ -52,23 +52,7 @@ export default function Map() {
         return;
       }
 
-      // TODO: Delete any
-      const popup: any = initPopup({
-        title: "Je m'appelle Lucas",
-      }).createPopupInstance();
-
-      const markerInstance: any = new mapboxgl.Marker({ color: '#3b82f6' })
-        .setLngLat([event.lngLat.lng, event.lngLat.lat])
-        .addTo(map.current)
-        .setPopup(popup);
-
-      setTimeout(() => {
-        const closeBtn =
-          popup._content.getElementsByClassName('close-button')[0];
-        closeBtn?.addEventListener('click', () => {
-          markerInstance.getPopup().remove();
-        });
-      }, 0);
+      console.log(event.lngLat);
     });
 
     // Cleanup function
@@ -84,6 +68,7 @@ export default function Map() {
             [&_.mapboxgl-popup-content]:p-0 [&_.mapboxgl-popup-content]:rounded-lg`}
       >
         <ProfileMenu />
+        <AddEvent />
       </div>
     </div>
   );
