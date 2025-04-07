@@ -1,10 +1,11 @@
 'use client';
 import mapboxgl from 'mapbox-gl';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ProfileMenu from './ProfileMenu';
 import initPopup from './initPopup';
 import AddEvent from './AddEvent';
+import { gsap } from 'gsap';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
@@ -12,6 +13,65 @@ export default function Map() {
   // TODO: Delete any
   const mapRef: any = useRef(null);
   const map: any = useRef(null);
+  const [close, setClose] = useState(true);
+  const panelRef = useRef(null);
+  const panelActive = useRef(false);
+  const tempMarkerActive = useRef(false);
+  const markerInstance: any = useRef(null);
+
+  function handleCloseAdd() {
+    if (close) {
+      if (panelActive.current) return;
+
+      // Animation pour ouvrir le panneau
+      setClose(false);
+      panelActive.current = true;
+
+      gsap.fromTo(
+        panelRef.current,
+        {
+          x: '-100%',
+        },
+        {
+          x: '0%',
+          duration: 0.5,
+          ease: 'power3.out',
+        }
+      );
+    } else {
+      // Animation pour fermer le panneau
+      markerInstance.current.remove();
+      tempMarkerActive.current = false;
+
+      gsap.to(panelRef.current, {
+        x: '-100%',
+        duration: 0.5,
+        ease: 'power3.out',
+        onComplete: () => {
+          setClose(true);
+          panelActive.current = false;
+        },
+      });
+    }
+  }
+
+  function handleClickMap(event: any) {
+    const target = event.originalEvent.target as HTMLElement;
+    if (target.closest('.mapboxgl-marker')) {
+      return;
+    }
+
+    if (tempMarkerActive.current) {
+      markerInstance.current.remove();
+    }
+
+    markerInstance.current = new mapboxgl.Marker({ color: '#f6721d' })
+      .setLngLat([event.lngLat.lng, event.lngLat.lat])
+      .addTo(map.current);
+
+    tempMarkerActive.current = true;
+    handleCloseAdd();
+  }
 
   useEffect(() => {
     map.current = new mapboxgl.Map({
@@ -46,14 +106,7 @@ export default function Map() {
     });
 
     // TODO: Delete any
-    map.current.on('click', (event: any) => {
-      const target = event.originalEvent.target as HTMLElement;
-      if (target.closest('.mapboxgl-marker')) {
-        return;
-      }
-
-      console.log(event.lngLat);
-    });
+    map.current.on('click', (event: any) => handleClickMap(event));
 
     // Cleanup function
     return () => map.current?.remove();
@@ -68,7 +121,11 @@ export default function Map() {
             [&_.mapboxgl-popup-content]:p-0 [&_.mapboxgl-popup-content]:rounded-lg`}
       >
         <ProfileMenu />
-        <AddEvent />
+        <AddEvent
+          hidden={close}
+          handleClose={handleCloseAdd}
+          panelRef={panelRef}
+        />
       </div>
     </div>
   );
