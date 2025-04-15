@@ -22,7 +22,7 @@
     "@apollo/subgraph": "^2.10.0",
     "@gsap/react": "^2.1.2",
     "@nestjs/apollo": "^13.0.2",
-    "@nestjs/common": "^11.0.9",
+    "@nestjs/common": "^11.0.17",
     "@nestjs/core": "^11.0.9",
     "@nestjs/graphql": "^13.0.2",
     "@nestjs/platform-express": "^11.0.9",
