@@ -1,0 +1,87 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API avec Fiber, Ent et Swagger",
+    "title": "Go Fiber API",
+    "contact": {},
+    "version": "1.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "paths": {
+    "/users": {
+      "post": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["users"],
+        "summary": "Create user",
+        "parameters": [
+          {
+            "description": "User payload",
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dto.CreateUserDTO"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ent.User"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "dto.CreateUserDTO": {
+      "type": "object",
+      "properties": {
+        "avatar": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "ent.User": {
+      "type": "object",
+      "properties": {
+        "avatar": {
+          "description": "Avatar holds the value of the \"avatar\" field.",
+          "type": "string"
+        },
+        "email": {
+          "description": "Email holds the value of the \"email\" field.",
+          "type": "string"
+        },
+        "firstname": {
+          "description": "Firstname holds the value of the \"firstname\" field.",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID of the ent.",
+          "type": "integer"
+        },
+        "lastname": {
+          "description": "Lastname holds the value of the \"lastname\" field.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

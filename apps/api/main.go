@@ -1,0 +1,34 @@
+package main
+
+import (
+	"log"
+
+	"github.com/LucasMadranges/MapMemory/routes"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
+
+	"github.com/LucasMadranges/MapMemory/database"
+	_ "github.com/LucasMadranges/MapMemory/docs"
+)
+
+// @title Go Fiber API
+// @version 1.0
+// @description API avec Fiber, Ent et Swagger
+// @host localhost:3000
+// @BasePath /
+func main() {
+	app := fiber.New()
+
+	client := database.NewClient()
+	defer client.Close()
+
+	app.Get("/swagger/*", swagger.HandlerDefault)
+
+	app.Get("/health", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{"status": "ok"})
+	})
+
+	routes.RegisterUserRoutes(app, client)
+
+	log.Fatal(app.Listen(":4000"))
+}
