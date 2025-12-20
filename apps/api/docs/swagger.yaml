@@ -1,0 +1,62 @@
+basePath: /
+definitions:
+  dto.CreateUserDTO:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
+  ent.User:
+    properties:
+      avatar:
+        description: Avatar holds the value of the "avatar" field.
+        type: string
+      email:
+        description: Email holds the value of the "email" field.
+        type: string
+      firstname:
+        description: Firstname holds the value of the "firstname" field.
+        type: string
+      id:
+        description: ID of the ent.
+        type: integer
+      lastname:
+        description: Lastname holds the value of the "lastname" field.
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: API avec Fiber, Ent et Swagger
+  title: Go Fiber API
+  version: '1.0'
+paths:
+  /users:
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - description: User payload
+          in: body
+          name: user
+          required: true
+          schema:
+            $ref: '#/definitions/dto.CreateUserDTO'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/ent.User'
+      summary: Create user
+      tags:
+        - users
+swagger: '2.0'
