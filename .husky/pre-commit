@@ -1,6 +1,6 @@
-echo "Vérification TS"
+echo "✅ Vérification TS"
 npx lint-staged
 
-echo "Vérification Golang"
+echo "✅ Vérification Golang"
 cd apps/api/
 make check
