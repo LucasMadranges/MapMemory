@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/LucasMadranges/MapMemory/ent"
 	"github.com/LucasMadranges/MapMemory/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -20,7 +21,12 @@ func main() {
 	app := fiber.New()
 
 	client := database.NewClient()
-	defer client.Close()
+	defer func(client *ent.Client) {
+		err := client.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(client)
 
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
