@@ -1,0 +1,61 @@
+name: 🐛 Bug Report
+description: Report a malfunction
+labels: [Bug]
+body:
+  - type: dropdown
+    id: project
+    attributes:
+      label: Affected Project
+      options:
+        - Web
+        - Mobile
+        - Desktop
+        - API
+        - Minecraft
+        - Docs
+      description: Which project does this bug occur in?
+    validations:
+      required: true
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      placeholder: 'Ex: Crash on login'
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      placeholder: 'Clearly describe what is not working.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Go to...
+        2. Click on...
+        3. See the error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      placeholder: 'What should happen instead?'
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and Context
+      placeholder: 'OS, browser, logs, screenshots, etc.'
+    validations:
+      required: false

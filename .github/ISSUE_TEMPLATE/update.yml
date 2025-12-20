@@ -1,0 +1,50 @@
+name: 🔄 Update / Technical Task
+description: Submit an update request or internal technical task
+labels: [Update]
+body:
+  - type: dropdown
+    id: project
+    attributes:
+      label: Relevant Project
+      options:
+        - Web
+        - Mobile
+        - Desktop
+        - API
+        - Minecraft
+        - Docs
+      description: Which project does this apply to?
+    validations:
+      required: true
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      placeholder: 'E.g.: Update dependency X'
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+      placeholder: 'Explain what the update or technical task consists of.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Estimated Impact
+      placeholder: 'Is there any risk or expected impact?'
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional Information
+      placeholder: 'References, context, links, etc.'
+    validations:
+      required: false

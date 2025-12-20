@@ -1,0 +1,50 @@
+name: ✨ New Feature
+description: Propose a new feature or improvement
+labels: [Features]
+body:
+  - type: dropdown
+    id: project
+    attributes:
+      label: Relevant Project
+      options:
+        - Web
+        - Mobile
+        - Desktop
+        - API
+        - Minecraft
+        - Docs
+      description: Which project does this feature apply to?
+    validations:
+      required: true
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      placeholder: 'E.g.: Add advanced search functionality'
+    validations:
+      required: true
+
+  - type: textarea
+    id: need
+    attributes:
+      label: What is the need?
+      placeholder: 'Describe the problem this feature solves.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution Description
+      placeholder: 'Describe how the feature could work.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional Information
+      placeholder: 'Screenshots, references, examples...'
+    validations:
+      required: false
