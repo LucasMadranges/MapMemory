@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "lucide-react": "^0.562.0",
+    "mapbox-gl": "^3.17.0",
     "zod": "^4.2.1"
   },
   "devDependencies": {

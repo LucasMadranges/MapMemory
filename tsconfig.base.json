@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -16,12 +17,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@org/clients": ["libs/clients/src/index.ts"],
-      "@org/graphql": ["libs/graphql/src/index.ts"],
-      "@org/models": ["libs/models/src/index.ts"],
-      "@org/prisma": ["libs/prisma/src/index.ts"],
-      "@org/utils": ["libs/utils/src/index.ts"],
-      "@org/components": ["libs/utils/src/index.ts"]
+      "@org/components": ["libs/components/index.ts"],
+      "@org/validation": ["libs/validation/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
