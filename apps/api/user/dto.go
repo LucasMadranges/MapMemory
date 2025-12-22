@@ -1,4 +1,4 @@
-package dto
+package user
 
 type CreateUserDTO struct {
 	Avatar    string `json:"avatar"`

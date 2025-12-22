@@ -1,9 +1,8 @@
-package handlers
+package user
 
 import (
 	"context"
 
-	"github.com/LucasMadranges/MapMemory/dto"
 	"github.com/LucasMadranges/MapMemory/ent"
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,7 +17,7 @@ import (
 // @Router /users [post]
 func CreateUser(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var body dto.CreateUserDTO
+		var body CreateUserDTO
 		if err := c.BodyParser(&body); err != nil {
 			return c.Status(400).JSON(fiber.Map{"error": err.Error()})
 		}

@@ -1,0 +1,8 @@
+node_modules
+.next
+.build
+.vscode
+.idea
+.git
+*.md
+.env*.local

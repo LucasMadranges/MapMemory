@@ -1,4 +1,40 @@
 services:
+  web-mapmemory:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: dev
+    container_name: web-mapmemory
+    ports:
+      - '3000:3000'
+    environment:
+      - MAPBOX_PUBLIC_TOKEN=${MAPBOX_PUBLIC_TOKEN}
+      - API_URL=${API_URL}
+      - NODE_ENV=development
+    depends_on:
+      - api-mapmemory
+    networks:
+      - MapMemoryNetworks
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/web
+          target: /app/apps/web
+          ignore:
+            - node_modules/
+            - .next/
+        - action: sync
+          path: ./libs
+          target: /app/libs
+          ignore:
+            - node_modules/
+        - action: sync
+          path: ./tsconfig.base.json
+          target: /app/tsconfig.base.json
+        - action: rebuild
+          path: ./apps/web/package.json
+
   api-mapmemory:
     build:
       context: ./apps/api
@@ -7,10 +43,11 @@ services:
     ports:
       - '4000:4000'
     environment:
+      - JWT_SECRET=${JWT_SECRET}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_HOST=db-mapmemory
-      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_DB=${POSTGRES_DB}
     depends_on:
       - db-mapmemory
@@ -28,6 +65,8 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_DB=${POSTGRES_DB}
     networks:
       - MapMemoryNetworks

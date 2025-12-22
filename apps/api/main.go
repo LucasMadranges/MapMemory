@@ -4,7 +4,8 @@ import (
 	"log"
 
 	"github.com/LucasMadranges/MapMemory/ent"
-	"github.com/LucasMadranges/MapMemory/routes"
+	"github.com/LucasMadranges/MapMemory/internal/config"
+	"github.com/LucasMadranges/MapMemory/user"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 
@@ -19,6 +20,7 @@ import (
 // @BasePath /
 func main() {
 	app := fiber.New()
+	config.Load()
 
 	client := database.NewClient()
 	defer func(client *ent.Client) {
@@ -34,7 +36,8 @@ func main() {
 		return c.JSON(fiber.Map{"status": "ok"})
 	})
 
-	routes.RegisterUserRoutes(app, client)
+	/* NOTE : Routes */
+	user.RegisterUserRoutes(app, client)
 
 	log.Fatal(app.Listen(":4000"))
 }

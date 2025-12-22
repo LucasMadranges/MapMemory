@@ -22,10 +22,10 @@ export function Map() {
   }, []);
 
   return (
-    <div className={'w-full min-h-screen'}>
+    <div className={'w-full min-h-svh'}>
       <div
         ref={mapRef}
-        className={`relative w-full min-h-screen overflow-hidden z-0
+        className={`relative w-full min-h-svh overflow-hidden z-0
             [&_.mapboxgl-popup]:!max-w-100
             [&_.mapboxgl-popup-content]:p-0 [&_.mapboxgl-popup-content]:rounded-lg`}
       ></div>
