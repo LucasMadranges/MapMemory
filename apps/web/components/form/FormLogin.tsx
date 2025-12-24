@@ -23,7 +23,6 @@ export default function FormLogin() {
         return;
       }
 
-      console.log('Success');
       console.log(result.data);
     } catch (error: unknown) {
       console.error(error);

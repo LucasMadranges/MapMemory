@@ -49,6 +49,12 @@ services:
     networks:
       - MapMemoryNetworks
     restart: unless-stopped
+    develop:
+      watch:
+        - action: rebuild
+          path: ./apps/api
+          ignore:
+            - ./apps/api/ent/
 
   db-mapmemory:
     image: postgres:16

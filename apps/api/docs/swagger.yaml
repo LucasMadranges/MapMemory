@@ -1,14 +1,8 @@
 basePath: /
 definitions:
-  dto.CreateUserDTO:
+  auth.LoginDTO:
     properties:
-      avatar:
-        type: string
       email:
-        type: string
-      firstname:
-        type: string
-      lastname:
         type: string
       password:
         type: string
@@ -31,6 +25,19 @@ definitions:
         description: Lastname holds the value of the "lastname" field.
         type: string
     type: object
+  user.CreateUserDTO:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
 host: localhost:3000
 info:
   contact: {}
@@ -38,25 +45,68 @@ info:
   title: Go Fiber API
   version: '1.0'
 paths:
+  /auth/login:
+    post:
+      consumes:
+        - application/json
+      description: Authenticate user with email and password
+      parameters:
+        - description: Login credentials
+          in: body
+          name: credentials
+          required: true
+          schema:
+            $ref: '#/definitions/auth.LoginDTO'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Returns JWT token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        '400':
+          description: Invalid request body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        '401':
+          description: Invalid credentials
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User login
+      tags:
+        - auth
   /users:
     post:
       consumes:
         - application/json
+      description: Create a new userrrrrrrr account
       parameters:
         - description: User payload
           in: body
           name: user
           required: true
           schema:
-            $ref: '#/definitions/dto.CreateUserDTO'
+            $ref: '#/definitions/user.CreateUserDTO'
       produces:
         - application/json
       responses:
         '201':
-          description: Created
+          description: User created successfully
           schema:
             $ref: '#/definitions/ent.User'
-      summary: Create user
+        '400':
+          description: Invalid request body or user creation failed
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create userrrrrrrrrrrrr
       tags:
-        - users
+        - Users
 swagger: '2.0'
