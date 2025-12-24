@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react",
+    "paths": {
+      "@components": ["./components/index.ts"],
+      "@components/*": ["./components/*"]
+    }
   },
   "extends": "../../tsconfig.base.json",
   "include": [

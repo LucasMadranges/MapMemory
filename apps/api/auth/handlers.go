@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Login(client *ent.Client) fiber.Handler {
+func FormLogin(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var dto LoginDTO
 		if err := c.BodyParser(&dto); err != nil {

@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
-export function Map() {
+export default function Map() {
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
