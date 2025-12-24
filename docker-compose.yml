@@ -25,11 +25,6 @@ services:
             - node_modules/
             - .next/
         - action: sync
-          path: ./libs
-          target: /app/libs
-          ignore:
-            - node_modules/
-        - action: sync
           path: ./tsconfig.base.json
           target: /app/tsconfig.base.json
         - action: rebuild
@@ -54,6 +49,12 @@ services:
     networks:
       - MapMemoryNetworks
     restart: unless-stopped
+    develop:
+      watch:
+        - action: rebuild
+          path: ./apps/api
+          ignore:
+            - ./apps/api/ent/
 
   db-mapmemory:
     image: postgres:16

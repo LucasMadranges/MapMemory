@@ -4,7 +4,6 @@ WORKDIR /app
 
 COPY package.json package-lock.json* ./
 COPY tsconfig.base.json ./
-COPY libs/package.json ./libs/
 COPY apps/web/package.json ./apps/web/
 
 RUN npm ci
@@ -13,12 +12,10 @@ FROM node:20-alpine AS dev
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/libs ./libs
 COPY --from=deps /app/apps/web ./apps/web
 
 COPY tsconfig.base.json ./
 COPY package.json ./
-COPY libs ./libs
 COPY apps/web ./apps/web
 
 ENV NODE_ENV=development
@@ -34,7 +31,6 @@ COPY --from=deps /app/node_modules ./node_modules
 
 COPY tsconfig.base.json ./
 COPY package.json ./
-COPY libs ./libs
 COPY apps/web ./apps/web
 
 ENV NODE_ENV=production

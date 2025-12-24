@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr">
       <body className={`${roboto.className}`}>
-        <main className="w-full min-h-svh flex items-center justify-center bg-blue-500">
+        <main className="w-full min-h-svh flex items-center justify-center bg-primary p-4">
           {children}
         </main>
       </body>

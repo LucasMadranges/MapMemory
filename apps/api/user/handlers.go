@@ -9,11 +9,13 @@ import (
 
 // CreateUser godoc
 // @Summary Create user
-// @Tags users
+// @Description Create a new user account
+// @Tags Users
 // @Accept json
 // @Produce json
-// @Param user body dto.CreateUserDTO true "User payload"
-// @Success 201 {object} ent.User
+// @Param user body CreateUserDTO true "User payload"
+// @Success 201 {object} ent.User "User created successfully"
+// @Failure 400 {object} map[string]string "Invalid request body or user creation failed"
 // @Router /users [post]
 func CreateUser(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {

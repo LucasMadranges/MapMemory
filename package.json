@@ -4,8 +4,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "libs/*"
+    "apps/*"
   ],
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

@@ -1,0 +1,7 @@
+import React from 'react';
+
+import Login from '../../components/page/Login';
+
+export default function Page() {
+  return <Login />;
+}
