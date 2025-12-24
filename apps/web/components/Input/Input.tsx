@@ -21,7 +21,6 @@ export default function Input<T extends string | number>({
   onClearError?: () => void;
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [isShowPassword, setIsShowPassword] = useState(false);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const inputValue = e.target.value;
@@ -35,7 +34,6 @@ export default function Input<T extends string | number>({
 
   function handleShowPassword() {
     setShowPassword(!showPassword);
-    setIsShowPassword(!isShowPassword);
   }
 
   return (
@@ -50,12 +48,13 @@ export default function Input<T extends string | number>({
             value={value}
             onChange={handleChange}
             className="rounded-md border border-gray-300 p-2 w-full pr-10"
-            type={isShowPassword ? 'text' : type}
+            type={showPassword ? 'text' : type}
             placeholder={placeholder}
           />
 
           {type === 'password' && (
             <button
+              type={'button'}
               onClick={handleShowPassword}
               className="absolute right-2.5 top-1/2 -translate-y-1/2"
             >
