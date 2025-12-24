@@ -1,6 +1,6 @@
 name: 🐛 Bug Report
 description: Report a malfunction
-labels: [Bug]
+labels: [ Bug ]
 body:
   - type: dropdown
     id: project
@@ -8,11 +8,7 @@ body:
       label: Affected Project
       options:
         - Web
-        - Mobile
-        - Desktop
         - API
-        - Minecraft
-        - Docs
       description: Which project does this bug occur in?
     validations:
       required: true

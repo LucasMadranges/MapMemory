@@ -1,6 +1,6 @@
 name: ✨ New Feature
 description: Propose a new feature or improvement
-labels: [Features]
+labels: [ Features ]
 body:
   - type: dropdown
     id: project
@@ -8,11 +8,7 @@ body:
       label: Relevant Project
       options:
         - Web
-        - Mobile
-        - Desktop
         - API
-        - Minecraft
-        - Docs
       description: Which project does this feature apply to?
     validations:
       required: true

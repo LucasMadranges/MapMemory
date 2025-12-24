@@ -1,6 +1,6 @@
 name: 🔄 Update / Technical Task
 description: Submit an update request or internal technical task
-labels: [Update]
+labels: [ Update ]
 body:
   - type: dropdown
     id: project
@@ -8,11 +8,7 @@ body:
       label: Relevant Project
       options:
         - Web
-        - Mobile
-        - Desktop
         - API
-        - Minecraft
-        - Docs
       description: Which project does this apply to?
     validations:
       required: true
