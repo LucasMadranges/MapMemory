@@ -64,15 +64,17 @@ func CreateUser(client *ent.Client) fiber.Handler {
 		var body CreateUserDTO
 		if err := c.BodyParser(&body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "Corps de requête invalide",
+				Success:  false,
+				Message:  "Corps de requête invalide",
+				Explicit: err.Error(),
 			})
 		}
 
 		if err := config.Validate.Struct(body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "Données invalides",
+				Success:  false,
+				Message:  "Données invalides",
+				Explicit: err.Error(),
 			})
 		}
 
@@ -80,14 +82,16 @@ func CreateUser(client *ent.Client) fiber.Handler {
 
 		if err != nil {
 			return c.Status(500).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "Erreur lors du hachage du mot de passe",
+				Success:  false,
+				Message:  "Erreur lors du hachage du mot de passe",
+				Explicit: err.Error(),
 			})
 		}
 
 		user, err := client.User.
 			Create().
 			SetAvatar(body.Avatar).
+			SetNillableRole(body.Role).
 			SetFirstname(body.Firstname).
 			SetLastname(body.Lastname).
 			SetEmail(body.Email).
@@ -96,8 +100,9 @@ func CreateUser(client *ent.Client) fiber.Handler {
 
 		if err != nil {
 			return c.Status(409).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "L'utilisateur existe déjà",
+				Success:  false,
+				Message:  "L'utilisateur existe déjà",
+				Explicit: err.Error(),
 			})
 		}
 

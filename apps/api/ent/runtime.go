@@ -15,7 +15,7 @@ func init() {
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescFirstname is the schema descriptor for firstname field.
-	userDescFirstname := userFields[2].Descriptor()
+	userDescFirstname := userFields[3].Descriptor()
 	// user.FirstnameValidator is a validator for the "firstname" field. It is called by the builders before save.
 	user.FirstnameValidator = func() func(string) error {
 		validators := userDescFirstname.Validators
@@ -34,7 +34,7 @@ func init() {
 		}
 	}()
 	// userDescLastname is the schema descriptor for lastname field.
-	userDescLastname := userFields[3].Descriptor()
+	userDescLastname := userFields[4].Descriptor()
 	// user.LastnameValidator is a validator for the "lastname" field. It is called by the builders before save.
 	user.LastnameValidator = func() func(string) error {
 		validators := userDescLastname.Validators
@@ -53,7 +53,7 @@ func init() {
 		}
 	}()
 	// userDescEmail is the schema descriptor for email field.
-	userDescEmail := userFields[4].Descriptor()
+	userDescEmail := userFields[5].Descriptor()
 	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	user.EmailValidator = func() func(string) error {
 		validators := userDescEmail.Validators
@@ -73,7 +73,7 @@ func init() {
 		}
 	}()
 	// userDescPassword is the schema descriptor for password field.
-	userDescPassword := userFields[5].Descriptor()
+	userDescPassword := userFields[6].Descriptor()
 	// user.PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	user.PasswordValidator = func() func(string) error {
 		validators := userDescPassword.Validators

@@ -21,6 +21,8 @@ var emailRegex = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Immutable(),
+		field.Enum("role").Values("admin", "user").
+			Default("user"),
 		field.String("avatar"),
 		field.String("firstname").NotEmpty().MinLen(2).MaxLen(100),
 		field.String("lastname").NotEmpty().MinLen(2).MaxLen(100),

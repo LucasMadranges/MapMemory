@@ -1,6 +1,7 @@
 package request
 
 type ErrorRequest struct {
-	Success bool   `json:"success" example:"false"`
-	Message string `json:"message" example:"Failed to retrieve users"`
+	Success  bool   `json:"success" example:"false"`
+	Message  string `json:"message" example:"Failed to retrieve users"`
+	Explicit string `json:"explicit" example:"Failed to retieve users due to database timeout"`
 }
