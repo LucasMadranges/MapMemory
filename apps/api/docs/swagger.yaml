@@ -7,31 +7,36 @@ definitions:
       password:
         type: string
     type: object
-  ent.User:
-    properties:
-      avatar:
-        description: Avatar holds the value of the "avatar" field.
-        type: string
-      email:
-        description: Email holds the value of the "email" field.
-        type: string
-      firstname:
-        description: Firstname holds the value of the "firstname" field.
-        type: string
-      id:
-        description: ID of the ent.
-        type: integer
-      lastname:
-        description: Lastname holds the value of the "lastname" field.
-        type: string
-    type: object
-  errors.ErrorRequest:
+  request.ErrorRequest:
     properties:
       message:
         example: Failed to retrieve users
         type: string
       success:
         example: false
+        type: boolean
+    type: object
+  request.SuccessCreateRequest:
+    properties:
+      data: {}
+      success:
+        example: true
+        type: boolean
+    type: object
+  request.SuccessDeleteRequest:
+    properties:
+      count:
+        example: 0
+        type: integer
+      success:
+        example: true
+        type: boolean
+    type: object
+  request.SuccessGetAllRequest:
+    properties:
+      data: {}
+      success:
+        example: true
         type: boolean
     type: object
   user.CreateUserDTO:
@@ -44,11 +49,11 @@ definitions:
         type: string
       firstname:
         example: Lucas
-        minLength: 5
+        minLength: 2
         type: string
       lastname:
         example: Madranges
-        minLength: 5
+        minLength: 2
         type: string
       password:
         example: Azertye789456&!
@@ -113,23 +118,23 @@ paths:
           description: List of users
           schema:
             items:
-              $ref: '#/definitions/ent.User'
+              $ref: '#/definitions/request.SuccessGetAllRequest'
             type: array
         '400':
           description: Failed to retrieve users
           schema:
-            $ref: '#/definitions/errors.ErrorRequest'
+            $ref: '#/definitions/request.ErrorRequest'
         '500':
           description: Internal server error
           schema:
-            $ref: '#/definitions/errors.ErrorRequest'
+            $ref: '#/definitions/request.ErrorRequest'
       summary: Get all users
       tags:
         - Users
     post:
       consumes:
         - application/json
-      description: Create a new userrrrrr account
+      description: Create a new user account
       parameters:
         - description: User payload
           in: body
@@ -143,20 +148,47 @@ paths:
         '201':
           description: User created successfully
           schema:
-            $ref: '#/definitions/ent.User'
+            $ref: '#/definitions/request.SuccessCreateRequest'
         '400':
           description: Invalid request body
           schema:
-            $ref: '#/definitions/errors.ErrorRequest'
+            $ref: '#/definitions/request.ErrorRequest'
         '409':
           description: User already exists
           schema:
-            $ref: '#/definitions/errors.ErrorRequest'
+            $ref: '#/definitions/request.ErrorRequest'
         '500':
           description: Internal server error
           schema:
-            $ref: '#/definitions/errors.ErrorRequest'
+            $ref: '#/definitions/request.ErrorRequest'
       summary: Create user
+      tags:
+        - Users
+  /users/{email}:
+    delete:
+      description: Delete a user account by email
+      parameters:
+        - description: User Email
+          in: path
+          name: email
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User deleted successfully
+          schema:
+            $ref: '#/definitions/request.SuccessDeleteRequest'
+        '404':
+          description: User not found
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Delete user by email
       tags:
         - Users
 swagger: '2.0'

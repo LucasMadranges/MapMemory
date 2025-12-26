@@ -86,26 +86,26 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/ent.User"
+                                "$ref": "#/definitions/request.SuccessGetAllRequest"
                             }
                         }
                     },
                     "400": {
                         "description": "Failed to retrieve users",
                         "schema": {
-                            "$ref": "#/definitions/errors.ErrorRequest"
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/errors.ErrorRequest"
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     }
                 }
             },
             "post": {
-                "description": "Create a new userrrrrr account",
+                "description": "Create a new user account",
                 "consumes": [
                     "application/json"
                 ],
@@ -131,25 +131,66 @@ const docTemplate = `{
                     "201": {
                         "description": "User created successfully",
                         "schema": {
-                            "$ref": "#/definitions/ent.User"
+                            "$ref": "#/definitions/request.SuccessCreateRequest"
                         }
                     },
                     "400": {
                         "description": "Invalid request body",
                         "schema": {
-                            "$ref": "#/definitions/errors.ErrorRequest"
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "409": {
                         "description": "User already exists",
                         "schema": {
-                            "$ref": "#/definitions/errors.ErrorRequest"
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/errors.ErrorRequest"
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{email}": {
+            "delete": {
+                "description": "Delete a user account by email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete user by email",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User Email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessDeleteRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     }
                 }
@@ -168,32 +209,7 @@ const docTemplate = `{
                 }
             }
         },
-        "ent.User": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "description": "Avatar holds the value of the \"avatar\" field.",
-                    "type": "string"
-                },
-                "email": {
-                    "description": "Email holds the value of the \"email\" field.",
-                    "type": "string"
-                },
-                "firstname": {
-                    "description": "Firstname holds the value of the \"firstname\" field.",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "ID of the ent.",
-                    "type": "integer"
-                },
-                "lastname": {
-                    "description": "Lastname holds the value of the \"lastname\" field.",
-                    "type": "string"
-                }
-            }
-        },
-        "errors.ErrorRequest": {
+        "request.ErrorRequest": {
             "type": "object",
             "properties": {
                 "message": {
@@ -203,6 +219,39 @@ const docTemplate = `{
                 "success": {
                     "type": "boolean",
                     "example": false
+                }
+            }
+        },
+        "request.SuccessCreateRequest": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "request.SuccessDeleteRequest": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "request.SuccessGetAllRequest": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "success": {
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },
@@ -225,12 +274,12 @@ const docTemplate = `{
                 },
                 "firstname": {
                     "type": "string",
-                    "minLength": 5,
+                    "minLength": 2,
                     "example": "Lucas"
                 },
                 "lastname": {
                     "type": "string",
-                    "minLength": 5,
+                    "minLength": 2,
                     "example": "Madranges"
                 },
                 "password": {

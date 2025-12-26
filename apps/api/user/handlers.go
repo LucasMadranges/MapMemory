@@ -2,11 +2,13 @@ package user
 
 import (
 	"context"
+	"net/url"
 
 	"github.com/LucasMadranges/MapMemory/ent"
+	"github.com/LucasMadranges/MapMemory/ent/user"
 	"github.com/LucasMadranges/MapMemory/internal/config"
 	"github.com/LucasMadranges/MapMemory/utils/bcrypt"
-	"github.com/LucasMadranges/MapMemory/utils/errors"
+	"github.com/LucasMadranges/MapMemory/utils/request"
 	"github.com/LucasMadranges/MapMemory/utils/validation"
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,9 +18,9 @@ import (
 // @Description Retrieve a list of all users
 // @Tags Users
 // @Produce json
-// @Success 201 {array} ent.User "List of users"
-// @Failure 400 {object} errors.ErrorRequest "Failed to retrieve users"
-// @Failure 500 {object} errors.ErrorRequest "Internal server error"
+// @Success 201 {array} request.SuccessGetAllRequest "List of users"
+// @Failure 400 {object} request.ErrorRequest "Failed to retrieve users"
+// @Failure 500 {object} request.ErrorRequest "Internal server error"
 // @Router /users [get]
 func GetUsers(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -26,13 +28,16 @@ func GetUsers(client *ent.Client) fiber.Handler {
 			All(context.Background())
 
 		if err != nil {
-			return c.Status(400).JSON(errors.ErrorRequest{
+			return c.Status(400).JSON(request.ErrorRequest{
 				Success: false,
-				Message: err.Error(),
+				Message: "Échec de la récupération des utilisateurs",
 			})
 		}
 
-		return c.Status(201).JSON(user)
+		return c.Status(201).JSON(request.SuccessGetAllRequest{
+			Success: true,
+			Data:    user,
+		})
 	}
 }
 
@@ -43,10 +48,10 @@ func GetUsers(client *ent.Client) fiber.Handler {
 // @Accept json
 // @Produce json
 // @Param user body CreateUserDTO true "User payload"
-// @Success 201 {object} ent.User "User created successfully"
-// @Failure 400 {object} errors.ErrorRequest "Invalid request body"
-// @Failure 409 {object} errors.ErrorRequest "User already exists"
-// @Failure 500 {object} errors.ErrorRequest "Internal server error"
+// @Success 201 {object} request.SuccessCreateRequest "User created successfully"
+// @Failure 400 {object} request.ErrorRequest "Invalid request body"
+// @Failure 409 {object} request.ErrorRequest "User already exists"
+// @Failure 500 {object} request.ErrorRequest "Internal server error"
 // @Router /users [post]
 func CreateUser(client *ent.Client) fiber.Handler {
 	err := validation.ValidatePassword(config.Validate)
@@ -58,25 +63,25 @@ func CreateUser(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var body CreateUserDTO
 		if err := c.BodyParser(&body); err != nil {
-			return c.Status(400).JSON(errors.ErrorRequest{
+			return c.Status(400).JSON(request.ErrorRequest{
 				Success: false,
-				Message: err.Error(),
+				Message: "Corps de requête invalide",
 			})
 		}
 
 		if err := config.Validate.Struct(body); err != nil {
-			return c.Status(400).JSON(errors.ErrorRequest{
+			return c.Status(400).JSON(request.ErrorRequest{
 				Success: false,
-				Message: err.Error(),
+				Message: "Données invalides",
 			})
 		}
 
 		hash, err := bcrypt.HashPassword(body.Password)
 
 		if err != nil {
-			return c.Status(500).JSON(errors.ErrorRequest{
+			return c.Status(500).JSON(request.ErrorRequest{
 				Success: false,
-				Message: err.Error(),
+				Message: "Erreur lors du hachage du mot de passe",
 			})
 		}
 
@@ -90,12 +95,60 @@ func CreateUser(client *ent.Client) fiber.Handler {
 			Save(context.Background())
 
 		if err != nil {
-			return c.Status(409).JSON(errors.ErrorRequest{
+			return c.Status(409).JSON(request.ErrorRequest{
 				Success: false,
-				Message: err.Error(),
+				Message: "L'utilisateur existe déjà",
 			})
 		}
 
-		return c.Status(201).JSON(user)
+		return c.Status(201).JSON(request.SuccessCreateRequest{
+			Success: true,
+			Data:    user,
+		})
+	}
+}
+
+// DeleteUsersByEmail godoc
+// @Summary Delete user by email
+// @Description Delete a user account by email
+// @Tags Users
+// @Param email path string true "User Email"
+// @Produce json
+// @Success 200 {object} request.SuccessDeleteRequest "User deleted successfully"
+// @Failure 404 {object} request.ErrorRequest "User not found"
+// @Failure 500 {object} request.ErrorRequest "Internal server error"
+// @Router /users/{email} [delete]
+func DeleteUsersByEmail(client *ent.Client) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		email := c.Params("email")
+
+		decodedEmail, err := url.QueryUnescape(email)
+		if err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success: false,
+				Message: "Email invalide",
+			})
+		}
+
+		count, err := client.User.Delete().Where(user.EmailEQ(decodedEmail)).Exec(context.Background())
+
+		if err != nil {
+			return c.Status(500).JSON(request.ErrorRequest{
+				Success: false,
+				Message: "Erreur lors de la suppression de l'utilisateur",
+			})
+		}
+
+		if count == 0 {
+			return c.Status(404).JSON(request.ErrorRequest{
+				Success: false,
+				Message: "L'utilisateur n'existe pas",
+			})
+		}
+
+		return c.Status(200).JSON(request.SuccessDeleteRequest{
+			Success: true,
+			Count:   count,
+		})
 	}
 }
