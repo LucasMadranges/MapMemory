@@ -16,7 +16,7 @@ import (
 // @title Go Fiber API
 // @version 1.0
 // @description API avec Fiber, Ent et Swagger
-// @host localhost:3000
+// @host localhost:4000
 // @BasePath /
 func main() {
 	app := fiber.New()

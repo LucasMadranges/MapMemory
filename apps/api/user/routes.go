@@ -6,5 +6,6 @@ import (
 )
 
 func RegisterUserRoutes(app *fiber.App, client *ent.Client) {
+	app.Get("/users", GetUsers(client))
 	app.Post("/users", CreateUser(client))
 }

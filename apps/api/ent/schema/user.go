@@ -20,8 +20,8 @@ var emailRegex = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("avatar"),
-		field.String("firstname").NotEmpty().MinLen(10).MaxLen(100),
-		field.String("lastname").NotEmpty().MinLen(10).MaxLen(100),
+		field.String("firstname").NotEmpty().MinLen(2).MaxLen(100),
+		field.String("lastname").NotEmpty().MinLen(2).MaxLen(100),
 		field.String("email").NotEmpty().MinLen(10).MaxLen(100).Unique().Match(emailRegex),
 		field.String("password").NotEmpty().MinLen(12).MaxLen(100).Sensitive().Validate(func(s string) error {
 			if len(s) < 12 {

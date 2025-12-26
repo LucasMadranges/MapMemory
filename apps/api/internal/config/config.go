@@ -1,17 +1,14 @@
 package config
 
 import (
-	"log"
-	"os"
+	config "github.com/LucasMadranges/MapMemory/internal/config/jwt"
+	"github.com/go-playground/validator/v10"
 )
 
 var JWTSecret []byte
+var Validate *validator.Validate
 
 func Load() {
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		log.Fatal("JWT_SECRET is not set")
-	}
-
-	JWTSecret = []byte(secret)
+	JWTSecret = []byte(config.LoadJWT())
+	Validate = validator.New()
 }

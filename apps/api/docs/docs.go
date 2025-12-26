@@ -71,8 +71,41 @@ const docTemplate = `{
             }
         },
         "/users": {
+            "get": {
+                "description": "Retrieve a list of all users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all users",
+                "responses": {
+                    "201": {
+                        "description": "List of users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to retrieve users",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorRequest"
+                        }
+                    }
+                }
+            },
             "post": {
-                "description": "Create a new userrrrrrrr account",
+                "description": "Create a new userrrrrr account",
                 "consumes": [
                     "application/json"
                 ],
@@ -82,7 +115,7 @@ const docTemplate = `{
                 "tags": [
                     "Users"
                 ],
-                "summary": "Create userrrrrrrrrrrrr",
+                "summary": "Create user",
                 "parameters": [
                     {
                         "description": "User payload",
@@ -102,12 +135,21 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Invalid request body or user creation failed",
+                        "description": "Invalid request body",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/errors.ErrorRequest"
+                        }
+                    },
+                    "409": {
+                        "description": "User already exists",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorRequest"
                         }
                     }
                 }
@@ -151,23 +193,50 @@ const docTemplate = `{
                 }
             }
         },
-        "user.CreateUserDTO": {
+        "errors.ErrorRequest": {
             "type": "object",
             "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Failed to retrieve users"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "user.CreateUserDTO": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstname",
+                "lastname",
+                "password"
+            ],
+            "properties": {
                 "avatar": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://example.com/"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "lucasmadranges@gmail.com"
                 },
                 "firstname": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 5,
+                    "example": "Lucas"
                 },
                 "lastname": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 5,
+                    "example": "Madranges"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 12,
+                    "example": "Azertye789456\u0026!"
                 }
             }
         }
@@ -177,7 +246,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3000",
+	Host:             "localhost:4000",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Go Fiber API",
