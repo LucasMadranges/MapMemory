@@ -29,8 +29,39 @@ func GetUsers(client *ent.Client) fiber.Handler {
 
 		if err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "Échec de la récupération des utilisateurs",
+				Success:  false,
+				Message:  "Échec de la récupération des utilisateurs",
+				Explicit: err.Error(),
+			})
+		}
+
+		return c.Status(201).JSON(request.SuccessGetAllRequest{
+			Success: true,
+			Data:    user,
+		})
+	}
+}
+
+// GetUserByEmail godoc
+// @Summary Get user by email
+// @Description Retrieve a user account by email
+// @Tags Users
+// @Param email path string true "User Email"
+// @Produce json
+// @Success 201 {array} request.SuccessGetAllRequest "List of users"
+// @Failure 400 {object} request.ErrorRequest "Failed to retrieve users"
+// @Failure 500 {object} request.ErrorRequest "Internal server error"
+// @Router /users/{email} [get]
+func GetUserByEmail(client *ent.Client) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		user, err := client.User.Query().Where(user.EmailEQ(c.Params("email"))).
+			All(context.Background())
+
+		if err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Échec de la récupération des utilisateurs",
+				Explicit: err.Error(),
 			})
 		}
 
@@ -130,8 +161,9 @@ func DeleteUsersByEmail(client *ent.Client) fiber.Handler {
 		decodedEmail, err := url.QueryUnescape(email)
 		if err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "Email invalide",
+				Success:  false,
+				Message:  "Email invalide",
+				Explicit: err.Error(),
 			})
 		}
 
@@ -139,15 +171,17 @@ func DeleteUsersByEmail(client *ent.Client) fiber.Handler {
 
 		if err != nil {
 			return c.Status(500).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "Erreur lors de la suppression de l'utilisateur",
+				Success:  false,
+				Message:  "Erreur lors de la suppression de l'utilisateur",
+				Explicit: err.Error(),
 			})
 		}
 
 		if count == 0 {
 			return c.Status(404).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "L'utilisateur n'existe pas",
+				Success:  false,
+				Message:  "L'utilisateur n'existe pas",
+				Explicit: err.Error(),
 			})
 		}
 

@@ -10,7 +10,7 @@ RUN go mod download
 
 COPY . .
 
-RUN swag init
+RUN swag init -g main.go -o docs
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /api .
 
@@ -25,6 +25,8 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
+
+RUN swag init -g main.go -o docs
 
 EXPOSE 4000
 

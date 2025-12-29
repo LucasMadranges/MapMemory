@@ -156,6 +156,48 @@ const docTemplate = `{
             }
         },
         "/users/{email}": {
+            "get": {
+                "description": "Retrieve a user account by email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user by email",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User Email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "List of users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/request.SuccessGetAllRequest"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to retrieve users",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete a user account by email",
                 "produces": [
@@ -200,18 +242,29 @@ const docTemplate = `{
     "definitions": {
         "auth.LoginDTO": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "lucasmadranges@gmail.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 12,
+                    "example": "Azertye789456\u0026!"
                 }
             }
         },
         "request.ErrorRequest": {
             "type": "object",
             "properties": {
+                "explicit": {
+                    "type": "string",
+                    "example": "Failed to retieve users due to database timeout"
+                },
                 "message": {
                     "type": "string",
                     "example": "Failed to retrieve users"
@@ -286,8 +339,33 @@ const docTemplate = `{
                     "type": "string",
                     "minLength": 12,
                     "example": "Azertye789456\u0026!"
+                },
+                "role": {
+                    "enum": [
+                        "admin",
+                        "user"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/user.Role"
+                        }
+                    ],
+                    "example": "user"
                 }
             }
+        },
+        "user.Role": {
+            "type": "string",
+            "enum": [
+                "user",
+                "admin",
+                "user"
+            ],
+            "x-enum-varnames": [
+                "DefaultRole",
+                "RoleAdmin",
+                "RoleUser"
+            ]
         }
     }
 }`

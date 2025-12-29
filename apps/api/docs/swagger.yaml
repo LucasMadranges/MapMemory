@@ -3,12 +3,21 @@ definitions:
   auth.LoginDTO:
     properties:
       email:
+        example: lucasmadranges@gmail.com
         type: string
       password:
+        example: Azertye789456&!
+        minLength: 12
         type: string
+    required:
+      - email
+      - password
     type: object
   request.ErrorRequest:
     properties:
+      explicit:
+        example: Failed to retieve users due to database timeout
+        type: string
       message:
         example: Failed to retrieve users
         type: string
@@ -59,12 +68,29 @@ definitions:
         example: Azertye789456&!
         minLength: 12
         type: string
+      role:
+        allOf:
+          - $ref: '#/definitions/user.Role'
+        enum:
+          - admin
+          - user
+        example: user
     required:
       - email
       - firstname
       - lastname
       - password
     type: object
+  user.Role:
+    enum:
+      - user
+      - admin
+      - user
+    type: string
+    x-enum-varnames:
+      - DefaultRole
+      - RoleAdmin
+      - RoleUser
 host: localhost:4000
 info:
   contact: {}
@@ -189,6 +215,34 @@ paths:
           schema:
             $ref: '#/definitions/request.ErrorRequest'
       summary: Delete user by email
+      tags:
+        - Users
+    get:
+      description: Retrieve a user account by email
+      parameters:
+        - description: User Email
+          in: path
+          name: email
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: List of users
+          schema:
+            items:
+              $ref: '#/definitions/request.SuccessGetAllRequest'
+            type: array
+        '400':
+          description: Failed to retrieve users
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Get user by email
       tags:
         - Users
 swagger: '2.0'

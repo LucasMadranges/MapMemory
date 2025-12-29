@@ -36,6 +36,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     container_name: api-mapmemory
+    command: ['/bin/sh', '-c', '/usr/local/bin/swag init -g main.go -o docs && air -c .air.toml']
     ports:
       - '4000:4000'
     environment:
