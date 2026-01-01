@@ -38,7 +38,7 @@ func main() {
 	})
 
 	/* NOTE : Routes */
-	auth.RegisterUserRoutes(app, client)
+	auth.RegisterAuthRoutes(app, client)
 	user.RegisterUserRoutes(app, client)
 
 	log.Fatal(app.Listen(":4000"))

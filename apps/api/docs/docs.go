@@ -79,7 +79,7 @@ const docTemplate = `{
                 "summary": "Get all users",
                 "responses": {
                     "201": {
-                        "description": "List of users",
+                        "description": "Récupérer tous les utilisateurs",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -88,13 +88,13 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Failed to retrieve users",
+                        "description": "Échec de la récupération des utilisateurs",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Erreur interne",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
@@ -126,25 +126,25 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "User created successfully",
+                        "description": "Utilisateur créé avec succés",
                         "schema": {
                             "$ref": "#/definitions/request.SuccessCreateRequest"
                         }
                     },
                     "400": {
-                        "description": "Invalid request body",
+                        "description": "Données invalides",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "409": {
-                        "description": "User already exists",
+                        "description": "Utilisateur déjà existant",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Erreur interne",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
@@ -173,7 +173,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "List of users",
+                        "description": "Récupérer un utilisateur par email",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -182,19 +182,19 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Failed to retrieve users",
+                        "description": "Échec de la récupération de l'utilisateur",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "404": {
-                        "description": "User not found",
+                        "description": "Utilisateur non trouvé",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Erreur interne",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
@@ -221,19 +221,25 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "User deleted successfully",
+                        "description": "Utilisateur supprimé avec succés",
                         "schema": {
                             "$ref": "#/definitions/request.SuccessDeleteRequest"
                         }
                     },
+                    "400": {
+                        "description": "Email invalide",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
                     "404": {
-                        "description": "User not found",
+                        "description": "Utilisateur non trouvé",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Erreur interne",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }

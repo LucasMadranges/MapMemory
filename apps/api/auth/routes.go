@@ -5,6 +5,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func RegisterUserRoutes(app *fiber.App, client *ent.Client) {
+func RegisterAuthRoutes(app *fiber.App, client *ent.Client) {
 	app.Post("/auth/login", Login(client))
 }
