@@ -18,9 +18,9 @@ import (
 // @Description Retrieve a list of all users
 // @Tags Users
 // @Produce json
-// @Success 201 {array} request.SuccessGetAllRequest "List of users"
-// @Failure 400 {object} request.ErrorRequest "Failed to retrieve users"
-// @Failure 500 {object} request.ErrorRequest "Internal server error"
+// @Success 201 {array} request.SuccessGetAllRequest "Récupérer tous les utilisateurs"
+// @Failure 400 {object} request.ErrorRequest "Échec de la récupération des utilisateurs"
+// @Failure 500 {object} request.ErrorRequest "Erreur interne"
 // @Router /users [get]
 func GetUsers(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -48,10 +48,10 @@ func GetUsers(client *ent.Client) fiber.Handler {
 // @Tags Users
 // @Param email path string true "User Email"
 // @Produce json
-// @Success 201 {array} request.SuccessGetAllRequest "List of users"
-// @Failure 400 {object} request.ErrorRequest "Failed to retrieve users"
-// @Failure 404 {object} request.ErrorRequest "User not found"
-// @Failure 500 {object} request.ErrorRequest "Internal server error"
+// @Success 201 {array} request.SuccessGetAllRequest "Récupérer un utilisateur par email"
+// @Failure 400 {object} request.ErrorRequest "Échec de la récupération de l'utilisateur"
+// @Failure 404 {object} request.ErrorRequest "Utilisateur non trouvé"
+// @Failure 500 {object} request.ErrorRequest "Erreur interne"
 // @Router /users/{email} [get]
 func GetUserByEmail(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -88,20 +88,24 @@ func GetUserByEmail(client *ent.Client) fiber.Handler {
 // @Accept json
 // @Produce json
 // @Param user body CreateUserDTO true "User payload"
-// @Success 201 {object} request.SuccessCreateRequest "User created successfully"
-// @Failure 400 {object} request.ErrorRequest "Invalid request body"
-// @Failure 409 {object} request.ErrorRequest "User already exists"
-// @Failure 500 {object} request.ErrorRequest "Internal server error"
+// @Success 201 {object} request.SuccessCreateRequest "Utilisateur créé avec succés"
+// @Failure 400 {object} request.ErrorRequest "Corps de requête invalide"
+// @Failure 400 {object} request.ErrorRequest "Données invalides"
+// @Failure 409 {object} request.ErrorRequest "Utilisateur déjà existant"
+// @Failure 500 {object} request.ErrorRequest "Erreur interne"
 // @Router /users [post]
 func CreateUser(client *ent.Client) fiber.Handler {
-	err := validation.ValidatePassword(config.Validate)
-
-	if err != nil {
-		return nil
-	}
-
 	return func(c *fiber.Ctx) error {
 		var body CreateUserDTO
+
+		if err := validation.ValidatePassword(config.Validate); err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Corps de requête invalide",
+				Explicit: err.Error(),
+			})
+		}
+
 		if err := c.BodyParser(&body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
@@ -110,6 +114,7 @@ func CreateUser(client *ent.Client) fiber.Handler {
 			})
 		}
 
+		// TODO : Status à vérifier
 		if err := config.Validate.Struct(body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
@@ -120,6 +125,7 @@ func CreateUser(client *ent.Client) fiber.Handler {
 
 		hash, err := bcrypt.HashPassword(body.Password)
 
+		// TODO : Status à vérifier
 		if err != nil {
 			return c.Status(500).JSON(request.ErrorRequest{
 				Success:  false,
@@ -159,9 +165,10 @@ func CreateUser(client *ent.Client) fiber.Handler {
 // @Tags Users
 // @Param email path string true "User Email"
 // @Produce json
-// @Success 200 {object} request.SuccessDeleteRequest "User deleted successfully"
-// @Failure 404 {object} request.ErrorRequest "User not found"
-// @Failure 500 {object} request.ErrorRequest "Internal server error"
+// @Success 200 {object} request.SuccessDeleteRequest "Utilisateur supprimé avec succés"
+// @Failure 400 {object} request.ErrorRequest "Email invalide"
+// @Failure 404 {object} request.ErrorRequest "Utilisateur non trouvé"
+// @Failure 500 {object} request.ErrorRequest "Erreur interne"
 // @Router /users/{email} [delete]
 func DeleteUsersByEmail(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
