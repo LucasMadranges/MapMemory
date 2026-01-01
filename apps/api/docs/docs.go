@@ -41,30 +41,27 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns JWT token",
+                        "description": "Retourne un JWT token",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/request.SuccessGetOneRequest"
                         }
                     },
                     "400": {
-                        "description": "Invalid request body",
+                        "description": "Données invalides",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "401": {
-                        "description": "Invalid credentials",
+                        "description": "Données de connexion invalides",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     }
                 }
@@ -190,6 +187,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
@@ -262,12 +265,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "explicit": {
-                    "type": "string",
-                    "example": "Failed to retieve users due to database timeout"
+                    "type": "string"
                 },
                 "message": {
-                    "type": "string",
-                    "example": "Failed to retrieve users"
+                    "type": "string"
                 },
                 "success": {
                     "type": "boolean",
@@ -299,6 +300,16 @@ const docTemplate = `{
             }
         },
         "request.SuccessGetAllRequest": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "request.SuccessGetOneRequest": {
             "type": "object",
             "properties": {
                 "data": {},

@@ -50,6 +50,7 @@ func GetUsers(client *ent.Client) fiber.Handler {
 // @Produce json
 // @Success 201 {array} request.SuccessGetAllRequest "List of users"
 // @Failure 400 {object} request.ErrorRequest "Failed to retrieve users"
+// @Failure 404 {object} request.ErrorRequest "User not found"
 // @Failure 500 {object} request.ErrorRequest "Internal server error"
 // @Router /users/{email} [get]
 func GetUserByEmail(client *ent.Client) fiber.Handler {
@@ -61,6 +62,14 @@ func GetUserByEmail(client *ent.Client) fiber.Handler {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
 				Message:  "Échec de la récupération des utilisateurs",
+				Explicit: err.Error(),
+			})
+		}
+
+		if len(user) == 0 {
+			return c.Status(404).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Utilisateur non trouvé",
 				Explicit: err.Error(),
 			})
 		}

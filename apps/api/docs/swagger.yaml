@@ -16,10 +16,8 @@ definitions:
   request.ErrorRequest:
     properties:
       explicit:
-        example: Failed to retieve users due to database timeout
         type: string
       message:
-        example: Failed to retrieve users
         type: string
       success:
         example: false
@@ -42,6 +40,13 @@ definitions:
         type: boolean
     type: object
   request.SuccessGetAllRequest:
+    properties:
+      data: {}
+      success:
+        example: true
+        type: boolean
+    type: object
+  request.SuccessGetOneRequest:
     properties:
       data: {}
       success:
@@ -114,23 +119,21 @@ paths:
         - application/json
       responses:
         '200':
-          description: Returns JWT token
+          description: Retourne un JWT token
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/request.SuccessGetOneRequest'
         '400':
-          description: Invalid request body
+          description: Données invalides
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/request.ErrorRequest'
         '401':
-          description: Invalid credentials
+          description: Données de connexion invalides
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/request.ErrorRequest'
+        '404':
+          description: Utilisateur non trouvé
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
       summary: User login
       tags:
         - auth
@@ -236,6 +239,10 @@ paths:
             type: array
         '400':
           description: Failed to retrieve users
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '404':
+          description: User not found
           schema:
             $ref: '#/definitions/request.ErrorRequest'
         '500':

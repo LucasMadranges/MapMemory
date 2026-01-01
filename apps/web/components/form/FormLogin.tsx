@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 import z from 'zod';
@@ -13,6 +14,7 @@ export default function FormLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState<LoginFormErrors>({});
+  const router = useRouter();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     try {
@@ -27,17 +29,26 @@ export default function FormLogin() {
         return;
       }
 
-      const response = await fetch('/api/users', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        toast.error(response.statusText);
+        toast.error(data.message);
+        return;
       }
 
-      const data = await response.json();
-      console.log(data);
+      toast.success('Connexion réussie !');
+      await router.push('/');
     } catch (error: unknown) {
       console.error(error);
     } finally {

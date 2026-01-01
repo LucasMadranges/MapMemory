@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/LucasMadranges/MapMemory/auth"
 	"github.com/LucasMadranges/MapMemory/ent"
 	"github.com/LucasMadranges/MapMemory/internal/config"
 	"github.com/LucasMadranges/MapMemory/user"
@@ -37,6 +38,7 @@ func main() {
 	})
 
 	/* NOTE : Routes */
+	auth.RegisterUserRoutes(app, client)
 	user.RegisterUserRoutes(app, client)
 
 	log.Fatal(app.Listen(":4000"))

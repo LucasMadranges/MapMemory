@@ -15,9 +15,11 @@ import (
 // @Accept json
 // @Produce json
 // @Param credentials body LoginDTO true "Login credentials"
-// @Success 200 {object} map[string]string "Returns JWT token"
-// @Failure 400 {object} map[string]string "Invalid request body"
-// @Failure 401 {object} map[string]string "Invalid credentials"
+// @Success 200 {object} request.SuccessGetOneRequest "Retourne un JWT token"
+// @Failure 400 {object} request.ErrorRequest "Corps de requête invalide"
+// @Failure 400 {object} request.ErrorRequest "Données invalides"
+// @Failure 401 {object} request.ErrorRequest "Données de connexion invalides"
+// @Failure 404 {object} request.ErrorRequest "Utilisateur non trouvé"
 // @Router /auth/login [post]
 func Login(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -42,9 +44,10 @@ func Login(client *ent.Client) fiber.Handler {
 			Only(c.Context())
 
 		if err != nil {
-			return c.Status(401).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "Données de connexion invalides",
+			return c.Status(404).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Utilisateur non trouvé",
+				Explicit: err.Error(),
 			})
 		}
 
