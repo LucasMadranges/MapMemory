@@ -32,16 +32,6 @@ export default function Input<T extends string | number>({
     }
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const inputValue = e.target.value;
-    const convertedValue = type === 'number' ? Number(inputValue) : inputValue;
-    setValue(convertedValue as T);
-
-    if (errorMessage && onClearError) {
-      onClearError();
-    }
-  }
-
   function handleShowPassword() {
     setShowPassword(!showPassword);
   }

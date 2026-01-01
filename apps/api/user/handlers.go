@@ -70,7 +70,7 @@ func GetUserByEmail(client *ent.Client) fiber.Handler {
 			return c.Status(404).JSON(request.ErrorRequest{
 				Success:  false,
 				Message:  "Utilisateur non trouvé",
-				Explicit: err.Error(),
+				Explicit: "No user found with the provided email",
 			})
 		}
 
@@ -190,7 +190,7 @@ func DeleteUsersByEmail(client *ent.Client) fiber.Handler {
 			return c.Status(404).JSON(request.ErrorRequest{
 				Success:  false,
 				Message:  "L'utilisateur n'existe pas",
-				Explicit: err.Error(),
+				Explicit: "No user found with the provided email",
 			})
 		}
 
