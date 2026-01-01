@@ -338,12 +338,10 @@ const docTemplate = `{
                 },
                 "firstname": {
                     "type": "string",
-                    "minLength": 2,
                     "example": "Lucas"
                 },
                 "lastname": {
                     "type": "string",
-                    "minLength": 2,
                     "example": "Madranges"
                 },
                 "password": {

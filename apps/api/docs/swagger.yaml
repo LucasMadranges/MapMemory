@@ -63,11 +63,9 @@ definitions:
         type: string
       firstname:
         example: Lucas
-        minLength: 2
         type: string
       lastname:
         example: Madranges
-        minLength: 2
         type: string
       password:
         example: Azertye789456&!

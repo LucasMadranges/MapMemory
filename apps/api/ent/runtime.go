@@ -22,7 +22,6 @@ func init() {
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
-			validators[2].(func(string) error),
 		}
 		return func(firstname string) error {
 			for _, fn := range fns {
@@ -41,7 +40,6 @@ func init() {
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
-			validators[2].(func(string) error),
 		}
 		return func(lastname string) error {
 			for _, fn := range fns {
@@ -61,7 +59,6 @@ func init() {
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
 			validators[2].(func(string) error),
-			validators[3].(func(string) error),
 		}
 		return func(email string) error {
 			for _, fn := range fns {
