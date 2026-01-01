@@ -4,6 +4,15 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get('token');
   const { pathname } = request.nextUrl;
 
+  if (
+    pathname.startsWith('/_next') || // Next.js internals
+    pathname.startsWith('/api') || // API routes
+    pathname.includes('.') || // Fichiers avec extension (.css, .js, .png, etc.)
+    pathname.startsWith('/favicon') // Favicon
+  ) {
+    return NextResponse.next();
+  }
+
   if (!token && !pathname.startsWith('/login')) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
@@ -16,5 +25,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/login', '/map/:path*'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico).*)', // Exclut les assets Next.js
+  ],
 };

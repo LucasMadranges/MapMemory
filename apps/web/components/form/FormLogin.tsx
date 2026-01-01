@@ -14,11 +14,13 @@ export default function FormLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState<LoginFormErrors>({});
+  const [disabled, setDisabled] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     try {
       setLoading(true);
+      setDisabled(true);
       event.preventDefault();
 
       const result = loginSchema.safeParse({ email, password });
@@ -26,6 +28,7 @@ export default function FormLogin() {
       if (!result.success) {
         const flattened = z.flattenError(result.error);
         setErrorMsg(flattened.fieldErrors);
+        setDisabled(false);
         return;
       }
 
@@ -43,13 +46,17 @@ export default function FormLogin() {
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data.message);
+        toast.error(data.message, { duration: 5000 });
+        setDisabled(false);
         return;
       }
 
-      toast.success('Connexion réussie !');
-      await router.push('/');
+      toast.success('Connexion réussie ! Redirection dans 5 secondes...', { duration: 5000 });
+      setTimeout(() => {
+        router.push('/');
+      }, 5000);
     } catch (error: unknown) {
+      setDisabled(false);
       console.error(error);
     } finally {
       setLoading(false);
@@ -79,9 +86,14 @@ export default function FormLogin() {
           onClearError={() => setErrorMsg((prev) => ({ ...prev, password: undefined }))}
         />
 
-        <Button variant={'primary'} className={'w-full flex items-center justify-center h-10'}>
-          {!loading && 'Se connecter'}
+        <Button
+          disabled={disabled}
+          variant={'primary'}
+          className={'w-full flex items-center justify-center h-10'}
+        >
+          {!loading && !disabled && 'Se connecter'}
           {loading && <Loading className={'text-white'} />}
+          {!loading && disabled && 'Redirection...'}
         </Button>
       </form>
       <Toaster />
