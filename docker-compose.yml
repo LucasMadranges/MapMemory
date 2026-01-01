@@ -34,7 +34,9 @@ services:
     build:
       context: ./apps/api
       dockerfile: Dockerfile
+      target: dev
     container_name: api-mapmemory
+    command: ['/bin/sh', '-c', '/usr/local/bin/swag init -g main.go -o docs && air -c .air.toml']
     ports:
       - '4000:4000'
     environment:
@@ -49,12 +51,8 @@ services:
     networks:
       - MapMemoryNetworks
     restart: unless-stopped
-    develop:
-      watch:
-        - action: rebuild
-          path: ./apps/api
-          ignore:
-            - ./apps/api/ent/
+    volumes:
+      - ./apps/api:/app
 
   db-mapmemory:
     image: postgres:16

@@ -41,38 +41,68 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns JWT token",
+                        "description": "Retourne un JWT token",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/request.SuccessGetOneRequest"
                         }
                     },
                     "400": {
-                        "description": "Invalid request body",
+                        "description": "Données invalides",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     },
                     "401": {
-                        "description": "Invalid credentials",
+                        "description": "Données de connexion invalides",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     }
                 }
             }
         },
         "/users": {
+            "get": {
+                "description": "Retrieve a list of all users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all users",
+                "responses": {
+                    "201": {
+                        "description": "Récupérer tous les utilisateurs",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/request.SuccessGetAllRequest"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Échec de la récupération des utilisateurs",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
             "post": {
-                "description": "Create a new userrrrrrrr account",
+                "description": "Create a new user account",
                 "consumes": [
                     "application/json"
                 ],
@@ -82,7 +112,7 @@ const docTemplate = `{
                 "tags": [
                     "Users"
                 ],
-                "summary": "Create userrrrrrrrrrrrr",
+                "summary": "Create user",
                 "parameters": [
                     {
                         "description": "User payload",
@@ -96,18 +126,122 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "User created successfully",
+                        "description": "Utilisateur créé avec succés",
                         "schema": {
-                            "$ref": "#/definitions/ent.User"
+                            "$ref": "#/definitions/request.SuccessCreateRequest"
                         }
                     },
                     "400": {
-                        "description": "Invalid request body or user creation failed",
+                        "description": "Données invalides",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "409": {
+                        "description": "Utilisateur déjà existant",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{email}": {
+            "get": {
+                "description": "Retrieve a user account by email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user by email",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User Email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Récupérer un utilisateur par email",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/request.SuccessGetAllRequest"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Échec de la récupération de l'utilisateur",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a user account by email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete user by email",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User Email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur supprimé avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessDeleteRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Email invalide",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
                         }
                     }
                 }
@@ -117,59 +251,136 @@ const docTemplate = `{
     "definitions": {
         "auth.LoginDTO": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "lucasmadranges@gmail.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 12,
+                    "example": "Azertye789456\u0026!"
                 }
             }
         },
-        "ent.User": {
+        "request.ErrorRequest": {
             "type": "object",
             "properties": {
-                "avatar": {
-                    "description": "Avatar holds the value of the \"avatar\" field.",
+                "explicit": {
                     "type": "string"
                 },
-                "email": {
-                    "description": "Email holds the value of the \"email\" field.",
+                "message": {
                     "type": "string"
                 },
-                "firstname": {
-                    "description": "Firstname holds the value of the \"firstname\" field.",
-                    "type": "string"
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "request.SuccessCreateRequest": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "request.SuccessDeleteRequest": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 0
                 },
-                "id": {
-                    "description": "ID of the ent.",
-                    "type": "integer"
-                },
-                "lastname": {
-                    "description": "Lastname holds the value of the \"lastname\" field.",
-                    "type": "string"
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "request.SuccessGetAllRequest": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "request.SuccessGetOneRequest": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "success": {
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },
         "user.CreateUserDTO": {
             "type": "object",
+            "required": [
+                "email",
+                "firstname",
+                "lastname",
+                "password"
+            ],
             "properties": {
                 "avatar": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://example.com/"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "lucasmadranges@gmail.com"
                 },
                 "firstname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Lucas"
                 },
                 "lastname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Madranges"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 12,
+                    "example": "Azertye789456\u0026!"
+                },
+                "role": {
+                    "enum": [
+                        "admin",
+                        "user"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/user.Role"
+                        }
+                    ],
+                    "example": "user"
                 }
             }
+        },
+        "user.Role": {
+            "type": "string",
+            "enum": [
+                "user",
+                "admin",
+                "user"
+            ],
+            "x-enum-varnames": [
+                "DefaultRole",
+                "RoleAdmin",
+                "RoleUser"
+            ]
         }
     }
 }`
@@ -177,7 +388,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3000",
+	Host:             "localhost:4000",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Go Fiber API",

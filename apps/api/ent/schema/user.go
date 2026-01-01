@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // User holds the schema definition for the User entity.
@@ -19,10 +20,13 @@ var emailRegex = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).Default(uuid.New).Immutable(),
+		field.Enum("role").Values("admin", "user").
+			Default("user"),
 		field.String("avatar"),
-		field.String("firstname").NotEmpty().MinLen(10).MaxLen(100),
-		field.String("lastname").NotEmpty().MinLen(10).MaxLen(100),
-		field.String("email").NotEmpty().MinLen(10).MaxLen(100).Unique().Match(emailRegex),
+		field.String("firstname").NotEmpty().MaxLen(100),
+		field.String("lastname").NotEmpty().MaxLen(100),
+		field.String("email").NotEmpty().MaxLen(100).Unique().Match(emailRegex),
 		field.String("password").NotEmpty().MinLen(12).MaxLen(100).Sensitive().Validate(func(s string) error {
 			if len(s) < 12 {
 				return fmt.Errorf("le mot de passe doit faire au moins 12 caractères")

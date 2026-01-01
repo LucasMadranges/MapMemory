@@ -5,6 +5,7 @@ package ent
 import (
 	"github.com/LucasMadranges/MapMemory/ent/schema"
 	"github.com/LucasMadranges/MapMemory/ent/user"
+	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -14,14 +15,13 @@ func init() {
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescFirstname is the schema descriptor for firstname field.
-	userDescFirstname := userFields[1].Descriptor()
+	userDescFirstname := userFields[3].Descriptor()
 	// user.FirstnameValidator is a validator for the "firstname" field. It is called by the builders before save.
 	user.FirstnameValidator = func() func(string) error {
 		validators := userDescFirstname.Validators
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
-			validators[2].(func(string) error),
 		}
 		return func(firstname string) error {
 			for _, fn := range fns {
@@ -33,14 +33,13 @@ func init() {
 		}
 	}()
 	// userDescLastname is the schema descriptor for lastname field.
-	userDescLastname := userFields[2].Descriptor()
+	userDescLastname := userFields[4].Descriptor()
 	// user.LastnameValidator is a validator for the "lastname" field. It is called by the builders before save.
 	user.LastnameValidator = func() func(string) error {
 		validators := userDescLastname.Validators
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
-			validators[2].(func(string) error),
 		}
 		return func(lastname string) error {
 			for _, fn := range fns {
@@ -52,7 +51,7 @@ func init() {
 		}
 	}()
 	// userDescEmail is the schema descriptor for email field.
-	userDescEmail := userFields[3].Descriptor()
+	userDescEmail := userFields[5].Descriptor()
 	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	user.EmailValidator = func() func(string) error {
 		validators := userDescEmail.Validators
@@ -60,7 +59,6 @@ func init() {
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
 			validators[2].(func(string) error),
-			validators[3].(func(string) error),
 		}
 		return func(email string) error {
 			for _, fn := range fns {
@@ -72,7 +70,7 @@ func init() {
 		}
 	}()
 	// userDescPassword is the schema descriptor for password field.
-	userDescPassword := userFields[4].Descriptor()
+	userDescPassword := userFields[6].Descriptor()
 	// user.PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	user.PasswordValidator = func() func(string) error {
 		validators := userDescPassword.Validators
@@ -91,4 +89,8 @@ func init() {
 			return nil
 		}
 	}()
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.DefaultID holds the default value on creation for the id field.
+	user.DefaultID = userDescID.Default.(func() uuid.UUID)
 }

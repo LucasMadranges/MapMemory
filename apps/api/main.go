@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/LucasMadranges/MapMemory/auth"
 	"github.com/LucasMadranges/MapMemory/ent"
 	"github.com/LucasMadranges/MapMemory/internal/config"
 	"github.com/LucasMadranges/MapMemory/user"
@@ -16,7 +17,7 @@ import (
 // @title Go Fiber API
 // @version 1.0
 // @description API avec Fiber, Ent et Swagger
-// @host localhost:3000
+// @host localhost:4000
 // @BasePath /
 func main() {
 	app := fiber.New()
@@ -37,6 +38,7 @@ func main() {
 	})
 
 	/* NOTE : Routes */
+	auth.RegisterAuthRoutes(app, client)
 	user.RegisterUserRoutes(app, client)
 
 	log.Fatal(app.Listen(":4000"))

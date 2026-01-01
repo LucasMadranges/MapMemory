@@ -10,7 +10,8 @@ import (
 var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"admin", "user"}, Default: "user"},
 		{Name: "avatar", Type: field.TypeString},
 		{Name: "firstname", Type: field.TypeString, Size: 100},
 		{Name: "lastname", Type: field.TypeString, Size: 100},
