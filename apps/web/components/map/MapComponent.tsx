@@ -3,6 +3,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+
+import Current from './Current';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
@@ -26,6 +29,14 @@ export default function MapComponent() {
             center: [longitude, latitude],
             zoom: 14,
           });
+
+          const markerElement = document.createElement('div');
+          const root = createRoot(markerElement);
+          root.render(<Current />);
+
+          new mapboxgl.Marker({ element: markerElement })
+            .setLngLat([longitude, latitude])
+            .addTo(map.current);
         },
         (error) => {
           console.error('Erreur de géolocalisation:', error);

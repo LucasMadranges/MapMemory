@@ -13,7 +13,7 @@ export default function NavigationLink({
   return (
     <Link
       href={href}
-      className={`relative
+      className={`cursor-pointer relative
     transition group hover:bg-white p-2 rounded-lg
        hover:after:content-[attr(data-text)] hover:after:absolute
        hover:after:hidden sm:hover:after:block
