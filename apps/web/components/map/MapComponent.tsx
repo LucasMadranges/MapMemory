@@ -6,19 +6,36 @@ import React, { useEffect, useRef } from 'react';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
-export default function Map() {
+export default function MapComponent() {
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
     if (!mapRef.current) return;
 
-    map.current = new mapboxgl.Map({
-      container: mapRef.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [2.3522, 48.8566],
-      zoom: 12,
-    });
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { longitude, latitude } = position.coords;
+
+          if (!mapRef.current) return;
+
+          map.current = new mapboxgl.Map({
+            container: mapRef.current!,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [longitude, latitude],
+            zoom: 14,
+          });
+        },
+        (error) => {
+          console.error('Erreur de géolocalisation:', error);
+        },
+      );
+    }
+
+    return () => {
+      map.current?.remove();
+    };
   }, []);
 
   return (

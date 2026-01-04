@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import Home from '../../components/page/Home';
+import Map from '../../components/page/Map';
 
 export default function Page() {
-  return <Home />;
+  return <Map />;
 }
