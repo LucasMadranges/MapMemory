@@ -56,7 +56,7 @@ export default function Input<T extends string | number>({
             <button
               type={'button'}
               onClick={handleShowPassword}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer"
             >
               {showPassword ? <EyeIcon /> : <EyeClosedIcon />}
             </button>

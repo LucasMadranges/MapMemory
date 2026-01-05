@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Badges from '../badge/Badges';
+import Badges from '../../badge/Badges';
 
 export default function LateralItem() {
   return (
