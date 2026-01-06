@@ -6,7 +6,7 @@ import z from 'zod';
 
 import { LoginFormErrors, loginSchema } from '../../utils/form/login';
 import Button from '../button/Button';
-import Input from '../Input/Input';
+import Input from '../input/Input';
 import Loading from '../loading/Loading';
 
 export default function FormLogin() {
