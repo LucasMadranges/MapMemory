@@ -6,6 +6,9 @@ export default function Input<T extends string | number>({
   type,
   placeholder,
   value,
+  unit,
+  min,
+  max,
   setValue,
   errorMessage,
   className = '',
@@ -15,6 +18,9 @@ export default function Input<T extends string | number>({
   type: 'text' | 'password' | 'email' | 'number' | 'date';
   placeholder: string;
   value: T;
+  unit?: string;
+  min?: number;
+  max?: number;
   setValue: React.Dispatch<React.SetStateAction<T>>;
   errorMessage: string | undefined;
   className?: string;
@@ -43,6 +49,8 @@ export default function Input<T extends string | number>({
 
         <div className="relative">
           <input
+            max={max}
+            min={min}
             id={name}
             name={name}
             value={value}
@@ -61,6 +69,7 @@ export default function Input<T extends string | number>({
               {showPassword ? <EyeIcon /> : <EyeClosedIcon />}
             </button>
           )}
+          {unit && <span className="absolute right-2.5 top-1/2 -translate-y-1/2">{unit}</span>}
         </div>
 
         {errorMessage && <span className={'text-danger'}>{errorMessage}</span>}

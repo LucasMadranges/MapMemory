@@ -5,6 +5,7 @@ export default function MultiSelect({
   name,
   type,
   options,
+  label,
   placeholder,
   value,
   setValue,
@@ -14,6 +15,7 @@ export default function MultiSelect({
   name: string;
   type: 'single' | 'multi';
   options: Array<{ value: string; label: string }>;
+  label?: string;
   placeholder: string;
   value: Array<{ value: string; label: string }>;
   setValue: React.Dispatch<React.SetStateAction<Array<{ value: string; label: string }>>>;
@@ -22,11 +24,13 @@ export default function MultiSelect({
 }) {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <label htmlFor={name}>{placeholder}</label>
+      {label && <label htmlFor={name}>{label}</label>}
       <Select
+        isMulti={type === 'multi'}
         instanceId={name}
         name={'label'}
         id={'label'}
+        placeholder={placeholder}
         options={options}
         styles={{
           control: (base) => ({
