@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Button from '../../button/Button';
 import MultiSelect from '../../input/MultiSelect';
 import Slider from '../../input/Slider';
 
@@ -39,6 +40,10 @@ export default function LateralFilters() {
           disabled={false}
           errorMessage={''}
         />
+        <div className={'flex gap-2 items-center justify-end'}>
+          <Button variant={'tertiary'}>Effacer</Button>
+          <Button variant={'primary'}>Appliquer</Button>
+        </div>
       </div>
     </>
   );

@@ -24,7 +24,7 @@ export default function Button({
        px-4 py-2 rounded-lg ${className}
     ${variant === 'primary' && 'bg-primary hover:bg-primary-dark text-white'}
     ${variant === 'secondary' && 'bg-secondary hover:bg-gray-200 text-black border border-primary transition'}
-    ${variant === 'tertiary' && 'bg-transparent text-black'}
+    ${variant === 'tertiary' && 'bg-transparent text-black transition hover:text-gray-800'}
     ${disabled && 'opacity-50 cursor-not-allowed'}`}
     >
       {children}

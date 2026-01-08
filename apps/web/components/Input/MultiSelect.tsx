@@ -30,6 +30,8 @@ export default function MultiSelect({
         instanceId={name}
         name={'label'}
         id={'label'}
+        value={value}
+        onChange={(newValue) => setValue(newValue as Array<{ value: string; label: string }>)}
         placeholder={placeholder}
         options={options}
         styles={{
@@ -37,6 +39,11 @@ export default function MultiSelect({
             ...base,
             borderColor: '#D1D5DB',
             borderRadius: '8px',
+            zIndex: 50,
+          }),
+          menu: (base) => ({
+            ...base,
+            zIndex: 50,
           }),
         }}
       />

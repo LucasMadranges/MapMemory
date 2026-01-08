@@ -73,6 +73,7 @@ export default function Slider({
             handle: {
               borderColor: 'var(--color-primary)',
               opacity: 1,
+              zIndex: 10,
             },
           }}
         />
