@@ -8,6 +8,68 @@ import (
 )
 
 var (
+	// MainTypesColumns holds the columns for the "main_types" table.
+	MainTypesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Size: 25},
+	}
+	// MainTypesTable holds the schema information for the "main_types" table.
+	MainTypesTable = &schema.Table{
+		Name:       "main_types",
+		Columns:    MainTypesColumns,
+		PrimaryKey: []*schema.Column{MainTypesColumns[0]},
+	}
+	// MemoriesColumns holds the columns for the "memories" table.
+	MemoriesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Size: 25},
+		{Name: "description", Type: field.TypeString, Size: 100, Default: ""},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "main_type_id", Type: field.TypeInt},
+		{Name: "sub_type_id", Type: field.TypeInt},
+	}
+	// MemoriesTable holds the schema information for the "memories" table.
+	MemoriesTable = &schema.Table{
+		Name:       "memories",
+		Columns:    MemoriesColumns,
+		PrimaryKey: []*schema.Column{MemoriesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "memories_main_types_main_type",
+				Columns:    []*schema.Column{MemoriesColumns[6]},
+				RefColumns: []*schema.Column{MainTypesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "memories_sub_types_sub_type",
+				Columns:    []*schema.Column{MemoriesColumns[7]},
+				RefColumns: []*schema.Column{SubTypesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// SubTypesColumns holds the columns for the "sub_types" table.
+	SubTypesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Size: 25},
+		{Name: "sub_type_id", Type: field.TypeInt},
+	}
+	// SubTypesTable holds the schema information for the "sub_types" table.
+	SubTypesTable = &schema.Table{
+		Name:       "sub_types",
+		Columns:    SubTypesColumns,
+		PrimaryKey: []*schema.Column{SubTypesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sub_types_main_types_sub_types",
+				Columns:    []*schema.Column{SubTypesColumns[2]},
+				RefColumns: []*schema.Column{MainTypesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
@@ -26,9 +88,15 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		MainTypesTable,
+		MemoriesTable,
+		SubTypesTable,
 		UsersTable,
 	}
 )
 
 func init() {
+	MemoriesTable.ForeignKeys[0].RefTable = MainTypesTable
+	MemoriesTable.ForeignKeys[1].RefTable = SubTypesTable
+	SubTypesTable.ForeignKeys[0].RefTable = MainTypesTable
 }

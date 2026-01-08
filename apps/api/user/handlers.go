@@ -114,7 +114,7 @@ func CreateUser(client *ent.Client) fiber.Handler {
 			})
 		}
 
-		// TODO : Status à vérifier
+		// TODO : Vérifier le status de retour de l'api
 		if err := config.Validate.Struct(body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
@@ -125,7 +125,7 @@ func CreateUser(client *ent.Client) fiber.Handler {
 
 		hash, err := bcrypt.HashPassword(body.Password)
 
-		// TODO : Status à vérifier
+		// TODO : Vérifier le status de retour de l'api
 		if err != nil {
 			return c.Status(500).JSON(request.ErrorRequest{
 				Success:  false,

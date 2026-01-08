@@ -25,7 +25,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "User login",
                 "parameters": [
@@ -60,6 +60,58 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Utilisateur non trouvé",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/subType": {
+            "post": {
+                "description": "Create a new sub type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubType"
+                ],
+                "summary": "Create subType",
+                "parameters": [
+                    {
+                        "description": "subType payload",
+                        "name": "subType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_LucasMadranges_MapMemory_subType.CreateSubTypeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Sous-catégorie créé avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessCreateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "409": {
+                        "description": "Sous-catégorie déjà existante",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
@@ -264,6 +316,32 @@ const docTemplate = `{
                     "type": "string",
                     "minLength": 12,
                     "example": "Azertye789456\u0026!"
+                }
+            }
+        },
+        "github_com_LucasMadranges_MapMemory_mainType.CreateSubTypeDto": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Restaurant"
+                }
+            }
+        },
+        "github_com_LucasMadranges_MapMemory_subType.CreateSubTypeDto": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Buffet à volonté"
                 }
             }
         },

@@ -12,7 +12,7 @@ import (
 // Login godoc
 // @Summary User login
 // @Description Authenticate user with email and password
-// @Tags auth
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param credentials body LoginDTO true "Login credentials"

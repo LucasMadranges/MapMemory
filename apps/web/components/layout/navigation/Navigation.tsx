@@ -1,5 +1,5 @@
 'use client';
-import { CircleDollarSignIcon, HomeIcon, MapIcon, ServerIcon } from 'lucide-react';
+import { CircleDollarSignIcon, HomeIcon, MapIcon, ServerIcon, SettingsIcon } from 'lucide-react';
 import React from 'react';
 
 import Lateral from '../lateral/Lateral';
@@ -24,9 +24,13 @@ export default function Navigation() {
         <NavigationLink textContent={'Serveur'} href={'/server'}>
           <ServerIcon className={'transition text-white group-hover:text-primary'} size={24} />
         </NavigationLink>
+        <NavigationLink textContent={'Configuration'} href={'/config'}>
+          <SettingsIcon className={'transition text-white group-hover:text-primary'} size={24} />
+        </NavigationLink>
       </div>
 
       <Lateral />
     </header>
+    // TODO : Protéger la route "Config"
   );
 }

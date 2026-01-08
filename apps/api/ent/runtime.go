@@ -3,7 +3,12 @@
 package ent
 
 import (
+	"time"
+
+	"github.com/LucasMadranges/MapMemory/ent/maintype"
+	"github.com/LucasMadranges/MapMemory/ent/memory"
 	"github.com/LucasMadranges/MapMemory/ent/schema"
+	"github.com/LucasMadranges/MapMemory/ent/subtype"
 	"github.com/LucasMadranges/MapMemory/ent/user"
 	"github.com/google/uuid"
 )
@@ -12,6 +17,100 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	maintypeFields := schema.MainType{}.Fields()
+	_ = maintypeFields
+	// maintypeDescName is the schema descriptor for name field.
+	maintypeDescName := maintypeFields[0].Descriptor()
+	// maintype.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	maintype.NameValidator = func() func(string) error {
+		validators := maintypeDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	memoryFields := schema.Memory{}.Fields()
+	_ = memoryFields
+	// memoryDescName is the schema descriptor for name field.
+	memoryDescName := memoryFields[0].Descriptor()
+	// memory.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	memory.NameValidator = func() func(string) error {
+		validators := memoryDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// memoryDescDescription is the schema descriptor for description field.
+	memoryDescDescription := memoryFields[1].Descriptor()
+	// memory.DefaultDescription holds the default value on creation for the description field.
+	memory.DefaultDescription = memoryDescDescription.Default.(string)
+	// memory.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
+	memory.DescriptionValidator = func() func(string) error {
+		validators := memoryDescDescription.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(description string) error {
+			for _, fn := range fns {
+				if err := fn(description); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// memoryDescPrice is the schema descriptor for price field.
+	memoryDescPrice := memoryFields[2].Descriptor()
+	// memory.PriceValidator is a validator for the "price" field. It is called by the builders before save.
+	memory.PriceValidator = memoryDescPrice.Validators[0].(func(float64) error)
+	// memoryDescCreatedAt is the schema descriptor for created_at field.
+	memoryDescCreatedAt := memoryFields[3].Descriptor()
+	// memory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	memory.DefaultCreatedAt = memoryDescCreatedAt.Default.(func() time.Time)
+	// memoryDescUpdatedAt is the schema descriptor for updated_at field.
+	memoryDescUpdatedAt := memoryFields[4].Descriptor()
+	// memory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	memory.DefaultUpdatedAt = memoryDescUpdatedAt.Default.(func() time.Time)
+	// memory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	memory.UpdateDefaultUpdatedAt = memoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	subtypeFields := schema.SubType{}.Fields()
+	_ = subtypeFields
+	// subtypeDescName is the schema descriptor for name field.
+	subtypeDescName := subtypeFields[0].Descriptor()
+	// subtype.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	subtype.NameValidator = func() func(string) error {
+		validators := subtypeDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescFirstname is the schema descriptor for firstname field.

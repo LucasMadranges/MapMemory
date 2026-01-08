@@ -13,6 +13,24 @@ definitions:
       - email
       - password
     type: object
+  github_com_LucasMadranges_MapMemory_mainType.CreateSubTypeDto:
+    properties:
+      name:
+        example: Restaurant
+        maxLength: 25
+        type: string
+    required:
+      - name
+    type: object
+  github_com_LucasMadranges_MapMemory_subType.CreateSubTypeDto:
+    properties:
+      name:
+        example: Buffet à volonté
+        maxLength: 25
+        type: string
+    required:
+      - name
+    type: object
   request.ErrorRequest:
     properties:
       explicit:
@@ -134,7 +152,41 @@ paths:
             $ref: '#/definitions/request.ErrorRequest'
       summary: User login
       tags:
-        - auth
+        - Auth
+  /subType:
+    post:
+      consumes:
+        - application/json
+      description: Create a new sub type
+      parameters:
+        - description: subType payload
+          in: body
+          name: subType
+          required: true
+          schema:
+            $ref: '#/definitions/github_com_LucasMadranges_MapMemory_subType.CreateSubTypeDto'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Sous-catégorie créé avec succés
+          schema:
+            $ref: '#/definitions/request.SuccessCreateRequest'
+        '400':
+          description: Données invalides
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '409':
+          description: Sous-catégorie déjà existante
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Create subType
+      tags:
+        - SubType
   /users:
     get:
       description: Retrieve a list of all users

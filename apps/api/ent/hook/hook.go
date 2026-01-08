@@ -9,6 +9,42 @@ import (
 	"github.com/LucasMadranges/MapMemory/ent"
 )
 
+// The MainTypeFunc type is an adapter to allow the use of ordinary
+// function as MainType mutator.
+type MainTypeFunc func(context.Context, *ent.MainTypeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MainTypeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MainTypeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MainTypeMutation", m)
+}
+
+// The MemoryFunc type is an adapter to allow the use of ordinary
+// function as Memory mutator.
+type MemoryFunc func(context.Context, *ent.MemoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MemoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MemoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MemoryMutation", m)
+}
+
+// The SubTypeFunc type is an adapter to allow the use of ordinary
+// function as SubType mutator.
+type SubTypeFunc func(context.Context, *ent.SubTypeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SubTypeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.SubTypeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SubTypeMutation", m)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)

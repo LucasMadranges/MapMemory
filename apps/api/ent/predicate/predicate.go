@@ -6,5 +6,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// MainType is the predicate function for maintype builders.
+type MainType func(*sql.Selector)
+
+// Memory is the predicate function for memory builders.
+type Memory func(*sql.Selector)
+
+// SubType is the predicate function for subtype builders.
+type SubType func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
