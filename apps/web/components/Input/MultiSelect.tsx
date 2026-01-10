@@ -10,17 +10,25 @@ export default function MultiSelect({
   value,
   setValue,
   errorMessage,
+  disabled = false,
   className,
 }: {
   name: string;
   type: 'single' | 'multi';
-  options: Array<{ value: string; label: string }>;
+  options: Array<{ value: string; label: string; color: string }>;
   label?: string;
   placeholder: string;
-  value: Array<{ value: string; label: string }>;
-  setValue: React.Dispatch<React.SetStateAction<Array<{ value: string; label: string }>>>;
-  errorMessage: string | undefined;
+  value: Array<{
+    color: string;
+    value: string;
+    label: string;
+  }>;
+  setValue: React.Dispatch<
+    React.SetStateAction<Array<{ value: string; label: string; color: string }>>
+  >;
+  errorMessage?: string | undefined;
   className?: string;
+  disabled?: boolean;
 }) {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
@@ -31,20 +39,28 @@ export default function MultiSelect({
         name={'label'}
         id={'label'}
         value={value}
-        onChange={(newValue) => setValue(newValue as Array<{ value: string; label: string }>)}
+        onChange={(newValue) =>
+          setValue(newValue as Array<{ value: string; label: string; color: string }>)
+        }
         placeholder={placeholder}
         options={options}
+        isDisabled={disabled}
         styles={{
           control: (base) => ({
             ...base,
             borderColor: '#D1D5DB',
             borderRadius: '8px',
-            zIndex: 50,
           }),
           menu: (base) => ({
             ...base,
             zIndex: 50,
           }),
+          option: (base, { data }) => {
+            return {
+              ...base,
+              backgroundColor: data.color,
+            };
+          },
         }}
       />
 

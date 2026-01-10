@@ -3,6 +3,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useRef } from 'react';
+import { toast } from 'react-hot-toast';
 
 import { MapConfig } from '../../utils/map/MapConfig';
 
@@ -13,20 +14,31 @@ export default function MapComponent() {
   const map = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
-    if (!mapRef.current) return;
+    try {
+      if (!mapRef.current) return;
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { longitude, latitude } = position.coords;
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+          (position) => {
+            const { longitude, latitude } = position.coords;
 
-          if (!mapRef.current) return;
+            if (!mapRef.current) return;
 
-          MapConfig(map, mapRef, longitude, latitude);
-        },
-        (error) => {
-          console.error('Erreur de géolocalisation:', error);
-        },
+            MapConfig(map, mapRef, longitude, latitude);
+          },
+          (error) => {
+            console.error('Erreur de géolocalisation:', error);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          },
+        );
+      }
+    } catch (_) {
+      toast.error(
+        "Veuillez autoriser la localisation de votre navigateur pour utiliser l'application",
       );
     }
   }, []);

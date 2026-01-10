@@ -14,7 +14,9 @@ export function proxy(request: NextRequest) {
   }
 
   if (!token && !pathname.startsWith('/login')) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const url = new URL('/login', request.url);
+    url.searchParams.set('redirect', 'unauthorized');
+    return NextResponse.redirect(url);
   }
 
   if (pathname.startsWith('/login') && token) {

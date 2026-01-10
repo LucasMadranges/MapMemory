@@ -19,6 +19,8 @@ type SubType struct {
 	ID int `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Color holds the value of the "color" field.
+	Color string `json:"color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubTypeQuery when eager-loading is set.
 	Edges        SubTypeEdges `json:"edges"`
@@ -64,7 +66,7 @@ func (*SubType) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subtype.FieldID:
 			values[i] = new(sql.NullInt64)
-		case subtype.FieldName:
+		case subtype.FieldName, subtype.FieldColor:
 			values[i] = new(sql.NullString)
 		case subtype.ForeignKeys[0]: // main_type_id
 			values[i] = new(sql.NullInt64)
@@ -94,6 +96,12 @@ func (_m *SubType) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				_m.Name = value.String
+			}
+		case subtype.FieldColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field color", values[i])
+			} else if value.Valid {
+				_m.Color = value.String
 			}
 		case subtype.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -150,6 +158,9 @@ func (_m *SubType) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("color=")
+	builder.WriteString(_m.Color)
 	builder.WriteByte(')')
 	return builder.String()
 }

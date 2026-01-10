@@ -43,6 +43,20 @@ func (_u *MainTypeUpdate) SetNillableName(v *string) *MainTypeUpdate {
 	return _u
 }
 
+// SetColor sets the "color" field.
+func (_u *MainTypeUpdate) SetColor(v string) *MainTypeUpdate {
+	_u.mutation.SetColor(v)
+	return _u
+}
+
+// SetNillableColor sets the "color" field if the given value is not nil.
+func (_u *MainTypeUpdate) SetNillableColor(v *string) *MainTypeUpdate {
+	if v != nil {
+		_u.SetColor(*v)
+	}
+	return _u
+}
+
 // AddMemoryIDs adds the "memories" edge to the Memory entity by IDs.
 func (_u *MainTypeUpdate) AddMemoryIDs(ids ...int) *MainTypeUpdate {
 	_u.mutation.AddMemoryIDs(ids...)
@@ -154,6 +168,11 @@ func (_u *MainTypeUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "MainType.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Color(); ok {
+		if err := maintype.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`ent: validator failed for field "MainType.color": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -171,6 +190,9 @@ func (_u *MainTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(maintype.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Color(); ok {
+		_spec.SetField(maintype.FieldColor, field.TypeString, value)
 	}
 	if _u.mutation.MemoriesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -292,6 +314,20 @@ func (_u *MainTypeUpdateOne) SetName(v string) *MainTypeUpdateOne {
 func (_u *MainTypeUpdateOne) SetNillableName(v *string) *MainTypeUpdateOne {
 	if v != nil {
 		_u.SetName(*v)
+	}
+	return _u
+}
+
+// SetColor sets the "color" field.
+func (_u *MainTypeUpdateOne) SetColor(v string) *MainTypeUpdateOne {
+	_u.mutation.SetColor(v)
+	return _u
+}
+
+// SetNillableColor sets the "color" field if the given value is not nil.
+func (_u *MainTypeUpdateOne) SetNillableColor(v *string) *MainTypeUpdateOne {
+	if v != nil {
+		_u.SetColor(*v)
 	}
 	return _u
 }
@@ -420,6 +456,11 @@ func (_u *MainTypeUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "MainType.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Color(); ok {
+		if err := maintype.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`ent: validator failed for field "MainType.color": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -454,6 +495,9 @@ func (_u *MainTypeUpdateOne) sqlSave(ctx context.Context) (_node *MainType, err 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(maintype.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Color(); ok {
+		_spec.SetField(maintype.FieldColor, field.TypeString, value)
 	}
 	if _u.mutation.MemoriesCleared() {
 		edge := &sqlgraph.EdgeSpec{

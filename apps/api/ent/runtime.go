@@ -37,6 +37,25 @@ func init() {
 			return nil
 		}
 	}()
+	// maintypeDescColor is the schema descriptor for color field.
+	maintypeDescColor := maintypeFields[1].Descriptor()
+	// maintype.ColorValidator is a validator for the "color" field. It is called by the builders before save.
+	maintype.ColorValidator = func() func(string) error {
+		validators := maintypeDescColor.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+			validators[2].(func(string) error),
+		}
+		return func(color string) error {
+			for _, fn := range fns {
+				if err := fn(color); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	memoryFields := schema.Memory{}.Fields()
 	_ = memoryFields
 	// memoryDescName is the schema descriptor for name field.
@@ -105,6 +124,25 @@ func init() {
 		return func(name string) error {
 			for _, fn := range fns {
 				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// subtypeDescColor is the schema descriptor for color field.
+	subtypeDescColor := subtypeFields[1].Descriptor()
+	// subtype.ColorValidator is a validator for the "color" field. It is called by the builders before save.
+	subtype.ColorValidator = func() func(string) error {
+		validators := subtypeDescColor.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+			validators[2].(func(string) error),
+		}
+		return func(color string) error {
+			for _, fn := range fns {
+				if err := fn(color); err != nil {
 					return err
 				}
 			}

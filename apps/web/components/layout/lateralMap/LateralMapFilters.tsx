@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 
+import { clientApi } from '../../../utils/api/clientApi';
 import Button from '../../button/Button';
 import MultiSelect from '../../input/MultiSelect';
 import Slider from '../../input/Slider';
 
-export default function LateralFilters() {
-  const [item, setItem] = useState<{ value: string; label: string }[]>([]);
+export default function LateralMapFilters() {
+  const [item, setItem] = useState<{ value: string; label: string; color: string }[]>([]);
+  const [options, setOptions] = useState<{ value: string; label: string; color: string }[]>([]);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100);
 
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
+  useEffect(() => {
+    const getMainTypes = async () => {
+      try {
+        const response = await clientApi.get('/mainTypes');
+        console.log(response.data);
+        const items = response.data.map((type: { id: number; name: string; color: string }) => ({
+          value: type.id,
+          label: type.name,
+          color: type.color,
+        }));
+
+        setOptions(items);
+      } catch (error) {
+        console.error('Erreur lors du chargement des catégories:', error);
+      }
+    };
+
+    getMainTypes();
+  }, []);
 
   return (
     <>
@@ -25,7 +42,6 @@ export default function LateralFilters() {
           value={item}
           setValue={setItem}
           options={options}
-          errorMessage={''}
         />
         <Slider
           type={'range'}
@@ -38,7 +54,6 @@ export default function LateralFilters() {
           setMax={setMax}
           step={1}
           disabled={false}
-          errorMessage={''}
         />
         <div className={'flex gap-2 items-center justify-end'}>
           <Button variant={'tertiary'}>Effacer</Button>

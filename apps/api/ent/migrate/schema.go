@@ -12,6 +12,7 @@ var (
 	MainTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Size: 25},
+		{Name: "color", Type: field.TypeString, Size: 7},
 	}
 	// MainTypesTable holds the schema information for the "main_types" table.
 	MainTypesTable = &schema.Table{
@@ -54,6 +55,7 @@ var (
 	SubTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Size: 25},
+		{Name: "color", Type: field.TypeString, Size: 7},
 		{Name: "main_type_id", Type: field.TypeInt},
 	}
 	// SubTypesTable holds the schema information for the "sub_types" table.
@@ -64,7 +66,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sub_types_main_types_sub_types",
-				Columns:    []*schema.Column{SubTypesColumns[2]},
+				Columns:    []*schema.Column{SubTypesColumns[3]},
 				RefColumns: []*schema.Column{MainTypesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

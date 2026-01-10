@@ -6,7 +6,7 @@ export default function Pagination() {
   return (
     <ReactPaginate
       pageCount={12}
-      pageRangeDisplayed={3}
+      pageRangeDisplayed={2}
       marginPagesDisplayed={0}
       previousLabel={<ChevronLeftIcon size={20} />}
       nextLabel={<ChevronRightIcon size={20} />}

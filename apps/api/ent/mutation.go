@@ -41,6 +41,7 @@ type MainTypeMutation struct {
 	typ              string
 	id               *int
 	name             *string
+	color            *string
 	clearedFields    map[string]struct{}
 	memories         map[int]struct{}
 	removedmemories  map[int]struct{}
@@ -187,6 +188,42 @@ func (m *MainTypeMutation) ResetName() {
 	m.name = nil
 }
 
+// SetColor sets the "color" field.
+func (m *MainTypeMutation) SetColor(s string) {
+	m.color = &s
+}
+
+// Color returns the value of the "color" field in the mutation.
+func (m *MainTypeMutation) Color() (r string, exists bool) {
+	v := m.color
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldColor returns the old "color" field's value of the MainType entity.
+// If the MainType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MainTypeMutation) OldColor(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldColor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldColor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldColor: %w", err)
+	}
+	return oldValue.Color, nil
+}
+
+// ResetColor resets all changes to the "color" field.
+func (m *MainTypeMutation) ResetColor() {
+	m.color = nil
+}
+
 // AddMemoryIDs adds the "memories" edge to the Memory entity by ids.
 func (m *MainTypeMutation) AddMemoryIDs(ids ...int) {
 	if m.memories == nil {
@@ -329,9 +366,12 @@ func (m *MainTypeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MainTypeMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.name != nil {
 		fields = append(fields, maintype.FieldName)
+	}
+	if m.color != nil {
+		fields = append(fields, maintype.FieldColor)
 	}
 	return fields
 }
@@ -343,6 +383,8 @@ func (m *MainTypeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case maintype.FieldName:
 		return m.Name()
+	case maintype.FieldColor:
+		return m.Color()
 	}
 	return nil, false
 }
@@ -354,6 +396,8 @@ func (m *MainTypeMutation) OldField(ctx context.Context, name string) (ent.Value
 	switch name {
 	case maintype.FieldName:
 		return m.OldName(ctx)
+	case maintype.FieldColor:
+		return m.OldColor(ctx)
 	}
 	return nil, fmt.Errorf("unknown MainType field %s", name)
 }
@@ -369,6 +413,13 @@ func (m *MainTypeMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case maintype.FieldColor:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetColor(v)
 		return nil
 	}
 	return fmt.Errorf("unknown MainType field %s", name)
@@ -421,6 +472,9 @@ func (m *MainTypeMutation) ResetField(name string) error {
 	switch name {
 	case maintype.FieldName:
 		m.ResetName()
+		return nil
+	case maintype.FieldColor:
+		m.ResetColor()
 		return nil
 	}
 	return fmt.Errorf("unknown MainType field %s", name)
@@ -1247,6 +1301,7 @@ type SubTypeMutation struct {
 	typ               string
 	id                *int
 	name              *string
+	color             *string
 	clearedFields     map[string]struct{}
 	main_types        *int
 	clearedmain_types bool
@@ -1392,6 +1447,42 @@ func (m *SubTypeMutation) ResetName() {
 	m.name = nil
 }
 
+// SetColor sets the "color" field.
+func (m *SubTypeMutation) SetColor(s string) {
+	m.color = &s
+}
+
+// Color returns the value of the "color" field in the mutation.
+func (m *SubTypeMutation) Color() (r string, exists bool) {
+	v := m.color
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldColor returns the old "color" field's value of the SubType entity.
+// If the SubType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubTypeMutation) OldColor(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldColor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldColor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldColor: %w", err)
+	}
+	return oldValue.Color, nil
+}
+
+// ResetColor resets all changes to the "color" field.
+func (m *SubTypeMutation) ResetColor() {
+	m.color = nil
+}
+
 // SetMainTypesID sets the "main_types" edge to the MainType entity by id.
 func (m *SubTypeMutation) SetMainTypesID(id int) {
 	m.main_types = &id
@@ -1519,9 +1610,12 @@ func (m *SubTypeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubTypeMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.name != nil {
 		fields = append(fields, subtype.FieldName)
+	}
+	if m.color != nil {
+		fields = append(fields, subtype.FieldColor)
 	}
 	return fields
 }
@@ -1533,6 +1627,8 @@ func (m *SubTypeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case subtype.FieldName:
 		return m.Name()
+	case subtype.FieldColor:
+		return m.Color()
 	}
 	return nil, false
 }
@@ -1544,6 +1640,8 @@ func (m *SubTypeMutation) OldField(ctx context.Context, name string) (ent.Value,
 	switch name {
 	case subtype.FieldName:
 		return m.OldName(ctx)
+	case subtype.FieldColor:
+		return m.OldColor(ctx)
 	}
 	return nil, fmt.Errorf("unknown SubType field %s", name)
 }
@@ -1559,6 +1657,13 @@ func (m *SubTypeMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case subtype.FieldColor:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetColor(v)
 		return nil
 	}
 	return fmt.Errorf("unknown SubType field %s", name)
@@ -1611,6 +1716,9 @@ func (m *SubTypeMutation) ResetField(name string) error {
 	switch name {
 	case subtype.FieldName:
 		m.ResetName()
+		return nil
+	case subtype.FieldColor:
+		m.ResetColor()
 		return nil
 	}
 	return fmt.Errorf("unknown SubType field %s", name)

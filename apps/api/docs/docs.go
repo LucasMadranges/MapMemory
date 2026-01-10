@@ -469,9 +469,14 @@ const docTemplate = `{
         "mainType.CreateMainTypeDto": {
             "type": "object",
             "required": [
+                "color",
                 "name"
             ],
             "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#000000"
+                },
                 "name": {
                     "type": "string",
                     "maxLength": 25,
@@ -540,10 +545,15 @@ const docTemplate = `{
         "subType.CreateSubTypeDto": {
             "type": "object",
             "required": [
+                "color",
                 "main_type_id",
                 "name"
             ],
             "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#000000"
+                },
                 "main_type_id": {
                     "type": "integer",
                     "example": 1

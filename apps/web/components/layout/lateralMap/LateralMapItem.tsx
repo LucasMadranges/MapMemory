@@ -2,7 +2,7 @@ import React from 'react';
 
 import Badges from '../../badge/Badges';
 
-export default function LateralItem() {
+export default function LateralMapItem() {
   return (
     <div
       className={

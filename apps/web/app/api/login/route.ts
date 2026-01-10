@@ -11,9 +11,10 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    const response = NextResponse.json(data);
+    const token = data.data;
+    const response = NextResponse.json({ success: true, token });
 
-    response.cookies.set('token', data.token, {
+    response.cookies.set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

@@ -90,6 +90,7 @@ func GetUserByEmail(client *ent.Client) fiber.Handler {
 // @Param user body CreateUserDTO true "User payload"
 // @Success 201 {object} request.SuccessCreateRequest "Utilisateur créé avec succés"
 // @Failure 400 {object} request.ErrorRequest "Corps de requête invalide"
+// @Failure 400 {object} request.ErrorRequest "Mot de passe invalide"
 // @Failure 400 {object} request.ErrorRequest "Données invalides"
 // @Failure 409 {object} request.ErrorRequest "Utilisateur déjà existant"
 // @Failure 500 {object} request.ErrorRequest "Erreur interne"
@@ -98,7 +99,7 @@ func CreateUser(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var body CreateUserDTO
 
-		if err := validation.ValidatePassword(config.Validate); err != nil {
+		if err := c.BodyParser(&body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
 				Message:  "Corps de requête invalide",
@@ -106,10 +107,10 @@ func CreateUser(client *ent.Client) fiber.Handler {
 			})
 		}
 
-		if err := c.BodyParser(&body); err != nil {
+		if err := validation.ValidatePassword(config.Validate); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
-				Message:  "Corps de requête invalide",
+				Message:  "Mot de passe invalide",
 				Explicit: err.Error(),
 			})
 		}

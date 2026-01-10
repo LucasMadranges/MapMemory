@@ -17,7 +17,7 @@ export function MapConfig(
   });
 
   map.current.on('load', () => {
-    if (!map.current) return;
+    if (!map.current || map.current.getSource('user-location')) return;
 
     map.current.addSource('user-location', {
       type: 'geojson',

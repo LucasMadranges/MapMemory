@@ -6,6 +6,7 @@ import (
 	"github.com/LucasMadranges/MapMemory/ent"
 	"github.com/LucasMadranges/MapMemory/internal/config"
 	"github.com/LucasMadranges/MapMemory/utils/request"
+	"github.com/LucasMadranges/MapMemory/utils/validation"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -46,6 +47,7 @@ func GetMainTypes(client *ent.Client) fiber.Handler {
 // @Param mainType body CreateMainTypeDto true "mainType payload"
 // @Success 201 {object} request.SuccessCreateRequest "Catégorie créé avec succés"
 // @Failure 400 {object} request.ErrorRequest "Corps de requête invalide"
+// @Failure 400 {object} request.ErrorRequest "Couleur invalide"
 // @Failure 400 {object} request.ErrorRequest "Données invalides"
 // @Failure 409 {object} request.ErrorRequest "Catégorie déjà existante"
 // @Failure 500 {object} request.ErrorRequest "Erreur interne"
@@ -62,6 +64,14 @@ func CreateMainType(client *ent.Client) fiber.Handler {
 			})
 		}
 
+		if err := validation.ValidateColor(config.Validate); err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Couleur invalide",
+				Explicit: err.Error(),
+			})
+		}
+
 		if err := config.Validate.Struct(body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
@@ -73,6 +83,7 @@ func CreateMainType(client *ent.Client) fiber.Handler {
 		mainType, err := client.MainType.
 			Create().
 			SetName(body.Name).
+			SetColor(body.Color).
 			Save(context.Background())
 
 		if err != nil {

@@ -411,8 +411,12 @@
     },
     "mainType.CreateMainTypeDto": {
       "type": "object",
-      "required": ["name"],
+      "required": ["color", "name"],
       "properties": {
+        "color": {
+          "type": "string",
+          "example": "#000000"
+        },
         "name": {
           "type": "string",
           "maxLength": 25,
@@ -480,8 +484,12 @@
     },
     "subType.CreateSubTypeDto": {
       "type": "object",
-      "required": ["main_type_id", "name"],
+      "required": ["color", "main_type_id", "name"],
       "properties": {
+        "color": {
+          "type": "string",
+          "example": "#000000"
+        },
         "main_type_id": {
           "type": "integer",
           "example": 1

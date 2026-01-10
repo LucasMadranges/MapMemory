@@ -120,6 +120,7 @@ func CreateSubType(client *ent.Client) fiber.Handler {
 		subType, err := client.SubType.
 			Create().
 			SetName(body.Name).
+			SetColor(body.Color).
 			SetMainTypesID(body.MainTypeID).
 			Save(context.Background())
 

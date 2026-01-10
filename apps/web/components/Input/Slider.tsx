@@ -32,7 +32,7 @@ export default function Slider({
   step: number;
   disabled: boolean;
   className?: string;
-  errorMessage: string;
+  errorMessage?: string;
 }) {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>

@@ -2,6 +2,6 @@ import React from 'react';
 
 import Pagination from '../../pagination/Pagination';
 
-export default function LateralPagination() {
+export default function LateralMapPagination() {
   return <Pagination />;
 }

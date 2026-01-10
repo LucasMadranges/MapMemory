@@ -43,6 +43,20 @@ func (_u *SubTypeUpdate) SetNillableName(v *string) *SubTypeUpdate {
 	return _u
 }
 
+// SetColor sets the "color" field.
+func (_u *SubTypeUpdate) SetColor(v string) *SubTypeUpdate {
+	_u.mutation.SetColor(v)
+	return _u
+}
+
+// SetNillableColor sets the "color" field if the given value is not nil.
+func (_u *SubTypeUpdate) SetNillableColor(v *string) *SubTypeUpdate {
+	if v != nil {
+		_u.SetColor(*v)
+	}
+	return _u
+}
+
 // SetMainTypesID sets the "main_types" edge to the MainType entity by ID.
 func (_u *SubTypeUpdate) SetMainTypesID(id int) *SubTypeUpdate {
 	_u.mutation.SetMainTypesID(id)
@@ -135,6 +149,11 @@ func (_u *SubTypeUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "SubType.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Color(); ok {
+		if err := subtype.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`ent: validator failed for field "SubType.color": %w`, err)}
+		}
+	}
 	if _u.mutation.MainTypesCleared() && len(_u.mutation.MainTypesIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "SubType.main_types"`)
 	}
@@ -155,6 +174,9 @@ func (_u *SubTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(subtype.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Color(); ok {
+		_spec.SetField(subtype.FieldColor, field.TypeString, value)
 	}
 	if _u.mutation.MainTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -264,6 +286,20 @@ func (_u *SubTypeUpdateOne) SetNillableName(v *string) *SubTypeUpdateOne {
 	return _u
 }
 
+// SetColor sets the "color" field.
+func (_u *SubTypeUpdateOne) SetColor(v string) *SubTypeUpdateOne {
+	_u.mutation.SetColor(v)
+	return _u
+}
+
+// SetNillableColor sets the "color" field if the given value is not nil.
+func (_u *SubTypeUpdateOne) SetNillableColor(v *string) *SubTypeUpdateOne {
+	if v != nil {
+		_u.SetColor(*v)
+	}
+	return _u
+}
+
 // SetMainTypesID sets the "main_types" edge to the MainType entity by ID.
 func (_u *SubTypeUpdateOne) SetMainTypesID(id int) *SubTypeUpdateOne {
 	_u.mutation.SetMainTypesID(id)
@@ -369,6 +405,11 @@ func (_u *SubTypeUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "SubType.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Color(); ok {
+		if err := subtype.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`ent: validator failed for field "SubType.color": %w`, err)}
+		}
+	}
 	if _u.mutation.MainTypesCleared() && len(_u.mutation.MainTypesIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "SubType.main_types"`)
 	}
@@ -406,6 +447,9 @@ func (_u *SubTypeUpdateOne) sqlSave(ctx context.Context) (_node *SubType, err er
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(subtype.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Color(); ok {
+		_spec.SetField(subtype.FieldColor, field.TypeString, value)
 	}
 	if _u.mutation.MainTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{

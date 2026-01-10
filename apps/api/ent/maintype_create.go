@@ -27,6 +27,12 @@ func (_c *MainTypeCreate) SetName(v string) *MainTypeCreate {
 	return _c
 }
 
+// SetColor sets the "color" field.
+func (_c *MainTypeCreate) SetColor(v string) *MainTypeCreate {
+	_c.mutation.SetColor(v)
+	return _c
+}
+
 // AddMemoryIDs adds the "memories" edge to the Memory entity by IDs.
 func (_c *MainTypeCreate) AddMemoryIDs(ids ...int) *MainTypeCreate {
 	_c.mutation.AddMemoryIDs(ids...)
@@ -99,6 +105,14 @@ func (_c *MainTypeCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "MainType.name": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Color(); !ok {
+		return &ValidationError{Name: "color", err: errors.New(`ent: missing required field "MainType.color"`)}
+	}
+	if v, ok := _c.mutation.Color(); ok {
+		if err := maintype.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`ent: validator failed for field "MainType.color": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -128,6 +142,10 @@ func (_c *MainTypeCreate) createSpec() (*MainType, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(maintype.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.Color(); ok {
+		_spec.SetField(maintype.FieldColor, field.TypeString, value)
+		_node.Color = value
 	}
 	if nodes := _c.mutation.MemoriesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

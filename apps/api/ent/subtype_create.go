@@ -27,6 +27,12 @@ func (_c *SubTypeCreate) SetName(v string) *SubTypeCreate {
 	return _c
 }
 
+// SetColor sets the "color" field.
+func (_c *SubTypeCreate) SetColor(v string) *SubTypeCreate {
+	_c.mutation.SetColor(v)
+	return _c
+}
+
 // SetMainTypesID sets the "main_types" edge to the MainType entity by ID.
 func (_c *SubTypeCreate) SetMainTypesID(id int) *SubTypeCreate {
 	_c.mutation.SetMainTypesID(id)
@@ -95,6 +101,14 @@ func (_c *SubTypeCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "SubType.name": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Color(); !ok {
+		return &ValidationError{Name: "color", err: errors.New(`ent: missing required field "SubType.color"`)}
+	}
+	if v, ok := _c.mutation.Color(); ok {
+		if err := subtype.ColorValidator(v); err != nil {
+			return &ValidationError{Name: "color", err: fmt.Errorf(`ent: validator failed for field "SubType.color": %w`, err)}
+		}
+	}
 	if len(_c.mutation.MainTypesIDs()) == 0 {
 		return &ValidationError{Name: "main_types", err: errors.New(`ent: missing required edge "SubType.main_types"`)}
 	}
@@ -127,6 +141,10 @@ func (_c *SubTypeCreate) createSpec() (*SubType, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(subtype.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.Color(); ok {
+		_spec.SetField(subtype.FieldColor, field.TypeString, value)
+		_node.Color = value
 	}
 	if nodes := _c.mutation.MainTypesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
