@@ -18,7 +18,7 @@ import (
 // @Description Retrieve a list of all users
 // @Tags Users
 // @Produce json
-// @Success 201 {array} request.SuccessGetAllRequest "Récupérer tous les utilisateurs"
+// @Success 201 {object} request.SuccessGetAllRequest "Récupérer tous les utilisateurs"
 // @Failure 400 {object} request.ErrorRequest "Échec de la récupération des utilisateurs"
 // @Failure 500 {object} request.ErrorRequest "Erreur interne"
 // @Router /users [get]
@@ -48,7 +48,7 @@ func GetUsers(client *ent.Client) fiber.Handler {
 // @Tags Users
 // @Param email path string true "User Email"
 // @Produce json
-// @Success 201 {array} request.SuccessGetAllRequest "Récupérer un utilisateur par email"
+// @Success 201 {object} request.SuccessGetAllRequest "Récupérer un utilisateur par email"
 // @Failure 400 {object} request.ErrorRequest "Échec de la récupération de l'utilisateur"
 // @Failure 404 {object} request.ErrorRequest "Utilisateur non trouvé"
 // @Failure 500 {object} request.ErrorRequest "Erreur interne"
@@ -114,7 +114,6 @@ func CreateUser(client *ent.Client) fiber.Handler {
 			})
 		}
 
-		// TODO : Vérifier le status de retour de l'api
 		if err := config.Validate.Struct(body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
@@ -125,7 +124,6 @@ func CreateUser(client *ent.Client) fiber.Handler {
 
 		hash, err := bcrypt.HashPassword(body.Password)
 
-		// TODO : Vérifier le status de retour de l'api
 		if err != nil {
 			return c.Status(500).JSON(request.ErrorRequest{
 				Success:  false,

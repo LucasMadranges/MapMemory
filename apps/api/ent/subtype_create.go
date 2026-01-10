@@ -142,7 +142,7 @@ func (_c *SubTypeCreate) createSpec() (*SubType, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.sub_type_id = &nodes[0]
+		_node.main_type_id = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.MemoriesIDs(); len(nodes) > 0 {

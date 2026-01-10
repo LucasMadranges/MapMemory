@@ -6,5 +6,7 @@ import (
 )
 
 func RegisterSubTypeRoutes(app *fiber.App, client *ent.Client) {
-	app.Post("/subType", CreateSubType(client))
+	app.Get("/subTypes", GetSubTypes(client))
+	app.Get("/subTypes/:mainTypeId", GetSubTypesByMainTypeId(client))
+	app.Post("/subTypes", CreateSubType(client))
 }

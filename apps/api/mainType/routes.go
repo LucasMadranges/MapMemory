@@ -1,10 +1,11 @@
-package subType
+package mainType
 
 import (
 	"github.com/LucasMadranges/MapMemory/ent"
 	"github.com/gofiber/fiber/v2"
 )
 
-func RegisterSubTypeRoutes(app *fiber.App, client *ent.Client) {
-	app.Post("/subType", CreateSubType(client))
+func RegisterMainTypeRoutes(app *fiber.App, client *ent.Client) {
+	app.Get("/mainTypes", GetMainTypes(client))
+	app.Post("/mainTypes", CreateMainType(client))
 }

@@ -54,7 +54,7 @@ var (
 	SubTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Size: 25},
-		{Name: "sub_type_id", Type: field.TypeInt},
+		{Name: "main_type_id", Type: field.TypeInt},
 	}
 	// SubTypesTable holds the schema information for the "sub_types" table.
 	SubTypesTable = &schema.Table{

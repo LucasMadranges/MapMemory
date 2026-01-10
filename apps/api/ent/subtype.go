@@ -22,7 +22,7 @@ type SubType struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubTypeQuery when eager-loading is set.
 	Edges        SubTypeEdges `json:"edges"`
-	sub_type_id  *int
+	main_type_id *int
 	selectValues sql.SelectValues
 }
 
@@ -66,7 +66,7 @@ func (*SubType) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case subtype.FieldName:
 			values[i] = new(sql.NullString)
-		case subtype.ForeignKeys[0]: // sub_type_id
+		case subtype.ForeignKeys[0]: // main_type_id
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -97,10 +97,10 @@ func (_m *SubType) assignValues(columns []string, values []any) error {
 			}
 		case subtype.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field sub_type_id", value)
+				return fmt.Errorf("unexpected type %T for edge-field main_type_id", value)
 			} else if value.Valid {
-				_m.sub_type_id = new(int)
-				*_m.sub_type_id = int(value.Int64)
+				_m.main_type_id = new(int)
+				*_m.main_type_id = int(value.Int64)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

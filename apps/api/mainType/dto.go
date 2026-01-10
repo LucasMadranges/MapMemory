@@ -1,5 +1,5 @@
-package subType
+package mainType
 
-type CreateSubTypeDto struct {
+type CreateMainTypeDto struct {
 	Name string `json:"name" example:"Restaurant" validate:"required,max=25"`
 }

@@ -33,7 +33,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "subtype" package.
 	SubTypesInverseTable = "sub_types"
 	// SubTypesColumn is the table column denoting the sub_types relation/edge.
-	SubTypesColumn = "sub_type_id"
+	SubTypesColumn = "main_type_id"
 )
 
 // Columns holds all SQL columns for maintype fields.

@@ -67,7 +67,119 @@ const docTemplate = `{
                 }
             }
         },
-        "/subType": {
+        "/mainTypes": {
+            "get": {
+                "description": "Retrieve a list of all main types",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MainType"
+                ],
+                "summary": "Get all main types",
+                "responses": {
+                    "201": {
+                        "description": "Récupérer toutes les catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Échec de la récupération des catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new main type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MainType"
+                ],
+                "summary": "Create mainType",
+                "parameters": [
+                    {
+                        "description": "mainType payload",
+                        "name": "mainType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mainType.CreateMainTypeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Catégorie créé avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessCreateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "409": {
+                        "description": "Catégorie déjà existante",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/subTypes": {
+            "get": {
+                "description": "Retrieve a list of all sub types",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubType"
+                ],
+                "summary": "Get all subTypes",
+                "responses": {
+                    "201": {
+                        "description": "Récupérer toutes les sous-catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Échec de la récupération des sous-catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a new sub type",
                 "consumes": [
@@ -87,7 +199,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_LucasMadranges_MapMemory_subType.CreateSubTypeDto"
+                            "$ref": "#/definitions/subType.CreateSubTypeDto"
                         }
                     }
                 ],
@@ -119,6 +231,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/subTypes/{mainTypeId}": {
+            "get": {
+                "description": "Retrieve a list of all sub types for a specific main type ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubType"
+                ],
+                "summary": "Get all subTypes by main type ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "MainType ID",
+                        "name": "mainTypeId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Récupérer toutes les sous-catégories d'une catégorie",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Échec de la récupération des sous-catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Retrieve a list of all users",
@@ -133,10 +286,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Récupérer tous les utilisateurs",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/request.SuccessGetAllRequest"
-                            }
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
                         }
                     },
                     "400": {
@@ -227,10 +377,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Récupérer un utilisateur par email",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/request.SuccessGetAllRequest"
-                            }
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
                         }
                     },
                     "400": {
@@ -319,7 +466,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_LucasMadranges_MapMemory_mainType.CreateSubTypeDto": {
+        "mainType.CreateMainTypeDto": {
             "type": "object",
             "required": [
                 "name"
@@ -329,19 +476,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 25,
                     "example": "Restaurant"
-                }
-            }
-        },
-        "github_com_LucasMadranges_MapMemory_subType.CreateSubTypeDto": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "maxLength": 25,
-                    "example": "Buffet à volonté"
                 }
             }
         },
@@ -400,6 +534,24 @@ const docTemplate = `{
                 "success": {
                     "type": "boolean",
                     "example": true
+                }
+            }
+        },
+        "subType.CreateSubTypeDto": {
+            "type": "object",
+            "required": [
+                "main_type_id",
+                "name"
+            ],
+            "properties": {
+                "main_type_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Buffet à volonté"
                 }
             }
         },

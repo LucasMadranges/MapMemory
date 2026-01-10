@@ -23,6 +23,6 @@ func (MainType) Edges() []ent.Edge {
 			Ref("main_type"),
 		// 1 maintype possède plusieurs subtypes (many-to-many)
 		edge.To("sub_types", SubType.Type).
-			StorageKey(edge.Column("sub_type_id")),
+			StorageKey(edge.Column("main_type_id")),
 	}
 }

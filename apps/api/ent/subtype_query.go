@@ -458,10 +458,10 @@ func (_q *SubTypeQuery) loadMainTypes(ctx context.Context, query *MainTypeQuery,
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*SubType)
 	for i := range nodes {
-		if nodes[i].sub_type_id == nil {
+		if nodes[i].main_type_id == nil {
 			continue
 		}
-		fk := *nodes[i].sub_type_id
+		fk := *nodes[i].main_type_id
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -478,7 +478,7 @@ func (_q *SubTypeQuery) loadMainTypes(ctx context.Context, query *MainTypeQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "sub_type_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "main_type_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

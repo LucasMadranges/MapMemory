@@ -26,7 +26,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "maintype" package.
 	MainTypesInverseTable = "main_types"
 	// MainTypesColumn is the table column denoting the main_types relation/edge.
-	MainTypesColumn = "sub_type_id"
+	MainTypesColumn = "main_type_id"
 	// MemoriesTable is the table that holds the memories relation/edge.
 	MemoriesTable = "memories"
 	// MemoriesInverseTable is the table name for the Memory entity.
@@ -45,7 +45,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "sub_types"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"sub_type_id",
+	"main_type_id",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

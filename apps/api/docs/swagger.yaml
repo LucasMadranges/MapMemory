@@ -13,19 +13,10 @@ definitions:
       - email
       - password
     type: object
-  github_com_LucasMadranges_MapMemory_mainType.CreateSubTypeDto:
+  mainType.CreateMainTypeDto:
     properties:
       name:
         example: Restaurant
-        maxLength: 25
-        type: string
-    required:
-      - name
-    type: object
-  github_com_LucasMadranges_MapMemory_subType.CreateSubTypeDto:
-    properties:
-      name:
-        example: Buffet à volonté
         maxLength: 25
         type: string
     required:
@@ -70,6 +61,19 @@ definitions:
       success:
         example: true
         type: boolean
+    type: object
+  subType.CreateSubTypeDto:
+    properties:
+      main_type_id:
+        example: 1
+        type: integer
+      name:
+        example: Buffet à volonté
+        maxLength: 25
+        type: string
+    required:
+      - main_type_id
+      - name
     type: object
   user.CreateUserDTO:
     properties:
@@ -153,7 +157,81 @@ paths:
       summary: User login
       tags:
         - Auth
-  /subType:
+  /mainTypes:
+    get:
+      description: Retrieve a list of all main types
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Récupérer toutes les catégories
+          schema:
+            $ref: '#/definitions/request.SuccessGetAllRequest'
+        '400':
+          description: Échec de la récupération des catégories
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Get all main types
+      tags:
+        - MainType
+    post:
+      consumes:
+        - application/json
+      description: Create a new main type
+      parameters:
+        - description: mainType payload
+          in: body
+          name: mainType
+          required: true
+          schema:
+            $ref: '#/definitions/mainType.CreateMainTypeDto'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Catégorie créé avec succés
+          schema:
+            $ref: '#/definitions/request.SuccessCreateRequest'
+        '400':
+          description: Données invalides
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '409':
+          description: Catégorie déjà existante
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Create mainType
+      tags:
+        - MainType
+  /subTypes:
+    get:
+      description: Retrieve a list of all sub types
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Récupérer toutes les sous-catégories
+          schema:
+            $ref: '#/definitions/request.SuccessGetAllRequest'
+        '400':
+          description: Échec de la récupération des sous-catégories
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Get all subTypes
+      tags:
+        - SubType
     post:
       consumes:
         - application/json
@@ -164,7 +242,7 @@ paths:
           name: subType
           required: true
           schema:
-            $ref: '#/definitions/github_com_LucasMadranges_MapMemory_subType.CreateSubTypeDto'
+            $ref: '#/definitions/subType.CreateSubTypeDto'
       produces:
         - application/json
       responses:
@@ -187,6 +265,33 @@ paths:
       summary: Create subType
       tags:
         - SubType
+  /subTypes/{mainTypeId}:
+    get:
+      description: Retrieve a list of all sub types for a specific main type ID
+      parameters:
+        - description: MainType ID
+          in: path
+          name: mainTypeId
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Récupérer toutes les sous-catégories d'une catégorie
+          schema:
+            $ref: '#/definitions/request.SuccessGetAllRequest'
+        '400':
+          description: Échec de la récupération des sous-catégories
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Get all subTypes by main type ID
+      tags:
+        - SubType
   /users:
     get:
       description: Retrieve a list of all users
@@ -196,9 +301,7 @@ paths:
         '201':
           description: Récupérer tous les utilisateurs
           schema:
-            items:
-              $ref: '#/definitions/request.SuccessGetAllRequest'
-            type: array
+            $ref: '#/definitions/request.SuccessGetAllRequest'
         '400':
           description: Échec de la récupération des utilisateurs
           schema:
@@ -288,9 +391,7 @@ paths:
         '201':
           description: Récupérer un utilisateur par email
           schema:
-            items:
-              $ref: '#/definitions/request.SuccessGetAllRequest'
-            type: array
+            $ref: '#/definitions/request.SuccessGetAllRequest'
         '400':
           description: Échec de la récupération de l'utilisateur
           schema:
