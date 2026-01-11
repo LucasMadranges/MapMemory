@@ -1,36 +1,65 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { clientApi } from '../../../utils/api/clientApi';
+import { MainTypes } from '../../../utils/types/mainTypes';
+import { MultiSelectTypes } from '../../../utils/types/multiSelectTypes';
+import { SubTypes } from '../../../utils/types/subTypes';
 import Button from '../../button/Button';
 import MultiSelect from '../../input/MultiSelect';
 import Slider from '../../input/Slider';
 
 export default function LateralMapFilters() {
-  const [item, setItem] = useState<{ value: string; label: string; color: string }[]>([]);
-  const [options, setOptions] = useState<{ value: string; label: string; color: string }[]>([]);
+  const [mainTypes, setMainTypes] = useState<MainTypes[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<MultiSelectTypes[]>([]);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100);
 
   useEffect(() => {
-    const getMainTypes = async () => {
+    async function getMainTypes() {
       try {
         const response = await clientApi.get('/mainTypes');
-        console.log(response.data);
-        const items = response.data.map((type: { id: number; name: string; color: string }) => ({
-          value: type.id,
-          label: type.name,
-          color: type.color,
-        }));
-
-        setOptions(items);
+        setMainTypes(response.data);
       } catch (error) {
         console.error('Erreur lors du chargement des catégories:', error);
       }
-    };
+    }
 
     getMainTypes();
   }, []);
+
+  const displayOptions = useMemo(() => {
+    const options: MultiSelectTypes[] = [];
+
+    mainTypes.forEach((type: MainTypes) => {
+      options.push({
+        value: type.id,
+        label: type.name,
+        color: type.color,
+        isSub: false,
+      });
+    });
+
+    selectedTypes.forEach((selected) => {
+      if (!selected.isSub) {
+        const mainType = mainTypes.find((type) => type.id === selected.value);
+
+        if (mainType?.edges.sub_types) {
+          mainType.edges.sub_types.forEach((subType: SubTypes) => {
+            options.push({
+              value: subType.id,
+              label: subType.name,
+              color: subType.color,
+              isSub: true,
+              parentId: mainType.id,
+            });
+          });
+        }
+      }
+    });
+
+    return options;
+  }, [mainTypes, selectedTypes]);
 
   return (
     <>
@@ -39,9 +68,9 @@ export default function LateralMapFilters() {
           name={'categorie'}
           type={'multi'}
           placeholder={'Catégorie'}
-          value={item}
-          setValue={setItem}
-          options={options}
+          value={selectedTypes}
+          setValue={setSelectedTypes}
+          options={displayOptions}
         />
         <Slider
           type={'range'}

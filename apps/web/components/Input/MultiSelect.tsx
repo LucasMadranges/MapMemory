@@ -1,6 +1,9 @@
 import React from 'react';
 import Select from 'react-select';
 
+import { getTextColor } from '../../utils/color/getTextColor';
+import { MultiSelectTypes } from '../../utils/types/multiSelectTypes';
+
 export default function MultiSelect({
   name,
   type,
@@ -15,17 +18,11 @@ export default function MultiSelect({
 }: {
   name: string;
   type: 'single' | 'multi';
-  options: Array<{ value: string; label: string; color: string }>;
+  options: MultiSelectTypes[];
   label?: string;
   placeholder: string;
-  value: Array<{
-    color: string;
-    value: string;
-    label: string;
-  }>;
-  setValue: React.Dispatch<
-    React.SetStateAction<Array<{ value: string; label: string; color: string }>>
-  >;
+  value: MultiSelectTypes[];
+  setValue: React.Dispatch<React.SetStateAction<MultiSelectTypes[]>>;
   errorMessage?: string | undefined;
   className?: string;
   disabled?: boolean;
@@ -39,9 +36,7 @@ export default function MultiSelect({
         name={'label'}
         id={'label'}
         value={value}
-        onChange={(newValue) =>
-          setValue(newValue as Array<{ value: string; label: string; color: string }>)
-        }
+        onChange={(newValue) => setValue(newValue as MultiSelectTypes[])}
         placeholder={placeholder}
         options={options}
         isDisabled={disabled}
@@ -55,12 +50,28 @@ export default function MultiSelect({
             ...base,
             zIndex: 50,
           }),
-          option: (base, { data }) => {
-            return {
-              ...base,
-              backgroundColor: data.color,
-            };
-          },
+          option: (base, { data }) => ({
+            ...base,
+            backgroundColor: data.color,
+            color: getTextColor(data.color),
+          }),
+          multiValue: (base, { data }) => ({
+            ...base,
+            backgroundColor: data.color,
+            color: getTextColor(data.color),
+            borderRadius: '6px',
+          }),
+          multiValueLabel: (base, { data }) => ({
+            ...base,
+            color: getTextColor(data.color),
+            lineHeight: '20px',
+            padding: '0 4px 0 8px',
+            borderRadius: '6px',
+          }),
+          multiValueRemove: (base) => ({
+            ...base,
+            borderRadius: '6px',
+          }),
         }}
       />
 
