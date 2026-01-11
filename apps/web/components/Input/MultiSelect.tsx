@@ -1,3 +1,4 @@
+import chroma from 'chroma-js';
 import React from 'react';
 import Select from 'react-select';
 
@@ -52,8 +53,9 @@ export default function MultiSelect({
           }),
           option: (base, { data }) => ({
             ...base,
-            backgroundColor: data.color,
-            color: getTextColor(data.color),
+            backgroundColor: chroma(data.color).alpha(0.1).css(),
+            color: data.color,
+            ':hover': { backgroundColor: chroma(data.color).alpha(0.3).css() },
           }),
           multiValue: (base, { data }) => ({
             ...base,
@@ -68,9 +70,13 @@ export default function MultiSelect({
             padding: '0 4px 0 8px',
             borderRadius: '6px',
           }),
-          multiValueRemove: (base) => ({
+          multiValueRemove: (base, { data }) => ({
             ...base,
             borderRadius: '6px',
+            ':hover': {
+              backgroundColor: chroma(data.color).darken(0.8).css(),
+              color: 'white',
+            },
           }),
         }}
       />

@@ -29,7 +29,9 @@ export default function LateralMapFilters() {
   }, []);
 
   const displayOptions = useMemo(() => {
-    const options: MultiSelectTypes[] = [];
+    let options: MultiSelectTypes[] = [];
+
+    if (selectedTypes.length === 2) return options;
 
     mainTypes.forEach((type: MainTypes) => {
       options.push({
@@ -45,9 +47,11 @@ export default function LateralMapFilters() {
         const mainType = mainTypes.find((type) => type.id === selected.value);
 
         if (mainType?.edges.sub_types) {
+          options = [];
+
           mainType.edges.sub_types.forEach((subType: SubTypes) => {
             options.push({
-              value: subType.id,
+              value: `sub-${subType.id}`,
               label: subType.name,
               color: subType.color,
               isSub: true,
