@@ -139,6 +139,70 @@ func CreateSubType(client *ent.Client) fiber.Handler {
 	}
 }
 
+// UpdateSubTypeBySubTypeId godoc
+// @Summary Update subType by subTypeId
+// @Description Update an existing sub type by subTypeId
+// @Tags SubTypes
+// @Accept json
+// @Produce json
+// @Param subTypeId path int true "Subtype ID"
+// @Param subType body UpdateSubTypeDto true "subType payload"
+// @Success 200 {object} request.SuccessUpdateRequest "Sous-catégorie mise à jour avec succés"
+// @Failure 400 {object} request.ErrorRequest "Corps de requête invalide"
+// @Failure 400 {object} request.ErrorRequest "Données invalides"
+// @Failure 404 {object} request.ErrorRequest "Sous-catégorie non trouvée"
+// @Failure 500 {object} request.ErrorRequest "Erreur interne"
+// @Router /subTypes/{subTypeId} [put]
+func UpdateSubTypeBySubTypeId(client *ent.Client) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		var body UpdateSubTypeDto
+
+		subTypeId, err := c.ParamsInt("subTypeId")
+		if err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "ID invalide",
+				Explicit: err.Error(),
+			})
+		}
+
+		if err := c.BodyParser(&body); err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Corps de requête invalide",
+				Explicit: err.Error(),
+			})
+		}
+
+		if err := config.Validate.Struct(body); err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Données invalides",
+				Explicit: err.Error(),
+			})
+		}
+
+		subType, err := client.SubType.
+			UpdateOneID(subTypeId).
+			SetName(body.Name).
+			SetColor(body.Color).
+			Save(context.Background())
+
+		if err != nil {
+			return c.Status(409).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "La sous-catégorie n'existe pas",
+				Explicit: err.Error(),
+			})
+		}
+
+		return c.Status(201).JSON(request.SuccessCreateRequest{
+			Success: true,
+			Data:    subType,
+		})
+	}
+}
+
 // DeleteSubTypesById godoc
 // @Summary Delete subtype by id
 // @Description Delete a subtype by id

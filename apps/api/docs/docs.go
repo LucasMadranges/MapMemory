@@ -150,6 +150,63 @@ const docTemplate = `{
             }
         },
         "/mainTypes/{mainTypeId}": {
+            "put": {
+                "description": "Update an existing main type by mainTypeId",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MainTypes"
+                ],
+                "summary": "Update mainType by mainTypeId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "MainType ID",
+                        "name": "mainTypeId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "mainType payload",
+                        "name": "mainType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mainType.UpdateMainTypeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie mise à jour avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessUpdateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete a main type by id",
                 "produces": [
@@ -320,6 +377,63 @@ const docTemplate = `{
             }
         },
         "/subTypes/{subTypeId}": {
+            "put": {
+                "description": "Update an existing sub type by subTypeId",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubTypes"
+                ],
+                "summary": "Update subType by subTypeId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Subtype ID",
+                        "name": "subTypeId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "subType payload",
+                        "name": "subType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/subType.UpdateSubTypeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sous-catégorie mise à jour avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessUpdateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Sous-catégorie non trouvée",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete a subtype by id",
                 "produces": [
@@ -578,6 +692,24 @@ const docTemplate = `{
                 }
             }
         },
+        "mainType.UpdateMainTypeDto": {
+            "type": "object",
+            "required": [
+                "color",
+                "name"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#000000"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Restaurant"
+                }
+            }
+        },
         "request.ErrorRequest": {
             "type": "object",
             "properties": {
@@ -636,6 +768,19 @@ const docTemplate = `{
                 }
             }
         },
+        "request.SuccessUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
         "subType.CreateSubTypeDto": {
             "type": "object",
             "required": [
@@ -651,6 +796,24 @@ const docTemplate = `{
                 "main_type_id": {
                     "type": "integer",
                     "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Buffet à volonté"
+                }
+            }
+        },
+        "subType.UpdateSubTypeDto": {
+            "type": "object",
+            "required": [
+                "color",
+                "name"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#000000"
                 },
                 "name": {
                     "type": "string",

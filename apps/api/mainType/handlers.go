@@ -102,6 +102,70 @@ func CreateMainType(client *ent.Client) fiber.Handler {
 	}
 }
 
+// UpdateMainTypeByMainTypeId godoc
+// @Summary Update mainType by mainTypeId
+// @Description Update an existing main type by mainTypeId
+// @Tags MainTypes
+// @Accept json
+// @Produce json
+// @Param mainTypeId path int true "MainType ID"
+// @Param mainType body UpdateMainTypeDto true "mainType payload"
+// @Success 200 {object} request.SuccessUpdateRequest "Catégorie mise à jour avec succés"
+// @Failure 400 {object} request.ErrorRequest "Corps de requête invalide"
+// @Failure 400 {object} request.ErrorRequest "Données invalides"
+// @Failure 404 {object} request.ErrorRequest "Catégorie non trouvée"
+// @Failure 500 {object} request.ErrorRequest "Erreur interne"
+// @Router /mainTypes/{mainTypeId} [put]
+func UpdateMainTypeByMainTypeId(client *ent.Client) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		var body UpdateMainTypeDto
+
+		mainTypeId, err := c.ParamsInt("mainTypeId")
+		if err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "ID invalide",
+				Explicit: err.Error(),
+			})
+		}
+
+		if err := c.BodyParser(&body); err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Corps de requête invalide",
+				Explicit: err.Error(),
+			})
+		}
+
+		if err := config.Validate.Struct(body); err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Données invalides",
+				Explicit: err.Error(),
+			})
+		}
+
+		mainType, err := client.MainType.
+			UpdateOneID(mainTypeId).
+			SetName(body.Name).
+			SetColor(body.Color).
+			Save(context.Background())
+
+		if err != nil {
+			return c.Status(409).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "La catégorie n'existe pas",
+				Explicit: err.Error(),
+			})
+		}
+
+		return c.Status(201).JSON(request.SuccessCreateRequest{
+			Success: true,
+			Data:    mainType,
+		})
+	}
+}
+
 // DeleteMainTypesById godoc
 // @Summary Delete main type by id
 // @Description Delete a main type by id

@@ -9,5 +9,6 @@ func RegisterSubTypeRoutes(app *fiber.App, client *ent.Client) {
 	app.Get("/subTypes", GetSubTypes(client))
 	app.Get("/subTypes/:mainTypeId", GetSubTypesByMainTypeId(client))
 	app.Post("/subTypes", CreateSubType(client))
+	app.Put("/subTypes/:subTypeId", UpdateSubTypeBySubTypeId(client))
 	app.Delete("/subTypes/:subTypeId", DeleteSubTypesById(client))
 }
