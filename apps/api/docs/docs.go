@@ -156,7 +156,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SubType"
+                    "SubTypes"
                 ],
                 "summary": "Get all subTypes",
                 "responses": {
@@ -189,7 +189,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SubType"
+                    "SubTypes"
                 ],
                 "summary": "Create subType",
                 "parameters": [
@@ -238,7 +238,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SubType"
+                    "SubTypes"
                 ],
                 "summary": "Get all subTypes by main type ID",
                 "parameters": [
@@ -259,6 +259,53 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Échec de la récupération des sous-catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/subtypes/{subTypeId}": {
+            "delete": {
+                "description": "Delete a subtype by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubTypes"
+                ],
+                "summary": "Delete subtype by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Subtype ID",
+                        "name": "subTypeId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sous-catégorie supprimée avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessDeleteRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "ID invalide",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Sous-catégorie non trouvée",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }

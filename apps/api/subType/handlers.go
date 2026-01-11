@@ -15,7 +15,7 @@ import (
 // GetSubTypes godoc
 // @Summary Get all subTypes
 // @Description Retrieve a list of all sub types
-// @Tags SubType
+// @Tags SubTypes
 // @Produce json
 // @Success 201 {object} request.SuccessGetAllRequest "Récupérer toutes les sous-catégories"
 // @Failure 400 {object} request.ErrorRequest "Échec de la récupération des sous-catégories"
@@ -44,7 +44,7 @@ func GetSubTypes(client *ent.Client) fiber.Handler {
 // GetSubTypesByMainTypeId godoc
 // @Summary Get all subTypes by main type ID
 // @Description Retrieve a list of all sub types for a specific main type ID
-// @Tags SubType
+// @Tags SubTypes
 // @Produce json
 // @Param mainTypeId path int true "MainType ID"
 // @Success 200 {object} request.SuccessGetAllRequest "Récupérer toutes les sous-catégories d'une catégorie"
@@ -87,7 +87,7 @@ func GetSubTypesByMainTypeId(client *ent.Client) fiber.Handler {
 // CreateSubType godoc
 // @Summary Create subType
 // @Description Create a new sub type
-// @Tags SubType
+// @Tags SubTypes
 // @Accept json
 // @Produce json
 // @Param subType body CreateSubTypeDto true "subType payload"
@@ -135,6 +135,53 @@ func CreateSubType(client *ent.Client) fiber.Handler {
 		return c.Status(201).JSON(request.SuccessCreateRequest{
 			Success: true,
 			Data:    subType,
+		})
+	}
+}
+
+// DeleteSubTypesById godoc
+// @Summary Delete subtype by id
+// @Description Delete a subtype by id
+// @Tags SubTypes
+// @Param subTypeId path int true "Subtype ID"
+// @Produce json
+// @Success 200 {object} request.SuccessDeleteRequest "Sous-catégorie supprimée avec succés"
+// @Failure 400 {object} request.ErrorRequest "ID invalide"
+// @Failure 404 {object} request.ErrorRequest "Sous-catégorie non trouvée"
+// @Failure 500 {object} request.ErrorRequest "Erreur interne"
+// @Router /subtypes/{subTypeId} [delete]
+func DeleteSubTypesById(client *ent.Client) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		subTypeId, err := c.ParamsInt("subTypeId")
+		if err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "ID invalide",
+				Explicit: err.Error(),
+			})
+		}
+
+		count, err := client.SubType.Delete().Where(subtype.IDEQ(subTypeId)).Exec(context.Background())
+
+		if err != nil {
+			return c.Status(500).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Erreur lors de la suppression de la sous-catégorie",
+				Explicit: err.Error(),
+			})
+		}
+
+		if count == 0 {
+			return c.Status(404).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "La sous-catégorie n'existe pas",
+				Explicit: "No subtype found with the provided id",
+			})
+		}
+
+		return c.Status(200).JSON(request.SuccessDeleteRequest{
+			Success: true,
+			Count:   count,
 		})
 	}
 }
