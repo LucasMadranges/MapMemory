@@ -149,7 +149,7 @@ func CreateSubType(client *ent.Client) fiber.Handler {
 // @Failure 400 {object} request.ErrorRequest "ID invalide"
 // @Failure 404 {object} request.ErrorRequest "Sous-catégorie non trouvée"
 // @Failure 500 {object} request.ErrorRequest "Erreur interne"
-// @Router /subtypes/{subTypeId} [delete]
+// @Router /subTypes/{subTypeId} [delete]
 func DeleteSubTypesById(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		subTypeId, err := c.ParamsInt("subTypeId")

@@ -8,4 +8,5 @@ import (
 func RegisterMainTypeRoutes(app *fiber.App, client *ent.Client) {
 	app.Get("/mainTypes", GetMainTypes(client))
 	app.Post("/mainTypes", CreateMainType(client))
+	app.Delete("/mainTypes/:mainTypeId", DeleteMainTypesById(client))
 }

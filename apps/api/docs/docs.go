@@ -74,7 +74,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "MainType"
+                    "MainTypes"
                 ],
                 "summary": "Get all main types",
                 "responses": {
@@ -107,7 +107,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "MainType"
+                    "MainTypes"
                 ],
                 "summary": "Create mainType",
                 "parameters": [
@@ -136,6 +136,53 @@ const docTemplate = `{
                     },
                     "409": {
                         "description": "Catégorie déjà existante",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/mainTypes/{mainTypeId}": {
+            "delete": {
+                "description": "Delete a main type by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MainTypes"
+                ],
+                "summary": "Delete main type by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Main Type ID",
+                        "name": "mainTypeId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie supprimée avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessDeleteRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "ID invalide",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée",
                         "schema": {
                             "$ref": "#/definitions/request.ErrorRequest"
                         }
@@ -272,7 +319,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/subtypes/{subTypeId}": {
+        "/subTypes/{subTypeId}": {
             "delete": {
                 "description": "Delete a subtype by id",
                 "produces": [

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/LucasMadranges/MapMemory/ent"
+	"github.com/LucasMadranges/MapMemory/ent/maintype"
 	"github.com/LucasMadranges/MapMemory/internal/config"
 	"github.com/LucasMadranges/MapMemory/utils/request"
 	"github.com/LucasMadranges/MapMemory/utils/validation"
@@ -13,7 +14,7 @@ import (
 // GetMainTypes godoc
 // @Summary Get all main types
 // @Description Retrieve a list of all main types
-// @Tags MainType
+// @Tags MainTypes
 // @Produce json
 // @Success 201 {object} request.SuccessGetAllRequest "Récupérer toutes les catégories"
 // @Failure 400 {object} request.ErrorRequest "Échec de la récupération des catégories"
@@ -41,7 +42,7 @@ func GetMainTypes(client *ent.Client) fiber.Handler {
 // CreateMainType godoc
 // @Summary Create mainType
 // @Description Create a new main type
-// @Tags MainType
+// @Tags MainTypes
 // @Accept json
 // @Produce json
 // @Param mainType body CreateMainTypeDto true "mainType payload"
@@ -97,6 +98,53 @@ func CreateMainType(client *ent.Client) fiber.Handler {
 		return c.Status(201).JSON(request.SuccessCreateRequest{
 			Success: true,
 			Data:    mainType,
+		})
+	}
+}
+
+// DeleteMainTypesById godoc
+// @Summary Delete main type by id
+// @Description Delete a main type by id
+// @Tags MainTypes
+// @Param mainTypeId path int true "Main Type ID"
+// @Produce json
+// @Success 200 {object} request.SuccessDeleteRequest "Catégorie supprimée avec succés"
+// @Failure 400 {object} request.ErrorRequest "ID invalide"
+// @Failure 404 {object} request.ErrorRequest "Catégorie non trouvée"
+// @Failure 500 {object} request.ErrorRequest "Erreur interne"
+// @Router /mainTypes/{mainTypeId} [delete]
+func DeleteMainTypesById(client *ent.Client) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		mainTypeId, err := c.ParamsInt("mainTypeId")
+		if err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "ID invalide",
+				Explicit: err.Error(),
+			})
+		}
+
+		count, err := client.MainType.Delete().Where(maintype.IDEQ(mainTypeId)).Exec(context.Background())
+
+		if err != nil {
+			return c.Status(500).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Erreur lors de la suppression de la catégorie",
+				Explicit: err.Error(),
+			})
+		}
+
+		if count == 0 {
+			return c.Status(404).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "La catégorie n'existe pas",
+				Explicit: "No subtype found with the provided id",
+			})
+		}
+
+		return c.Status(200).JSON(request.SuccessDeleteRequest{
+			Success: true,
+			Count:   count,
 		})
 	}
 }
