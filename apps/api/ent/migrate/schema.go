@@ -11,7 +11,7 @@ var (
 	// MainTypesColumns holds the columns for the "main_types" table.
 	MainTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString, Size: 25},
+		{Name: "label", Type: field.TypeString, Size: 25},
 		{Name: "color", Type: field.TypeString, Size: 7},
 	}
 	// MainTypesTable holds the schema information for the "main_types" table.
@@ -23,7 +23,7 @@ var (
 	// MemoriesColumns holds the columns for the "memories" table.
 	MemoriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString, Size: 25},
+		{Name: "label", Type: field.TypeString, Size: 25},
 		{Name: "description", Type: field.TypeString, Size: 100, Default: ""},
 		{Name: "price", Type: field.TypeFloat64},
 		{Name: "created_at", Type: field.TypeTime},
@@ -54,7 +54,7 @@ var (
 	// SubTypesColumns holds the columns for the "sub_types" table.
 	SubTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString, Size: 25},
+		{Name: "label", Type: field.TypeString, Size: 25},
 		{Name: "color", Type: field.TypeString, Size: 7},
 		{Name: "main_type_id", Type: field.TypeInt},
 	}

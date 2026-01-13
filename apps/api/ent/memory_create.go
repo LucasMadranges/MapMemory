@@ -22,9 +22,9 @@ type MemoryCreate struct {
 	hooks    []Hook
 }
 
-// SetName sets the "name" field.
-func (_c *MemoryCreate) SetName(v string) *MemoryCreate {
-	_c.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_c *MemoryCreate) SetLabel(v string) *MemoryCreate {
+	_c.mutation.SetLabel(v)
 	return _c
 }
 
@@ -149,12 +149,12 @@ func (_c *MemoryCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *MemoryCreate) check() error {
-	if _, ok := _c.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Memory.name"`)}
+	if _, ok := _c.mutation.Label(); !ok {
+		return &ValidationError{Name: "label", err: errors.New(`ent: missing required field "Memory.label"`)}
 	}
-	if v, ok := _c.mutation.Name(); ok {
-		if err := memory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Memory.name": %w`, err)}
+	if v, ok := _c.mutation.Label(); ok {
+		if err := memory.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "Memory.label": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Description(); !ok {
@@ -211,9 +211,9 @@ func (_c *MemoryCreate) createSpec() (*Memory, *sqlgraph.CreateSpec) {
 		_node = &Memory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(memory.Table, sqlgraph.NewFieldSpec(memory.FieldID, field.TypeInt))
 	)
-	if value, ok := _c.mutation.Name(); ok {
-		_spec.SetField(memory.FieldName, field.TypeString, value)
-		_node.Name = value
+	if value, ok := _c.mutation.Label(); ok {
+		_spec.SetField(memory.FieldLabel, field.TypeString, value)
+		_node.Label = value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(memory.FieldDescription, field.TypeString, value)

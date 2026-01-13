@@ -30,16 +30,16 @@ func (_u *MemoryUpdate) Where(ps ...predicate.Memory) *MemoryUpdate {
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *MemoryUpdate) SetName(v string) *MemoryUpdate {
-	_u.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_u *MemoryUpdate) SetLabel(v string) *MemoryUpdate {
+	_u.mutation.SetLabel(v)
 	return _u
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *MemoryUpdate) SetNillableName(v *string) *MemoryUpdate {
+// SetNillableLabel sets the "label" field if the given value is not nil.
+func (_u *MemoryUpdate) SetNillableLabel(v *string) *MemoryUpdate {
 	if v != nil {
-		_u.SetName(*v)
+		_u.SetLabel(*v)
 	}
 	return _u
 }
@@ -162,9 +162,9 @@ func (_u *MemoryUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *MemoryUpdate) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := memory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Memory.name": %w`, err)}
+	if v, ok := _u.mutation.Label(); ok {
+		if err := memory.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "Memory.label": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Description(); ok {
@@ -198,8 +198,8 @@ func (_u *MemoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(memory.FieldName, field.TypeString, value)
+	if value, ok := _u.mutation.Label(); ok {
+		_spec.SetField(memory.FieldLabel, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(memory.FieldDescription, field.TypeString, value)
@@ -291,16 +291,16 @@ type MemoryUpdateOne struct {
 	mutation *MemoryMutation
 }
 
-// SetName sets the "name" field.
-func (_u *MemoryUpdateOne) SetName(v string) *MemoryUpdateOne {
-	_u.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_u *MemoryUpdateOne) SetLabel(v string) *MemoryUpdateOne {
+	_u.mutation.SetLabel(v)
 	return _u
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *MemoryUpdateOne) SetNillableName(v *string) *MemoryUpdateOne {
+// SetNillableLabel sets the "label" field if the given value is not nil.
+func (_u *MemoryUpdateOne) SetNillableLabel(v *string) *MemoryUpdateOne {
 	if v != nil {
-		_u.SetName(*v)
+		_u.SetLabel(*v)
 	}
 	return _u
 }
@@ -436,9 +436,9 @@ func (_u *MemoryUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *MemoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := memory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Memory.name": %w`, err)}
+	if v, ok := _u.mutation.Label(); ok {
+		if err := memory.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "Memory.label": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Description(); ok {
@@ -489,8 +489,8 @@ func (_u *MemoryUpdateOne) sqlSave(ctx context.Context) (_node *Memory, err erro
 			}
 		}
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(memory.FieldName, field.TypeString, value)
+	if value, ok := _u.mutation.Label(); ok {
+		_spec.SetField(memory.FieldLabel, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(memory.FieldDescription, field.TypeString, value)

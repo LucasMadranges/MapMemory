@@ -19,18 +19,18 @@ import (
 func init() {
 	maintypeFields := schema.MainType{}.Fields()
 	_ = maintypeFields
-	// maintypeDescName is the schema descriptor for name field.
-	maintypeDescName := maintypeFields[0].Descriptor()
-	// maintype.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	maintype.NameValidator = func() func(string) error {
-		validators := maintypeDescName.Validators
+	// maintypeDescLabel is the schema descriptor for label field.
+	maintypeDescLabel := maintypeFields[0].Descriptor()
+	// maintype.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	maintype.LabelValidator = func() func(string) error {
+		validators := maintypeDescLabel.Validators
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
 		}
-		return func(name string) error {
+		return func(label string) error {
 			for _, fn := range fns {
-				if err := fn(name); err != nil {
+				if err := fn(label); err != nil {
 					return err
 				}
 			}
@@ -58,18 +58,18 @@ func init() {
 	}()
 	memoryFields := schema.Memory{}.Fields()
 	_ = memoryFields
-	// memoryDescName is the schema descriptor for name field.
-	memoryDescName := memoryFields[0].Descriptor()
-	// memory.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	memory.NameValidator = func() func(string) error {
-		validators := memoryDescName.Validators
+	// memoryDescLabel is the schema descriptor for label field.
+	memoryDescLabel := memoryFields[0].Descriptor()
+	// memory.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	memory.LabelValidator = func() func(string) error {
+		validators := memoryDescLabel.Validators
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
 		}
-		return func(name string) error {
+		return func(label string) error {
 			for _, fn := range fns {
-				if err := fn(name); err != nil {
+				if err := fn(label); err != nil {
 					return err
 				}
 			}
@@ -112,18 +112,18 @@ func init() {
 	memory.UpdateDefaultUpdatedAt = memoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	subtypeFields := schema.SubType{}.Fields()
 	_ = subtypeFields
-	// subtypeDescName is the schema descriptor for name field.
-	subtypeDescName := subtypeFields[0].Descriptor()
-	// subtype.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	subtype.NameValidator = func() func(string) error {
-		validators := subtypeDescName.Validators
+	// subtypeDescLabel is the schema descriptor for label field.
+	subtypeDescLabel := subtypeFields[0].Descriptor()
+	// subtype.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	subtype.LabelValidator = func() func(string) error {
+		validators := subtypeDescLabel.Validators
 		fns := [...]func(string) error{
 			validators[0].(func(string) error),
 			validators[1].(func(string) error),
 		}
-		return func(name string) error {
+		return func(label string) error {
 			for _, fn := range fns {
-				if err := fn(name); err != nil {
+				if err := fn(label); err != nil {
 					return err
 				}
 			}

@@ -599,13 +599,13 @@
     },
     "mainType.CreateMainTypeDto": {
       "type": "object",
-      "required": ["color", "name"],
+      "required": ["color", "label"],
       "properties": {
         "color": {
           "type": "string",
           "example": "#000000"
         },
-        "name": {
+        "label": {
           "type": "string",
           "maxLength": 25,
           "example": "Restaurant"
@@ -614,13 +614,13 @@
     },
     "mainType.UpdateMainTypeDto": {
       "type": "object",
-      "required": ["color", "name"],
+      "required": ["color", "label"],
       "properties": {
         "color": {
           "type": "string",
           "example": "#000000"
         },
-        "name": {
+        "label": {
           "type": "string",
           "maxLength": 25,
           "example": "Restaurant"
@@ -700,32 +700,32 @@
     },
     "subType.CreateSubTypeDto": {
       "type": "object",
-      "required": ["color", "main_type_id", "name"],
+      "required": ["color", "label", "main_type_id"],
       "properties": {
         "color": {
           "type": "string",
           "example": "#000000"
         },
-        "main_type_id": {
-          "type": "integer",
-          "example": 1
-        },
-        "name": {
+        "label": {
           "type": "string",
           "maxLength": 25,
           "example": "Buffet à volonté"
+        },
+        "main_type_id": {
+          "type": "integer",
+          "example": 1
         }
       }
     },
     "subType.UpdateSubTypeDto": {
       "type": "object",
-      "required": ["color", "name"],
+      "required": ["color", "label"],
       "properties": {
         "color": {
           "type": "string",
           "example": "#000000"
         },
-        "name": {
+        "label": {
           "type": "string",
           "maxLength": 25,
           "example": "Buffet à volonté"

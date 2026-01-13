@@ -18,26 +18,26 @@ definitions:
       color:
         example: '#000000'
         type: string
-      name:
+      label:
         example: Restaurant
         maxLength: 25
         type: string
     required:
       - color
-      - name
+      - label
     type: object
   mainType.UpdateMainTypeDto:
     properties:
       color:
         example: '#000000'
         type: string
-      name:
+      label:
         example: Restaurant
         maxLength: 25
         type: string
     required:
       - color
-      - name
+      - label
     type: object
   request.ErrorRequest:
     properties:
@@ -93,30 +93,30 @@ definitions:
       color:
         example: '#000000'
         type: string
-      main_type_id:
-        example: 1
-        type: integer
-      name:
+      label:
         example: Buffet à volonté
         maxLength: 25
         type: string
+      main_type_id:
+        example: 1
+        type: integer
     required:
       - color
+      - label
       - main_type_id
-      - name
     type: object
   subType.UpdateSubTypeDto:
     properties:
       color:
         example: '#000000'
         type: string
-      name:
+      label:
         example: Buffet à volonté
         maxLength: 25
         type: string
     required:
       - color
-      - name
+      - label
     type: object
   user.CreateUserDTO:
     properties:

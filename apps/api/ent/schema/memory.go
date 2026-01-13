@@ -14,7 +14,7 @@ type Memory struct {
 
 func (Memory) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").NotEmpty().MaxLen(25),
+		field.String("label").NotEmpty().MaxLen(25),
 		field.String("description").NotEmpty().Default("").MaxLen(100),
 		field.Float("price").Positive(),
 		field.Time("created_at").

@@ -335,12 +335,12 @@ func (_q *MainTypeQuery) WithSubTypes(opts ...func(*SubTypeQuery)) *MainTypeQuer
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Label string `json:"label,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.MainType.Query().
-//		GroupBy(maintype.FieldName).
+//		GroupBy(maintype.FieldLabel).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (_q *MainTypeQuery) GroupBy(field string, fields ...string) *MainTypeGroupBy {
@@ -358,11 +358,11 @@ func (_q *MainTypeQuery) GroupBy(field string, fields ...string) *MainTypeGroupB
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Label string `json:"label,omitempty"`
 //	}
 //
 //	client.MainType.Query().
-//		Select(maintype.FieldName).
+//		Select(maintype.FieldLabel).
 //		Scan(ctx, &v)
 func (_q *MainTypeQuery) Select(fields ...string) *MainTypeSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)

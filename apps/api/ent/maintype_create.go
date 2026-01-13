@@ -21,9 +21,9 @@ type MainTypeCreate struct {
 	hooks    []Hook
 }
 
-// SetName sets the "name" field.
-func (_c *MainTypeCreate) SetName(v string) *MainTypeCreate {
-	_c.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_c *MainTypeCreate) SetLabel(v string) *MainTypeCreate {
+	_c.mutation.SetLabel(v)
 	return _c
 }
 
@@ -97,12 +97,12 @@ func (_c *MainTypeCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *MainTypeCreate) check() error {
-	if _, ok := _c.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "MainType.name"`)}
+	if _, ok := _c.mutation.Label(); !ok {
+		return &ValidationError{Name: "label", err: errors.New(`ent: missing required field "MainType.label"`)}
 	}
-	if v, ok := _c.mutation.Name(); ok {
-		if err := maintype.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "MainType.name": %w`, err)}
+	if v, ok := _c.mutation.Label(); ok {
+		if err := maintype.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "MainType.label": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Color(); !ok {
@@ -139,9 +139,9 @@ func (_c *MainTypeCreate) createSpec() (*MainType, *sqlgraph.CreateSpec) {
 		_node = &MainType{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(maintype.Table, sqlgraph.NewFieldSpec(maintype.FieldID, field.TypeInt))
 	)
-	if value, ok := _c.mutation.Name(); ok {
-		_spec.SetField(maintype.FieldName, field.TypeString, value)
-		_node.Name = value
+	if value, ok := _c.mutation.Label(); ok {
+		_spec.SetField(maintype.FieldLabel, field.TypeString, value)
+		_node.Label = value
 	}
 	if value, ok := _c.mutation.Color(); ok {
 		_spec.SetField(maintype.FieldColor, field.TypeString, value)

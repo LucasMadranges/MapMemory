@@ -21,9 +21,9 @@ type SubTypeCreate struct {
 	hooks    []Hook
 }
 
-// SetName sets the "name" field.
-func (_c *SubTypeCreate) SetName(v string) *SubTypeCreate {
-	_c.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_c *SubTypeCreate) SetLabel(v string) *SubTypeCreate {
+	_c.mutation.SetLabel(v)
 	return _c
 }
 
@@ -93,12 +93,12 @@ func (_c *SubTypeCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *SubTypeCreate) check() error {
-	if _, ok := _c.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "SubType.name"`)}
+	if _, ok := _c.mutation.Label(); !ok {
+		return &ValidationError{Name: "label", err: errors.New(`ent: missing required field "SubType.label"`)}
 	}
-	if v, ok := _c.mutation.Name(); ok {
-		if err := subtype.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "SubType.name": %w`, err)}
+	if v, ok := _c.mutation.Label(); ok {
+		if err := subtype.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "SubType.label": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Color(); !ok {
@@ -138,9 +138,9 @@ func (_c *SubTypeCreate) createSpec() (*SubType, *sqlgraph.CreateSpec) {
 		_node = &SubType{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subtype.Table, sqlgraph.NewFieldSpec(subtype.FieldID, field.TypeInt))
 	)
-	if value, ok := _c.mutation.Name(); ok {
-		_spec.SetField(subtype.FieldName, field.TypeString, value)
-		_node.Name = value
+	if value, ok := _c.mutation.Label(); ok {
+		_spec.SetField(subtype.FieldLabel, field.TypeString, value)
+		_node.Label = value
 	}
 	if value, ok := _c.mutation.Color(); ok {
 		_spec.SetField(subtype.FieldColor, field.TypeString, value)

@@ -12,8 +12,8 @@ const (
 	Label = "main_type"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
+	// FieldLabel holds the string denoting the label field in the database.
+	FieldLabel = "label"
 	// FieldColor holds the string denoting the color field in the database.
 	FieldColor = "color"
 	// EdgeMemories holds the string denoting the memories edge name in mutations.
@@ -41,7 +41,7 @@ const (
 // Columns holds all SQL columns for maintype fields.
 var Columns = []string{
 	FieldID,
-	FieldName,
+	FieldLabel,
 	FieldColor,
 }
 
@@ -56,8 +56,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// NameValidator is a validator for the "name" field. It is called by the builders before save.
-	NameValidator func(string) error
+	// LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	LabelValidator func(string) error
 	// ColorValidator is a validator for the "color" field. It is called by the builders before save.
 	ColorValidator func(string) error
 )
@@ -70,9 +70,9 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
+// ByLabel orders the results by the label field.
+func ByLabel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLabel, opts...).ToFunc()
 }
 
 // ByColor orders the results by the color field.

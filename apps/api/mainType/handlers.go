@@ -83,7 +83,7 @@ func CreateMainType(client *ent.Client) fiber.Handler {
 
 		mainType, err := client.MainType.
 			Create().
-			SetName(body.Name).
+			SetLabel(body.Label).
 			SetColor(body.Color).
 			Save(context.Background())
 
@@ -147,7 +147,7 @@ func UpdateMainTypeByMainTypeId(client *ent.Client) fiber.Handler {
 
 		mainType, err := client.MainType.
 			UpdateOneID(mainTypeId).
-			SetName(body.Name).
+			SetLabel(body.Label).
 			SetColor(body.Color).
 			Save(context.Background())
 

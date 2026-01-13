@@ -336,12 +336,12 @@ func (_q *SubTypeQuery) WithMemories(opts ...func(*MemoryQuery)) *SubTypeQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Label string `json:"label,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.SubType.Query().
-//		GroupBy(subtype.FieldName).
+//		GroupBy(subtype.FieldLabel).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (_q *SubTypeQuery) GroupBy(field string, fields ...string) *SubTypeGroupBy {
@@ -359,11 +359,11 @@ func (_q *SubTypeQuery) GroupBy(field string, fields ...string) *SubTypeGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Label string `json:"label,omitempty"`
 //	}
 //
 //	client.SubType.Query().
-//		Select(subtype.FieldName).
+//		Select(subtype.FieldLabel).
 //		Scan(ctx, &v)
 func (_q *SubTypeQuery) Select(fields ...string) *SubTypeSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)

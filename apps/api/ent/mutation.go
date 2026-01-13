@@ -40,7 +40,7 @@ type MainTypeMutation struct {
 	op               Op
 	typ              string
 	id               *int
-	name             *string
+	label            *string
 	color            *string
 	clearedFields    map[string]struct{}
 	memories         map[int]struct{}
@@ -152,40 +152,40 @@ func (m *MainTypeMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
-// SetName sets the "name" field.
-func (m *MainTypeMutation) SetName(s string) {
-	m.name = &s
+// SetLabel sets the "label" field.
+func (m *MainTypeMutation) SetLabel(s string) {
+	m.label = &s
 }
 
-// Name returns the value of the "name" field in the mutation.
-func (m *MainTypeMutation) Name() (r string, exists bool) {
-	v := m.name
+// Label returns the value of the "label" field in the mutation.
+func (m *MainTypeMutation) Label() (r string, exists bool) {
+	v := m.label
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldName returns the old "name" field's value of the MainType entity.
+// OldLabel returns the old "label" field's value of the MainType entity.
 // If the MainType object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MainTypeMutation) OldName(ctx context.Context) (v string, err error) {
+func (m *MainTypeMutation) OldLabel(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldName is only allowed on UpdateOne operations")
+		return v, errors.New("OldLabel is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldName requires an ID field in the mutation")
+		return v, errors.New("OldLabel requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldName: %w", err)
+		return v, fmt.Errorf("querying old value for OldLabel: %w", err)
 	}
-	return oldValue.Name, nil
+	return oldValue.Label, nil
 }
 
-// ResetName resets all changes to the "name" field.
-func (m *MainTypeMutation) ResetName() {
-	m.name = nil
+// ResetLabel resets all changes to the "label" field.
+func (m *MainTypeMutation) ResetLabel() {
+	m.label = nil
 }
 
 // SetColor sets the "color" field.
@@ -367,8 +367,8 @@ func (m *MainTypeMutation) Type() string {
 // AddedFields().
 func (m *MainTypeMutation) Fields() []string {
 	fields := make([]string, 0, 2)
-	if m.name != nil {
-		fields = append(fields, maintype.FieldName)
+	if m.label != nil {
+		fields = append(fields, maintype.FieldLabel)
 	}
 	if m.color != nil {
 		fields = append(fields, maintype.FieldColor)
@@ -381,8 +381,8 @@ func (m *MainTypeMutation) Fields() []string {
 // schema.
 func (m *MainTypeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case maintype.FieldName:
-		return m.Name()
+	case maintype.FieldLabel:
+		return m.Label()
 	case maintype.FieldColor:
 		return m.Color()
 	}
@@ -394,8 +394,8 @@ func (m *MainTypeMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *MainTypeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case maintype.FieldName:
-		return m.OldName(ctx)
+	case maintype.FieldLabel:
+		return m.OldLabel(ctx)
 	case maintype.FieldColor:
 		return m.OldColor(ctx)
 	}
@@ -407,12 +407,12 @@ func (m *MainTypeMutation) OldField(ctx context.Context, name string) (ent.Value
 // type.
 func (m *MainTypeMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case maintype.FieldName:
+	case maintype.FieldLabel:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetName(v)
+		m.SetLabel(v)
 		return nil
 	case maintype.FieldColor:
 		v, ok := value.(string)
@@ -470,8 +470,8 @@ func (m *MainTypeMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *MainTypeMutation) ResetField(name string) error {
 	switch name {
-	case maintype.FieldName:
-		m.ResetName()
+	case maintype.FieldLabel:
+		m.ResetLabel()
 		return nil
 	case maintype.FieldColor:
 		m.ResetColor()
@@ -596,7 +596,7 @@ type MemoryMutation struct {
 	op               Op
 	typ              string
 	id               *int
-	name             *string
+	label            *string
 	description      *string
 	price            *float64
 	addprice         *float64
@@ -710,40 +710,40 @@ func (m *MemoryMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
-// SetName sets the "name" field.
-func (m *MemoryMutation) SetName(s string) {
-	m.name = &s
+// SetLabel sets the "label" field.
+func (m *MemoryMutation) SetLabel(s string) {
+	m.label = &s
 }
 
-// Name returns the value of the "name" field in the mutation.
-func (m *MemoryMutation) Name() (r string, exists bool) {
-	v := m.name
+// Label returns the value of the "label" field in the mutation.
+func (m *MemoryMutation) Label() (r string, exists bool) {
+	v := m.label
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldName returns the old "name" field's value of the Memory entity.
+// OldLabel returns the old "label" field's value of the Memory entity.
 // If the Memory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *MemoryMutation) OldName(ctx context.Context) (v string, err error) {
+func (m *MemoryMutation) OldLabel(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldName is only allowed on UpdateOne operations")
+		return v, errors.New("OldLabel is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldName requires an ID field in the mutation")
+		return v, errors.New("OldLabel requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldName: %w", err)
+		return v, fmt.Errorf("querying old value for OldLabel: %w", err)
 	}
-	return oldValue.Name, nil
+	return oldValue.Label, nil
 }
 
-// ResetName resets all changes to the "name" field.
-func (m *MemoryMutation) ResetName() {
-	m.name = nil
+// ResetLabel resets all changes to the "label" field.
+func (m *MemoryMutation) ResetLabel() {
+	m.label = nil
 }
 
 // SetDescription sets the "description" field.
@@ -1023,8 +1023,8 @@ func (m *MemoryMutation) Type() string {
 // AddedFields().
 func (m *MemoryMutation) Fields() []string {
 	fields := make([]string, 0, 5)
-	if m.name != nil {
-		fields = append(fields, memory.FieldName)
+	if m.label != nil {
+		fields = append(fields, memory.FieldLabel)
 	}
 	if m.description != nil {
 		fields = append(fields, memory.FieldDescription)
@@ -1046,8 +1046,8 @@ func (m *MemoryMutation) Fields() []string {
 // schema.
 func (m *MemoryMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case memory.FieldName:
-		return m.Name()
+	case memory.FieldLabel:
+		return m.Label()
 	case memory.FieldDescription:
 		return m.Description()
 	case memory.FieldPrice:
@@ -1065,8 +1065,8 @@ func (m *MemoryMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *MemoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case memory.FieldName:
-		return m.OldName(ctx)
+	case memory.FieldLabel:
+		return m.OldLabel(ctx)
 	case memory.FieldDescription:
 		return m.OldDescription(ctx)
 	case memory.FieldPrice:
@@ -1084,12 +1084,12 @@ func (m *MemoryMutation) OldField(ctx context.Context, name string) (ent.Value, 
 // type.
 func (m *MemoryMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case memory.FieldName:
+	case memory.FieldLabel:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetName(v)
+		m.SetLabel(v)
 		return nil
 	case memory.FieldDescription:
 		v, ok := value.(string)
@@ -1183,8 +1183,8 @@ func (m *MemoryMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *MemoryMutation) ResetField(name string) error {
 	switch name {
-	case memory.FieldName:
-		m.ResetName()
+	case memory.FieldLabel:
+		m.ResetLabel()
 		return nil
 	case memory.FieldDescription:
 		m.ResetDescription()
@@ -1300,7 +1300,7 @@ type SubTypeMutation struct {
 	op                Op
 	typ               string
 	id                *int
-	name              *string
+	label             *string
 	color             *string
 	clearedFields     map[string]struct{}
 	main_types        *int
@@ -1411,40 +1411,40 @@ func (m *SubTypeMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
-// SetName sets the "name" field.
-func (m *SubTypeMutation) SetName(s string) {
-	m.name = &s
+// SetLabel sets the "label" field.
+func (m *SubTypeMutation) SetLabel(s string) {
+	m.label = &s
 }
 
-// Name returns the value of the "name" field in the mutation.
-func (m *SubTypeMutation) Name() (r string, exists bool) {
-	v := m.name
+// Label returns the value of the "label" field in the mutation.
+func (m *SubTypeMutation) Label() (r string, exists bool) {
+	v := m.label
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldName returns the old "name" field's value of the SubType entity.
+// OldLabel returns the old "label" field's value of the SubType entity.
 // If the SubType object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubTypeMutation) OldName(ctx context.Context) (v string, err error) {
+func (m *SubTypeMutation) OldLabel(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldName is only allowed on UpdateOne operations")
+		return v, errors.New("OldLabel is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldName requires an ID field in the mutation")
+		return v, errors.New("OldLabel requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldName: %w", err)
+		return v, fmt.Errorf("querying old value for OldLabel: %w", err)
 	}
-	return oldValue.Name, nil
+	return oldValue.Label, nil
 }
 
-// ResetName resets all changes to the "name" field.
-func (m *SubTypeMutation) ResetName() {
-	m.name = nil
+// ResetLabel resets all changes to the "label" field.
+func (m *SubTypeMutation) ResetLabel() {
+	m.label = nil
 }
 
 // SetColor sets the "color" field.
@@ -1611,8 +1611,8 @@ func (m *SubTypeMutation) Type() string {
 // AddedFields().
 func (m *SubTypeMutation) Fields() []string {
 	fields := make([]string, 0, 2)
-	if m.name != nil {
-		fields = append(fields, subtype.FieldName)
+	if m.label != nil {
+		fields = append(fields, subtype.FieldLabel)
 	}
 	if m.color != nil {
 		fields = append(fields, subtype.FieldColor)
@@ -1625,8 +1625,8 @@ func (m *SubTypeMutation) Fields() []string {
 // schema.
 func (m *SubTypeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case subtype.FieldName:
-		return m.Name()
+	case subtype.FieldLabel:
+		return m.Label()
 	case subtype.FieldColor:
 		return m.Color()
 	}
@@ -1638,8 +1638,8 @@ func (m *SubTypeMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *SubTypeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case subtype.FieldName:
-		return m.OldName(ctx)
+	case subtype.FieldLabel:
+		return m.OldLabel(ctx)
 	case subtype.FieldColor:
 		return m.OldColor(ctx)
 	}
@@ -1651,12 +1651,12 @@ func (m *SubTypeMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *SubTypeMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case subtype.FieldName:
+	case subtype.FieldLabel:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetName(v)
+		m.SetLabel(v)
 		return nil
 	case subtype.FieldColor:
 		v, ok := value.(string)
@@ -1714,8 +1714,8 @@ func (m *SubTypeMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *SubTypeMutation) ResetField(name string) error {
 	switch name {
-	case subtype.FieldName:
-		m.ResetName()
+	case subtype.FieldLabel:
+		m.ResetLabel()
 		return nil
 	case subtype.FieldColor:
 		m.ResetColor()

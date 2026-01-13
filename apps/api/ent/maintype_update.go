@@ -29,16 +29,16 @@ func (_u *MainTypeUpdate) Where(ps ...predicate.MainType) *MainTypeUpdate {
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *MainTypeUpdate) SetName(v string) *MainTypeUpdate {
-	_u.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_u *MainTypeUpdate) SetLabel(v string) *MainTypeUpdate {
+	_u.mutation.SetLabel(v)
 	return _u
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *MainTypeUpdate) SetNillableName(v *string) *MainTypeUpdate {
+// SetNillableLabel sets the "label" field if the given value is not nil.
+func (_u *MainTypeUpdate) SetNillableLabel(v *string) *MainTypeUpdate {
 	if v != nil {
-		_u.SetName(*v)
+		_u.SetLabel(*v)
 	}
 	return _u
 }
@@ -163,9 +163,9 @@ func (_u *MainTypeUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *MainTypeUpdate) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := maintype.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "MainType.name": %w`, err)}
+	if v, ok := _u.mutation.Label(); ok {
+		if err := maintype.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "MainType.label": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Color(); ok {
@@ -188,8 +188,8 @@ func (_u *MainTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(maintype.FieldName, field.TypeString, value)
+	if value, ok := _u.mutation.Label(); ok {
+		_spec.SetField(maintype.FieldLabel, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Color(); ok {
 		_spec.SetField(maintype.FieldColor, field.TypeString, value)
@@ -304,16 +304,16 @@ type MainTypeUpdateOne struct {
 	mutation *MainTypeMutation
 }
 
-// SetName sets the "name" field.
-func (_u *MainTypeUpdateOne) SetName(v string) *MainTypeUpdateOne {
-	_u.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_u *MainTypeUpdateOne) SetLabel(v string) *MainTypeUpdateOne {
+	_u.mutation.SetLabel(v)
 	return _u
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *MainTypeUpdateOne) SetNillableName(v *string) *MainTypeUpdateOne {
+// SetNillableLabel sets the "label" field if the given value is not nil.
+func (_u *MainTypeUpdateOne) SetNillableLabel(v *string) *MainTypeUpdateOne {
 	if v != nil {
-		_u.SetName(*v)
+		_u.SetLabel(*v)
 	}
 	return _u
 }
@@ -451,9 +451,9 @@ func (_u *MainTypeUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *MainTypeUpdateOne) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := maintype.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "MainType.name": %w`, err)}
+	if v, ok := _u.mutation.Label(); ok {
+		if err := maintype.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "MainType.label": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Color(); ok {
@@ -493,8 +493,8 @@ func (_u *MainTypeUpdateOne) sqlSave(ctx context.Context) (_node *MainType, err 
 			}
 		}
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(maintype.FieldName, field.TypeString, value)
+	if value, ok := _u.mutation.Label(); ok {
+		_spec.SetField(maintype.FieldLabel, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Color(); ok {
 		_spec.SetField(maintype.FieldColor, field.TypeString, value)

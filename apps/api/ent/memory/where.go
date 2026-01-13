@@ -55,11 +55,6 @@ func IDLTE(id int) predicate.Memory {
 	return predicate.Memory(sql.FieldLTE(FieldID, id))
 }
 
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldEQ(FieldName, v))
-}
-
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.Memory {
 	return predicate.Memory(sql.FieldEQ(FieldDescription, v))
@@ -80,69 +75,69 @@ func UpdatedAt(v time.Time) predicate.Memory {
 	return predicate.Memory(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldEQ(FieldName, v))
+// LabelEQ applies the EQ predicate on the "label" field.
+func LabelEQ(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldEQ(FieldLabel, v))
 }
 
-// NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldNEQ(FieldName, v))
+// LabelNEQ applies the NEQ predicate on the "label" field.
+func LabelNEQ(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldNEQ(FieldLabel, v))
 }
 
-// NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.Memory {
-	return predicate.Memory(sql.FieldIn(FieldName, vs...))
+// LabelIn applies the In predicate on the "label" field.
+func LabelIn(vs ...string) predicate.Memory {
+	return predicate.Memory(sql.FieldIn(FieldLabel, vs...))
 }
 
-// NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.Memory {
-	return predicate.Memory(sql.FieldNotIn(FieldName, vs...))
+// LabelNotIn applies the NotIn predicate on the "label" field.
+func LabelNotIn(vs ...string) predicate.Memory {
+	return predicate.Memory(sql.FieldNotIn(FieldLabel, vs...))
 }
 
-// NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldGT(FieldName, v))
+// LabelGT applies the GT predicate on the "label" field.
+func LabelGT(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldGT(FieldLabel, v))
 }
 
-// NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldGTE(FieldName, v))
+// LabelGTE applies the GTE predicate on the "label" field.
+func LabelGTE(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldGTE(FieldLabel, v))
 }
 
-// NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldLT(FieldName, v))
+// LabelLT applies the LT predicate on the "label" field.
+func LabelLT(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldLT(FieldLabel, v))
 }
 
-// NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldLTE(FieldName, v))
+// LabelLTE applies the LTE predicate on the "label" field.
+func LabelLTE(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldLTE(FieldLabel, v))
 }
 
-// NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldContains(FieldName, v))
+// LabelContains applies the Contains predicate on the "label" field.
+func LabelContains(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldContains(FieldLabel, v))
 }
 
-// NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldHasPrefix(FieldName, v))
+// LabelHasPrefix applies the HasPrefix predicate on the "label" field.
+func LabelHasPrefix(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldHasPrefix(FieldLabel, v))
 }
 
-// NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldHasSuffix(FieldName, v))
+// LabelHasSuffix applies the HasSuffix predicate on the "label" field.
+func LabelHasSuffix(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldHasSuffix(FieldLabel, v))
 }
 
-// NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldEqualFold(FieldName, v))
+// LabelEqualFold applies the EqualFold predicate on the "label" field.
+func LabelEqualFold(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldEqualFold(FieldLabel, v))
 }
 
-// NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.Memory {
-	return predicate.Memory(sql.FieldContainsFold(FieldName, v))
+// LabelContainsFold applies the ContainsFold predicate on the "label" field.
+func LabelContainsFold(v string) predicate.Memory {
+	return predicate.Memory(sql.FieldContainsFold(FieldLabel, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.

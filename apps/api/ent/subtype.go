@@ -17,8 +17,8 @@ type SubType struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
+	// Label holds the value of the "label" field.
+	Label string `json:"label,omitempty"`
 	// Color holds the value of the "color" field.
 	Color string `json:"color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -66,7 +66,7 @@ func (*SubType) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subtype.FieldID:
 			values[i] = new(sql.NullInt64)
-		case subtype.FieldName, subtype.FieldColor:
+		case subtype.FieldLabel, subtype.FieldColor:
 			values[i] = new(sql.NullString)
 		case subtype.ForeignKeys[0]: // main_type_id
 			values[i] = new(sql.NullInt64)
@@ -91,11 +91,11 @@ func (_m *SubType) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			_m.ID = int(value.Int64)
-		case subtype.FieldName:
+		case subtype.FieldLabel:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
+				return fmt.Errorf("unexpected type %T for field label", values[i])
 			} else if value.Valid {
-				_m.Name = value.String
+				_m.Label = value.String
 			}
 		case subtype.FieldColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -156,8 +156,8 @@ func (_m *SubType) String() string {
 	var builder strings.Builder
 	builder.WriteString("SubType(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
-	builder.WriteString("name=")
-	builder.WriteString(_m.Name)
+	builder.WriteString("label=")
+	builder.WriteString(_m.Label)
 	builder.WriteString(", ")
 	builder.WriteString("color=")
 	builder.WriteString(_m.Color)

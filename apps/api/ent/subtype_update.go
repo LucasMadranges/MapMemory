@@ -29,16 +29,16 @@ func (_u *SubTypeUpdate) Where(ps ...predicate.SubType) *SubTypeUpdate {
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *SubTypeUpdate) SetName(v string) *SubTypeUpdate {
-	_u.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_u *SubTypeUpdate) SetLabel(v string) *SubTypeUpdate {
+	_u.mutation.SetLabel(v)
 	return _u
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *SubTypeUpdate) SetNillableName(v *string) *SubTypeUpdate {
+// SetNillableLabel sets the "label" field if the given value is not nil.
+func (_u *SubTypeUpdate) SetNillableLabel(v *string) *SubTypeUpdate {
 	if v != nil {
-		_u.SetName(*v)
+		_u.SetLabel(*v)
 	}
 	return _u
 }
@@ -144,9 +144,9 @@ func (_u *SubTypeUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *SubTypeUpdate) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := subtype.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "SubType.name": %w`, err)}
+	if v, ok := _u.mutation.Label(); ok {
+		if err := subtype.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "SubType.label": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Color(); ok {
@@ -172,8 +172,8 @@ func (_u *SubTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(subtype.FieldName, field.TypeString, value)
+	if value, ok := _u.mutation.Label(); ok {
+		_spec.SetField(subtype.FieldLabel, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Color(); ok {
 		_spec.SetField(subtype.FieldColor, field.TypeString, value)
@@ -272,16 +272,16 @@ type SubTypeUpdateOne struct {
 	mutation *SubTypeMutation
 }
 
-// SetName sets the "name" field.
-func (_u *SubTypeUpdateOne) SetName(v string) *SubTypeUpdateOne {
-	_u.mutation.SetName(v)
+// SetLabel sets the "label" field.
+func (_u *SubTypeUpdateOne) SetLabel(v string) *SubTypeUpdateOne {
+	_u.mutation.SetLabel(v)
 	return _u
 }
 
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *SubTypeUpdateOne) SetNillableName(v *string) *SubTypeUpdateOne {
+// SetNillableLabel sets the "label" field if the given value is not nil.
+func (_u *SubTypeUpdateOne) SetNillableLabel(v *string) *SubTypeUpdateOne {
 	if v != nil {
-		_u.SetName(*v)
+		_u.SetLabel(*v)
 	}
 	return _u
 }
@@ -400,9 +400,9 @@ func (_u *SubTypeUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *SubTypeUpdateOne) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := subtype.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "SubType.name": %w`, err)}
+	if v, ok := _u.mutation.Label(); ok {
+		if err := subtype.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`ent: validator failed for field "SubType.label": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Color(); ok {
@@ -445,8 +445,8 @@ func (_u *SubTypeUpdateOne) sqlSave(ctx context.Context) (_node *SubType, err er
 			}
 		}
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(subtype.FieldName, field.TypeString, value)
+	if value, ok := _u.mutation.Label(); ok {
+		_spec.SetField(subtype.FieldLabel, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Color(); ok {
 		_spec.SetField(subtype.FieldColor, field.TypeString, value)

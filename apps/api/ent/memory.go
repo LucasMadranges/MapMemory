@@ -19,8 +19,8 @@ type Memory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
+	// Label holds the value of the "label" field.
+	Label string `json:"label,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// Price holds the value of the "price" field.
@@ -79,7 +79,7 @@ func (*Memory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case memory.FieldID:
 			values[i] = new(sql.NullInt64)
-		case memory.FieldName, memory.FieldDescription:
+		case memory.FieldLabel, memory.FieldDescription:
 			values[i] = new(sql.NullString)
 		case memory.FieldCreatedAt, memory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -108,11 +108,11 @@ func (_m *Memory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			_m.ID = int(value.Int64)
-		case memory.FieldName:
+		case memory.FieldLabel:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
+				return fmt.Errorf("unexpected type %T for field label", values[i])
 			} else if value.Valid {
-				_m.Name = value.String
+				_m.Label = value.String
 			}
 		case memory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -198,8 +198,8 @@ func (_m *Memory) String() string {
 	var builder strings.Builder
 	builder.WriteString("Memory(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
-	builder.WriteString("name=")
-	builder.WriteString(_m.Name)
+	builder.WriteString("label=")
+	builder.WriteString(_m.Label)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)

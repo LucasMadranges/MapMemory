@@ -14,7 +14,7 @@ type MainType struct {
 
 func (MainType) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").NotEmpty().MaxLen(25),
+		field.String("label").NotEmpty().MaxLen(25),
 		field.String("color").NotEmpty().MaxLen(7).Match(regexp.MustCompile("^#[0-9A-Fa-f]{6}$")),
 	}
 }

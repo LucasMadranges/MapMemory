@@ -678,14 +678,14 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "color",
-                "name"
+                "label"
             ],
             "properties": {
                 "color": {
                     "type": "string",
                     "example": "#000000"
                 },
-                "name": {
+                "label": {
                     "type": "string",
                     "maxLength": 25,
                     "example": "Restaurant"
@@ -696,14 +696,14 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "color",
-                "name"
+                "label"
             ],
             "properties": {
                 "color": {
                     "type": "string",
                     "example": "#000000"
                 },
-                "name": {
+                "label": {
                     "type": "string",
                     "maxLength": 25,
                     "example": "Restaurant"
@@ -785,22 +785,22 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "color",
-                "main_type_id",
-                "name"
+                "label",
+                "main_type_id"
             ],
             "properties": {
                 "color": {
                     "type": "string",
                     "example": "#000000"
                 },
-                "main_type_id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
+                "label": {
                     "type": "string",
                     "maxLength": 25,
                     "example": "Buffet à volonté"
+                },
+                "main_type_id": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -808,14 +808,14 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "color",
-                "name"
+                "label"
             ],
             "properties": {
                 "color": {
                     "type": "string",
                     "example": "#000000"
                 },
-                "name": {
+                "label": {
                     "type": "string",
                     "maxLength": 25,
                     "example": "Buffet à volonté"

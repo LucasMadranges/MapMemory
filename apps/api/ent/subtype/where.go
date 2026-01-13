@@ -53,79 +53,74 @@ func IDLTE(id int) predicate.SubType {
 	return predicate.SubType(sql.FieldLTE(FieldID, id))
 }
 
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldEQ(FieldName, v))
-}
-
 // Color applies equality check predicate on the "color" field. It's identical to ColorEQ.
 func Color(v string) predicate.SubType {
 	return predicate.SubType(sql.FieldEQ(FieldColor, v))
 }
 
-// NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldEQ(FieldName, v))
+// LabelEQ applies the EQ predicate on the "label" field.
+func LabelEQ(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldEQ(FieldLabel, v))
 }
 
-// NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldNEQ(FieldName, v))
+// LabelNEQ applies the NEQ predicate on the "label" field.
+func LabelNEQ(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldNEQ(FieldLabel, v))
 }
 
-// NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.SubType {
-	return predicate.SubType(sql.FieldIn(FieldName, vs...))
+// LabelIn applies the In predicate on the "label" field.
+func LabelIn(vs ...string) predicate.SubType {
+	return predicate.SubType(sql.FieldIn(FieldLabel, vs...))
 }
 
-// NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.SubType {
-	return predicate.SubType(sql.FieldNotIn(FieldName, vs...))
+// LabelNotIn applies the NotIn predicate on the "label" field.
+func LabelNotIn(vs ...string) predicate.SubType {
+	return predicate.SubType(sql.FieldNotIn(FieldLabel, vs...))
 }
 
-// NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldGT(FieldName, v))
+// LabelGT applies the GT predicate on the "label" field.
+func LabelGT(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldGT(FieldLabel, v))
 }
 
-// NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldGTE(FieldName, v))
+// LabelGTE applies the GTE predicate on the "label" field.
+func LabelGTE(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldGTE(FieldLabel, v))
 }
 
-// NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldLT(FieldName, v))
+// LabelLT applies the LT predicate on the "label" field.
+func LabelLT(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldLT(FieldLabel, v))
 }
 
-// NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldLTE(FieldName, v))
+// LabelLTE applies the LTE predicate on the "label" field.
+func LabelLTE(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldLTE(FieldLabel, v))
 }
 
-// NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldContains(FieldName, v))
+// LabelContains applies the Contains predicate on the "label" field.
+func LabelContains(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldContains(FieldLabel, v))
 }
 
-// NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldHasPrefix(FieldName, v))
+// LabelHasPrefix applies the HasPrefix predicate on the "label" field.
+func LabelHasPrefix(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldHasPrefix(FieldLabel, v))
 }
 
-// NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldHasSuffix(FieldName, v))
+// LabelHasSuffix applies the HasSuffix predicate on the "label" field.
+func LabelHasSuffix(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldHasSuffix(FieldLabel, v))
 }
 
-// NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldEqualFold(FieldName, v))
+// LabelEqualFold applies the EqualFold predicate on the "label" field.
+func LabelEqualFold(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldEqualFold(FieldLabel, v))
 }
 
-// NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.SubType {
-	return predicate.SubType(sql.FieldContainsFold(FieldName, v))
+// LabelContainsFold applies the ContainsFold predicate on the "label" field.
+func LabelContainsFold(v string) predicate.SubType {
+	return predicate.SubType(sql.FieldContainsFold(FieldLabel, v))
 }
 
 // ColorEQ applies the EQ predicate on the "color" field.
