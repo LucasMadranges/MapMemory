@@ -2,6 +2,7 @@ import { ChevronLeftIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 import { clientApi } from '../../../utils/api/clientApi';
+import { MultiSelectTypes } from '../../../utils/types/multiSelectTypes';
 import Button from '../../button/Button';
 import Input from '../../input/Input';
 import MultiSelect from '../../input/MultiSelect';
@@ -14,30 +15,41 @@ export default function LateralMapForm({
 }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [mainTypes, setMainTypes] = useState<{ value: string; label: string; color: string }[]>([]);
-  const [selectedMainTypes, setSelectedMainTypes] = useState<
-    { value: string; label: string; color: string }[]
-  >([]);
+  const [mainTypes, setMainTypes] = useState<MultiSelectTypes[]>([]);
+  const [selectedMainTypes, setSelectedMainTypes] = useState<MultiSelectTypes[]>([]);
+  const [subTypes, setSubTypes] = useState<MultiSelectTypes[]>([]);
+  const [selectedSubTypes, setSelectedSubTypes] = useState<MultiSelectTypes[]>([]);
+  const [subTypesDisabled, setSubTypesDisabled] = useState(true);
 
   useEffect(() => {
-    const getMainTypes = async () => {
+    async function getMainTypes() {
       try {
         const response = await clientApi.get('/mainTypes');
-        console.log(response.data);
-        const items = response.data.map((type: { id: number; name: string; color: string }) => ({
-          value: type.id,
-          label: type.name,
-          color: type.color,
-        }));
-
-        setMainTypes(items);
+        setMainTypes(response.data);
       } catch (error) {
         console.error('Erreur lors du chargement des catégories:', error);
       }
-    };
+    }
 
     getMainTypes();
   }, []);
+
+  console.log(mainTypes);
+  console.log(selectedMainTypes);
+
+  /*  useEffect(() => {
+    async function getSubTypes() {
+      try {
+        const response = await clientApi.get(`/subTypes/${selectedMainTypes[0].value}`);
+        setSubTypesDisabled(false);
+        setSubTypes(response.data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des sous-catégories:', error);
+      }
+    }
+
+    getSubTypes();
+  }, [selectedMainTypes]);*/
 
   return (
     <div className={'flex-1'}>
@@ -66,7 +78,7 @@ export default function LateralMapForm({
           placeholder={'Description du lieu'}
           value={description}
           setValue={setDescription}
-          errorMessage={''}
+          errorMessage={''} // FIXME
           className={'w-full'}
         />
         <MultiSelect
@@ -83,12 +95,12 @@ export default function LateralMapForm({
           label={'Sous-catégorie'}
           name={'subTypes'}
           type={'single'}
-          options={mainTypes}
+          options={subTypes}
           placeholder={'Catégorie'}
           className={'w-full'}
-          value={selectedMainTypes}
-          setValue={setSelectedMainTypes}
-          disabled={true}
+          value={selectedSubTypes}
+          setValue={setSelectedSubTypes}
+          disabled={subTypesDisabled}
         />
       </div>
     </div>

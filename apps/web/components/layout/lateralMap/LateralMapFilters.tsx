@@ -36,7 +36,7 @@ export default function LateralMapFilters() {
     mainTypes.forEach((type: MainTypes) => {
       options.push({
         value: type.id,
-        label: type.name,
+        label: type.label,
         color: type.color,
         isSub: false,
       });
@@ -52,7 +52,7 @@ export default function LateralMapFilters() {
           mainType.edges.sub_types.forEach((subType: SubTypes) => {
             options.push({
               value: `sub-${subType.id}`,
-              label: subType.name,
+              label: subType.label,
               color: subType.color,
               isSub: true,
               parentId: mainType.id,

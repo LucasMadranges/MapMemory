@@ -1,5 +1,5 @@
 export interface SubTypes {
   id: number;
-  name: string;
+  label: string;
   color: string;
 }

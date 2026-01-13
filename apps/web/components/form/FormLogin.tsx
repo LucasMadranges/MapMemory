@@ -38,7 +38,6 @@ export default function FormLogin() {
         email: email,
         password: password,
       });
-      console.log(response);
 
       const data = await response.data;
 
@@ -49,6 +48,7 @@ export default function FormLogin() {
       }
 
       toast.success('Connexion réussie ! Redirection dans 5 secondes...', { duration: 5000 });
+
       setTimeout(() => {
         router.push('/');
       }, 5000);
@@ -68,7 +68,7 @@ export default function FormLogin() {
 
   return (
     <>
-      <form className={'flex flex-col gap-8 w-full'} onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={'flex flex-col gap-8 w-full'}>
         <Input
           value={email}
           setValue={setEmail}
@@ -92,6 +92,7 @@ export default function FormLogin() {
         <Button
           disabled={disabled}
           variant={'primary'}
+          type={'submit'}
           className={'w-full flex items-center justify-center h-10'}
         >
           {!loading && !disabled && 'Se connecter'}
