@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 import z from 'zod';
 
-import { clientApi } from '../../utils/api/clientApi';
 import { LoginFormErrors, loginSchema } from '../../utils/form/login';
 import Button from '../button/Button';
 import Input from '../input/Input';
@@ -34,12 +33,18 @@ export default function FormLogin() {
         return;
       }
 
-      const response = await clientApi.post('/login', {
-        email: email,
-        password: password,
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
-      const data = await response.data;
+      const data = await response.json();
 
       if (response.status !== 200) {
         toast.error(data.message, { duration: 5000 });
