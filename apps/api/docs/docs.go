@@ -25,7 +25,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "User login",
                 "parameters": [
@@ -67,6 +67,419 @@ const docTemplate = `{
                 }
             }
         },
+        "/mainTypes": {
+            "get": {
+                "description": "Retrieve a list of all main types",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MainTypes"
+                ],
+                "summary": "Get all main types",
+                "responses": {
+                    "201": {
+                        "description": "Récupérer toutes les catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Échec de la récupération des catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new main type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MainTypes"
+                ],
+                "summary": "Create mainType",
+                "parameters": [
+                    {
+                        "description": "mainType payload",
+                        "name": "mainType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mainType.CreateMainTypeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Catégorie créé avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessCreateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "409": {
+                        "description": "Catégorie déjà existante",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/mainTypes/{mainTypeId}": {
+            "put": {
+                "description": "Update an existing main type by mainTypeId",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MainTypes"
+                ],
+                "summary": "Update mainType by mainTypeId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "MainType ID",
+                        "name": "mainTypeId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "mainType payload",
+                        "name": "mainType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mainType.UpdateMainTypeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie mise à jour avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessUpdateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a main type by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MainTypes"
+                ],
+                "summary": "Delete main type by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Main Type ID",
+                        "name": "mainTypeId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie supprimée avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessDeleteRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "ID invalide",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/subTypes": {
+            "get": {
+                "description": "Retrieve a list of all sub types",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubTypes"
+                ],
+                "summary": "Get all subTypes",
+                "responses": {
+                    "201": {
+                        "description": "Récupérer toutes les sous-catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Échec de la récupération des sous-catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new sub type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubTypes"
+                ],
+                "summary": "Create subType",
+                "parameters": [
+                    {
+                        "description": "subType payload",
+                        "name": "subType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/subType.CreateSubTypeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Sous-catégorie créé avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessCreateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "409": {
+                        "description": "Sous-catégorie déjà existante",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/subTypes/{mainTypeId}": {
+            "get": {
+                "description": "Retrieve a list of all sub types for a specific main type ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubTypes"
+                ],
+                "summary": "Get all subTypes by main type ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "MainType ID",
+                        "name": "mainTypeId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Récupérer toutes les sous-catégories d'une catégorie",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Échec de la récupération des sous-catégories",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "/subTypes/{subTypeId}": {
+            "put": {
+                "description": "Update an existing sub type by subTypeId",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubTypes"
+                ],
+                "summary": "Update subType by subTypeId",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Subtype ID",
+                        "name": "subTypeId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "subType payload",
+                        "name": "subType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/subType.UpdateSubTypeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sous-catégorie mise à jour avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessUpdateRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Sous-catégorie non trouvée",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a subtype by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubTypes"
+                ],
+                "summary": "Delete subtype by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Subtype ID",
+                        "name": "subTypeId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sous-catégorie supprimée avec succés",
+                        "schema": {
+                            "$ref": "#/definitions/request.SuccessDeleteRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "ID invalide",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "404": {
+                        "description": "Sous-catégorie non trouvée",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne",
+                        "schema": {
+                            "$ref": "#/definitions/request.ErrorRequest"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Retrieve a list of all users",
@@ -81,10 +494,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Récupérer tous les utilisateurs",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/request.SuccessGetAllRequest"
-                            }
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
                         }
                     },
                     "400": {
@@ -175,10 +585,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Récupérer un utilisateur par email",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/request.SuccessGetAllRequest"
-                            }
+                            "$ref": "#/definitions/request.SuccessGetAllRequest"
                         }
                     },
                     "400": {
@@ -267,6 +674,42 @@ const docTemplate = `{
                 }
             }
         },
+        "mainType.CreateMainTypeDto": {
+            "type": "object",
+            "required": [
+                "color",
+                "label"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#000000"
+                },
+                "label": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Restaurant"
+                }
+            }
+        },
+        "mainType.UpdateMainTypeDto": {
+            "type": "object",
+            "required": [
+                "color",
+                "label"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#000000"
+                },
+                "label": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Restaurant"
+                }
+            }
+        },
         "request.ErrorRequest": {
             "type": "object",
             "properties": {
@@ -322,6 +765,60 @@ const docTemplate = `{
                 "success": {
                     "type": "boolean",
                     "example": true
+                }
+            }
+        },
+        "request.SuccessUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "subType.CreateSubTypeDto": {
+            "type": "object",
+            "required": [
+                "color",
+                "label",
+                "main_type_id"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#000000"
+                },
+                "label": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Buffet à volonté"
+                },
+                "main_type_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "subType.UpdateSubTypeDto": {
+            "type": "object",
+            "required": [
+                "color",
+                "label"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "#000000"
+                },
+                "label": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "example": "Buffet à volonté"
                 }
             }
         },

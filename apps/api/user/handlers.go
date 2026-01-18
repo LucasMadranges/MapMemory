@@ -18,7 +18,7 @@ import (
 // @Description Retrieve a list of all users
 // @Tags Users
 // @Produce json
-// @Success 201 {array} request.SuccessGetAllRequest "Récupérer tous les utilisateurs"
+// @Success 201 {object} request.SuccessGetAllRequest "Récupérer tous les utilisateurs"
 // @Failure 400 {object} request.ErrorRequest "Échec de la récupération des utilisateurs"
 // @Failure 500 {object} request.ErrorRequest "Erreur interne"
 // @Router /users [get]
@@ -48,7 +48,7 @@ func GetUsers(client *ent.Client) fiber.Handler {
 // @Tags Users
 // @Param email path string true "User Email"
 // @Produce json
-// @Success 201 {array} request.SuccessGetAllRequest "Récupérer un utilisateur par email"
+// @Success 201 {object} request.SuccessGetAllRequest "Récupérer un utilisateur par email"
 // @Failure 400 {object} request.ErrorRequest "Échec de la récupération de l'utilisateur"
 // @Failure 404 {object} request.ErrorRequest "Utilisateur non trouvé"
 // @Failure 500 {object} request.ErrorRequest "Erreur interne"
@@ -90,6 +90,7 @@ func GetUserByEmail(client *ent.Client) fiber.Handler {
 // @Param user body CreateUserDTO true "User payload"
 // @Success 201 {object} request.SuccessCreateRequest "Utilisateur créé avec succés"
 // @Failure 400 {object} request.ErrorRequest "Corps de requête invalide"
+// @Failure 400 {object} request.ErrorRequest "Mot de passe invalide"
 // @Failure 400 {object} request.ErrorRequest "Données invalides"
 // @Failure 409 {object} request.ErrorRequest "Utilisateur déjà existant"
 // @Failure 500 {object} request.ErrorRequest "Erreur interne"
@@ -97,14 +98,6 @@ func GetUserByEmail(client *ent.Client) fiber.Handler {
 func CreateUser(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var body CreateUserDTO
-
-		if err := validation.ValidatePassword(config.Validate); err != nil {
-			return c.Status(400).JSON(request.ErrorRequest{
-				Success:  false,
-				Message:  "Corps de requête invalide",
-				Explicit: err.Error(),
-			})
-		}
 
 		if err := c.BodyParser(&body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
@@ -114,7 +107,14 @@ func CreateUser(client *ent.Client) fiber.Handler {
 			})
 		}
 
-		// TODO : Status à vérifier
+		if err := validation.ValidatePassword(config.Validate); err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Mot de passe invalide",
+				Explicit: err.Error(),
+			})
+		}
+
 		if err := config.Validate.Struct(body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
 				Success:  false,
@@ -125,7 +125,6 @@ func CreateUser(client *ent.Client) fiber.Handler {
 
 		hash, err := bcrypt.HashPassword(body.Password)
 
-		// TODO : Status à vérifier
 		if err != nil {
 			return c.Status(500).JSON(request.ErrorRequest{
 				Success:  false,

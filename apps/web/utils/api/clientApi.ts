@@ -17,4 +17,17 @@ if (typeof window !== 'undefined') {
 
     return config;
   });
+
+  clientApi.interceptors.response.use(
+    (response) => {
+      // Si la réponse contient data.data, on remonte data directement
+      if (response.data && response.data.data !== undefined) {
+        response.data = response.data.data;
+      }
+      return response;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
 }

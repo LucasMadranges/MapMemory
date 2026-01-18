@@ -5,13 +5,14 @@ import (
 	"github.com/LucasMadranges/MapMemory/ent/user"
 	"github.com/LucasMadranges/MapMemory/internal/config"
 	"github.com/LucasMadranges/MapMemory/utils/request"
+	"github.com/LucasMadranges/MapMemory/utils/validation"
 	"github.com/gofiber/fiber/v2"
 )
 
 // Login godoc
 // @Summary User login
 // @Description Authenticate user with email and password
-// @Tags auth
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param credentials body LoginDTO true "Login credentials"
@@ -24,10 +25,20 @@ import (
 func Login(client *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var body LoginDTO
+
+		if err := validation.ValidatePassword(config.Validate); err != nil {
+			return c.Status(400).JSON(request.ErrorRequest{
+				Success:  false,
+				Message:  "Corps de requête invalide",
+				Explicit: err.Error(),
+			})
+		}
+
 		if err := c.BodyParser(&body); err != nil {
 			return c.Status(400).JSON(request.ErrorRequest{
-				Success: false,
-				Message: "Corps de requête invalide",
+				Success:  false,
+				Message:  "Corps de requête invalide",
+				Explicit: err.Error(),
 			})
 		}
 

@@ -15,6 +15,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/LucasMadranges/MapMemory/ent/maintype"
+	"github.com/LucasMadranges/MapMemory/ent/memory"
+	"github.com/LucasMadranges/MapMemory/ent/subtype"
 	"github.com/LucasMadranges/MapMemory/ent/user"
 )
 
@@ -23,6 +27,12 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// MainType is the client for interacting with the MainType builders.
+	MainType *MainTypeClient
+	// Memory is the client for interacting with the Memory builders.
+	Memory *MemoryClient
+	// SubType is the client for interacting with the SubType builders.
+	SubType *SubTypeClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -36,6 +46,9 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.MainType = NewMainTypeClient(c.config)
+	c.Memory = NewMemoryClient(c.config)
+	c.SubType = NewSubTypeClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -127,9 +140,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		User:   NewUserClient(cfg),
+		ctx:      ctx,
+		config:   cfg,
+		MainType: NewMainTypeClient(cfg),
+		Memory:   NewMemoryClient(cfg),
+		SubType:  NewSubTypeClient(cfg),
+		User:     NewUserClient(cfg),
 	}, nil
 }
 
@@ -147,16 +163,19 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		User:   NewUserClient(cfg),
+		ctx:      ctx,
+		config:   cfg,
+		MainType: NewMainTypeClient(cfg),
+		Memory:   NewMemoryClient(cfg),
+		SubType:  NewSubTypeClient(cfg),
+		User:     NewUserClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		User.
+//		MainType.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -178,22 +197,529 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.MainType.Use(hooks...)
+	c.Memory.Use(hooks...)
+	c.SubType.Use(hooks...)
 	c.User.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
+	c.MainType.Intercept(interceptors...)
+	c.Memory.Intercept(interceptors...)
+	c.SubType.Intercept(interceptors...)
 	c.User.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *MainTypeMutation:
+		return c.MainType.mutate(ctx, m)
+	case *MemoryMutation:
+		return c.Memory.mutate(ctx, m)
+	case *SubTypeMutation:
+		return c.SubType.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// MainTypeClient is a client for the MainType schema.
+type MainTypeClient struct {
+	config
+}
+
+// NewMainTypeClient returns a client for the MainType from the given config.
+func NewMainTypeClient(c config) *MainTypeClient {
+	return &MainTypeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `maintype.Hooks(f(g(h())))`.
+func (c *MainTypeClient) Use(hooks ...Hook) {
+	c.hooks.MainType = append(c.hooks.MainType, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `maintype.Intercept(f(g(h())))`.
+func (c *MainTypeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MainType = append(c.inters.MainType, interceptors...)
+}
+
+// Create returns a builder for creating a MainType entity.
+func (c *MainTypeClient) Create() *MainTypeCreate {
+	mutation := newMainTypeMutation(c.config, OpCreate)
+	return &MainTypeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MainType entities.
+func (c *MainTypeClient) CreateBulk(builders ...*MainTypeCreate) *MainTypeCreateBulk {
+	return &MainTypeCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MainTypeClient) MapCreateBulk(slice any, setFunc func(*MainTypeCreate, int)) *MainTypeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MainTypeCreateBulk{err: fmt.Errorf("calling to MainTypeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MainTypeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MainTypeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MainType.
+func (c *MainTypeClient) Update() *MainTypeUpdate {
+	mutation := newMainTypeMutation(c.config, OpUpdate)
+	return &MainTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MainTypeClient) UpdateOne(_m *MainType) *MainTypeUpdateOne {
+	mutation := newMainTypeMutation(c.config, OpUpdateOne, withMainType(_m))
+	return &MainTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MainTypeClient) UpdateOneID(id int) *MainTypeUpdateOne {
+	mutation := newMainTypeMutation(c.config, OpUpdateOne, withMainTypeID(id))
+	return &MainTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MainType.
+func (c *MainTypeClient) Delete() *MainTypeDelete {
+	mutation := newMainTypeMutation(c.config, OpDelete)
+	return &MainTypeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MainTypeClient) DeleteOne(_m *MainType) *MainTypeDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MainTypeClient) DeleteOneID(id int) *MainTypeDeleteOne {
+	builder := c.Delete().Where(maintype.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MainTypeDeleteOne{builder}
+}
+
+// Query returns a query builder for MainType.
+func (c *MainTypeClient) Query() *MainTypeQuery {
+	return &MainTypeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMainType},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MainType entity by its id.
+func (c *MainTypeClient) Get(ctx context.Context, id int) (*MainType, error) {
+	return c.Query().Where(maintype.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MainTypeClient) GetX(ctx context.Context, id int) *MainType {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryMemories queries the memories edge of a MainType.
+func (c *MainTypeClient) QueryMemories(_m *MainType) *MemoryQuery {
+	query := (&MemoryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(maintype.Table, maintype.FieldID, id),
+			sqlgraph.To(memory.Table, memory.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, maintype.MemoriesTable, maintype.MemoriesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubTypes queries the sub_types edge of a MainType.
+func (c *MainTypeClient) QuerySubTypes(_m *MainType) *SubTypeQuery {
+	query := (&SubTypeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(maintype.Table, maintype.FieldID, id),
+			sqlgraph.To(subtype.Table, subtype.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, maintype.SubTypesTable, maintype.SubTypesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MainTypeClient) Hooks() []Hook {
+	return c.hooks.MainType
+}
+
+// Interceptors returns the client interceptors.
+func (c *MainTypeClient) Interceptors() []Interceptor {
+	return c.inters.MainType
+}
+
+func (c *MainTypeClient) mutate(ctx context.Context, m *MainTypeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MainTypeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MainTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MainTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MainTypeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MainType mutation op: %q", m.Op())
+	}
+}
+
+// MemoryClient is a client for the Memory schema.
+type MemoryClient struct {
+	config
+}
+
+// NewMemoryClient returns a client for the Memory from the given config.
+func NewMemoryClient(c config) *MemoryClient {
+	return &MemoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `memory.Hooks(f(g(h())))`.
+func (c *MemoryClient) Use(hooks ...Hook) {
+	c.hooks.Memory = append(c.hooks.Memory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `memory.Intercept(f(g(h())))`.
+func (c *MemoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Memory = append(c.inters.Memory, interceptors...)
+}
+
+// Create returns a builder for creating a Memory entity.
+func (c *MemoryClient) Create() *MemoryCreate {
+	mutation := newMemoryMutation(c.config, OpCreate)
+	return &MemoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Memory entities.
+func (c *MemoryClient) CreateBulk(builders ...*MemoryCreate) *MemoryCreateBulk {
+	return &MemoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemoryClient) MapCreateBulk(slice any, setFunc func(*MemoryCreate, int)) *MemoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemoryCreateBulk{err: fmt.Errorf("calling to MemoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Memory.
+func (c *MemoryClient) Update() *MemoryUpdate {
+	mutation := newMemoryMutation(c.config, OpUpdate)
+	return &MemoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MemoryClient) UpdateOne(_m *Memory) *MemoryUpdateOne {
+	mutation := newMemoryMutation(c.config, OpUpdateOne, withMemory(_m))
+	return &MemoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MemoryClient) UpdateOneID(id int) *MemoryUpdateOne {
+	mutation := newMemoryMutation(c.config, OpUpdateOne, withMemoryID(id))
+	return &MemoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Memory.
+func (c *MemoryClient) Delete() *MemoryDelete {
+	mutation := newMemoryMutation(c.config, OpDelete)
+	return &MemoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MemoryClient) DeleteOne(_m *Memory) *MemoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MemoryClient) DeleteOneID(id int) *MemoryDeleteOne {
+	builder := c.Delete().Where(memory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MemoryDeleteOne{builder}
+}
+
+// Query returns a query builder for Memory.
+func (c *MemoryClient) Query() *MemoryQuery {
+	return &MemoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMemory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Memory entity by its id.
+func (c *MemoryClient) Get(ctx context.Context, id int) (*Memory, error) {
+	return c.Query().Where(memory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MemoryClient) GetX(ctx context.Context, id int) *Memory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryMainType queries the main_type edge of a Memory.
+func (c *MemoryClient) QueryMainType(_m *Memory) *MainTypeQuery {
+	query := (&MainTypeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memory.Table, memory.FieldID, id),
+			sqlgraph.To(maintype.Table, maintype.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, memory.MainTypeTable, memory.MainTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubType queries the sub_type edge of a Memory.
+func (c *MemoryClient) QuerySubType(_m *Memory) *SubTypeQuery {
+	query := (&SubTypeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(memory.Table, memory.FieldID, id),
+			sqlgraph.To(subtype.Table, subtype.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, memory.SubTypeTable, memory.SubTypeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MemoryClient) Hooks() []Hook {
+	return c.hooks.Memory
+}
+
+// Interceptors returns the client interceptors.
+func (c *MemoryClient) Interceptors() []Interceptor {
+	return c.inters.Memory
+}
+
+func (c *MemoryClient) mutate(ctx context.Context, m *MemoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MemoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MemoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MemoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MemoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Memory mutation op: %q", m.Op())
+	}
+}
+
+// SubTypeClient is a client for the SubType schema.
+type SubTypeClient struct {
+	config
+}
+
+// NewSubTypeClient returns a client for the SubType from the given config.
+func NewSubTypeClient(c config) *SubTypeClient {
+	return &SubTypeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `subtype.Hooks(f(g(h())))`.
+func (c *SubTypeClient) Use(hooks ...Hook) {
+	c.hooks.SubType = append(c.hooks.SubType, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `subtype.Intercept(f(g(h())))`.
+func (c *SubTypeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SubType = append(c.inters.SubType, interceptors...)
+}
+
+// Create returns a builder for creating a SubType entity.
+func (c *SubTypeClient) Create() *SubTypeCreate {
+	mutation := newSubTypeMutation(c.config, OpCreate)
+	return &SubTypeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SubType entities.
+func (c *SubTypeClient) CreateBulk(builders ...*SubTypeCreate) *SubTypeCreateBulk {
+	return &SubTypeCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SubTypeClient) MapCreateBulk(slice any, setFunc func(*SubTypeCreate, int)) *SubTypeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SubTypeCreateBulk{err: fmt.Errorf("calling to SubTypeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SubTypeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SubTypeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SubType.
+func (c *SubTypeClient) Update() *SubTypeUpdate {
+	mutation := newSubTypeMutation(c.config, OpUpdate)
+	return &SubTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SubTypeClient) UpdateOne(_m *SubType) *SubTypeUpdateOne {
+	mutation := newSubTypeMutation(c.config, OpUpdateOne, withSubType(_m))
+	return &SubTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SubTypeClient) UpdateOneID(id int) *SubTypeUpdateOne {
+	mutation := newSubTypeMutation(c.config, OpUpdateOne, withSubTypeID(id))
+	return &SubTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SubType.
+func (c *SubTypeClient) Delete() *SubTypeDelete {
+	mutation := newSubTypeMutation(c.config, OpDelete)
+	return &SubTypeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SubTypeClient) DeleteOne(_m *SubType) *SubTypeDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SubTypeClient) DeleteOneID(id int) *SubTypeDeleteOne {
+	builder := c.Delete().Where(subtype.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SubTypeDeleteOne{builder}
+}
+
+// Query returns a query builder for SubType.
+func (c *SubTypeClient) Query() *SubTypeQuery {
+	return &SubTypeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSubType},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SubType entity by its id.
+func (c *SubTypeClient) Get(ctx context.Context, id int) (*SubType, error) {
+	return c.Query().Where(subtype.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SubTypeClient) GetX(ctx context.Context, id int) *SubType {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryMainTypes queries the main_types edge of a SubType.
+func (c *SubTypeClient) QueryMainTypes(_m *SubType) *MainTypeQuery {
+	query := (&MainTypeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subtype.Table, subtype.FieldID, id),
+			sqlgraph.To(maintype.Table, maintype.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subtype.MainTypesTable, subtype.MainTypesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemories queries the memories edge of a SubType.
+func (c *SubTypeClient) QueryMemories(_m *SubType) *MemoryQuery {
+	query := (&MemoryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subtype.Table, subtype.FieldID, id),
+			sqlgraph.To(memory.Table, memory.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, subtype.MemoriesTable, subtype.MemoriesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SubTypeClient) Hooks() []Hook {
+	return c.hooks.SubType
+}
+
+// Interceptors returns the client interceptors.
+func (c *SubTypeClient) Interceptors() []Interceptor {
+	return c.inters.SubType
+}
+
+func (c *SubTypeClient) mutate(ctx context.Context, m *SubTypeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SubTypeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SubTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SubTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SubTypeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown SubType mutation op: %q", m.Op())
 	}
 }
 
@@ -333,9 +859,9 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		User []ent.Hook
+		MainType, Memory, SubType, User []ent.Hook
 	}
 	inters struct {
-		User []ent.Interceptor
+		MainType, Memory, SubType, User []ent.Interceptor
 	}
 )

@@ -1,12 +1,12 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 import z from 'zod';
 
 import { LoginFormErrors, loginSchema } from '../../utils/form/login';
 import Button from '../button/Button';
-import Input from '../Input/Input';
+import Input from '../input/Input';
 import Loading from '../loading/Loading';
 
 export default function FormLogin() {
@@ -16,6 +16,7 @@ export default function FormLogin() {
   const [errorMsg, setErrorMsg] = useState<LoginFormErrors>({});
   const [disabled, setDisabled] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     try {
@@ -38,20 +39,21 @@ export default function FormLogin() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: email,
-          password: password,
+          email,
+          password,
         }),
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         toast.error(data.message, { duration: 5000 });
         setDisabled(false);
         return;
       }
 
       toast.success('Connexion réussie ! Redirection dans 5 secondes...', { duration: 5000 });
+
       setTimeout(() => {
         router.push('/');
       }, 5000);
@@ -63,9 +65,15 @@ export default function FormLogin() {
     }
   }
 
+  useEffect(() => {
+    if (searchParams.get('redirect') === 'unauthorized') {
+      toast.error('Vous devez être connecté pour accéder à cette page', { duration: 5000 });
+    }
+  }, [searchParams]);
+
   return (
     <>
-      <form className={'flex flex-col gap-8 w-full'} onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={'flex flex-col gap-8 w-full'}>
         <Input
           value={email}
           setValue={setEmail}
@@ -89,6 +97,7 @@ export default function FormLogin() {
         <Button
           disabled={disabled}
           variant={'primary'}
+          type={'submit'}
           className={'w-full flex items-center justify-center h-10'}
         >
           {!loading && !disabled && 'Se connecter'}

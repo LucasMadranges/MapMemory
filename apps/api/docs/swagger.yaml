@@ -13,6 +13,32 @@ definitions:
       - email
       - password
     type: object
+  mainType.CreateMainTypeDto:
+    properties:
+      color:
+        example: '#000000'
+        type: string
+      label:
+        example: Restaurant
+        maxLength: 25
+        type: string
+    required:
+      - color
+      - label
+    type: object
+  mainType.UpdateMainTypeDto:
+    properties:
+      color:
+        example: '#000000'
+        type: string
+      label:
+        example: Restaurant
+        maxLength: 25
+        type: string
+    required:
+      - color
+      - label
+    type: object
   request.ErrorRequest:
     properties:
       explicit:
@@ -52,6 +78,45 @@ definitions:
       success:
         example: true
         type: boolean
+    type: object
+  request.SuccessUpdateRequest:
+    properties:
+      count:
+        example: 0
+        type: integer
+      success:
+        example: true
+        type: boolean
+    type: object
+  subType.CreateSubTypeDto:
+    properties:
+      color:
+        example: '#000000'
+        type: string
+      label:
+        example: Buffet à volonté
+        maxLength: 25
+        type: string
+      main_type_id:
+        example: 1
+        type: integer
+    required:
+      - color
+      - label
+      - main_type_id
+    type: object
+  subType.UpdateSubTypeDto:
+    properties:
+      color:
+        example: '#000000'
+        type: string
+      label:
+        example: Buffet à volonté
+        maxLength: 25
+        type: string
+    required:
+      - color
+      - label
     type: object
   user.CreateUserDTO:
     properties:
@@ -134,7 +199,280 @@ paths:
             $ref: '#/definitions/request.ErrorRequest'
       summary: User login
       tags:
-        - auth
+        - Auth
+  /mainTypes:
+    get:
+      description: Retrieve a list of all main types
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Récupérer toutes les catégories
+          schema:
+            $ref: '#/definitions/request.SuccessGetAllRequest'
+        '400':
+          description: Échec de la récupération des catégories
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Get all main types
+      tags:
+        - MainTypes
+    post:
+      consumes:
+        - application/json
+      description: Create a new main type
+      parameters:
+        - description: mainType payload
+          in: body
+          name: mainType
+          required: true
+          schema:
+            $ref: '#/definitions/mainType.CreateMainTypeDto'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Catégorie créé avec succés
+          schema:
+            $ref: '#/definitions/request.SuccessCreateRequest'
+        '400':
+          description: Données invalides
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '409':
+          description: Catégorie déjà existante
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Create mainType
+      tags:
+        - MainTypes
+  /mainTypes/{mainTypeId}:
+    delete:
+      description: Delete a main type by id
+      parameters:
+        - description: Main Type ID
+          in: path
+          name: mainTypeId
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Catégorie supprimée avec succés
+          schema:
+            $ref: '#/definitions/request.SuccessDeleteRequest'
+        '400':
+          description: ID invalide
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '404':
+          description: Catégorie non trouvée
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Delete main type by id
+      tags:
+        - MainTypes
+    put:
+      consumes:
+        - application/json
+      description: Update an existing main type by mainTypeId
+      parameters:
+        - description: MainType ID
+          in: path
+          name: mainTypeId
+          required: true
+          type: integer
+        - description: mainType payload
+          in: body
+          name: mainType
+          required: true
+          schema:
+            $ref: '#/definitions/mainType.UpdateMainTypeDto'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Catégorie mise à jour avec succés
+          schema:
+            $ref: '#/definitions/request.SuccessUpdateRequest'
+        '400':
+          description: Données invalides
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '404':
+          description: Catégorie non trouvée
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Update mainType by mainTypeId
+      tags:
+        - MainTypes
+  /subTypes:
+    get:
+      description: Retrieve a list of all sub types
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Récupérer toutes les sous-catégories
+          schema:
+            $ref: '#/definitions/request.SuccessGetAllRequest'
+        '400':
+          description: Échec de la récupération des sous-catégories
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Get all subTypes
+      tags:
+        - SubTypes
+    post:
+      consumes:
+        - application/json
+      description: Create a new sub type
+      parameters:
+        - description: subType payload
+          in: body
+          name: subType
+          required: true
+          schema:
+            $ref: '#/definitions/subType.CreateSubTypeDto'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Sous-catégorie créé avec succés
+          schema:
+            $ref: '#/definitions/request.SuccessCreateRequest'
+        '400':
+          description: Données invalides
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '409':
+          description: Sous-catégorie déjà existante
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Create subType
+      tags:
+        - SubTypes
+  /subTypes/{mainTypeId}:
+    get:
+      description: Retrieve a list of all sub types for a specific main type ID
+      parameters:
+        - description: MainType ID
+          in: path
+          name: mainTypeId
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Récupérer toutes les sous-catégories d'une catégorie
+          schema:
+            $ref: '#/definitions/request.SuccessGetAllRequest'
+        '400':
+          description: Échec de la récupération des sous-catégories
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Get all subTypes by main type ID
+      tags:
+        - SubTypes
+  /subTypes/{subTypeId}:
+    delete:
+      description: Delete a subtype by id
+      parameters:
+        - description: Subtype ID
+          in: path
+          name: subTypeId
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Sous-catégorie supprimée avec succés
+          schema:
+            $ref: '#/definitions/request.SuccessDeleteRequest'
+        '400':
+          description: ID invalide
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '404':
+          description: Sous-catégorie non trouvée
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Delete subtype by id
+      tags:
+        - SubTypes
+    put:
+      consumes:
+        - application/json
+      description: Update an existing sub type by subTypeId
+      parameters:
+        - description: Subtype ID
+          in: path
+          name: subTypeId
+          required: true
+          type: integer
+        - description: subType payload
+          in: body
+          name: subType
+          required: true
+          schema:
+            $ref: '#/definitions/subType.UpdateSubTypeDto'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Sous-catégorie mise à jour avec succés
+          schema:
+            $ref: '#/definitions/request.SuccessUpdateRequest'
+        '400':
+          description: Données invalides
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '404':
+          description: Sous-catégorie non trouvée
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+        '500':
+          description: Erreur interne
+          schema:
+            $ref: '#/definitions/request.ErrorRequest'
+      summary: Update subType by subTypeId
+      tags:
+        - SubTypes
   /users:
     get:
       description: Retrieve a list of all users
@@ -144,9 +482,7 @@ paths:
         '201':
           description: Récupérer tous les utilisateurs
           schema:
-            items:
-              $ref: '#/definitions/request.SuccessGetAllRequest'
-            type: array
+            $ref: '#/definitions/request.SuccessGetAllRequest'
         '400':
           description: Échec de la récupération des utilisateurs
           schema:
@@ -236,9 +572,7 @@ paths:
         '201':
           description: Récupérer un utilisateur par email
           schema:
-            items:
-              $ref: '#/definitions/request.SuccessGetAllRequest'
-            type: array
+            $ref: '#/definitions/request.SuccessGetAllRequest'
         '400':
           description: Échec de la récupération de l'utilisateur
           schema:

@@ -7,10 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/LucasMadranges/MapMemory/ent/maintype"
+	"github.com/LucasMadranges/MapMemory/ent/memory"
 	"github.com/LucasMadranges/MapMemory/ent/predicate"
+	"github.com/LucasMadranges/MapMemory/ent/subtype"
 	"github.com/LucasMadranges/MapMemory/ent/user"
 	"github.com/google/uuid"
 )
@@ -24,8 +28,1803 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeUser = "User"
+	TypeMainType = "MainType"
+	TypeMemory   = "Memory"
+	TypeSubType  = "SubType"
+	TypeUser     = "User"
 )
+
+// MainTypeMutation represents an operation that mutates the MainType nodes in the graph.
+type MainTypeMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *int
+	label            *string
+	color            *string
+	clearedFields    map[string]struct{}
+	memories         map[int]struct{}
+	removedmemories  map[int]struct{}
+	clearedmemories  bool
+	sub_types        map[int]struct{}
+	removedsub_types map[int]struct{}
+	clearedsub_types bool
+	done             bool
+	oldValue         func(context.Context) (*MainType, error)
+	predicates       []predicate.MainType
+}
+
+var _ ent.Mutation = (*MainTypeMutation)(nil)
+
+// maintypeOption allows management of the mutation configuration using functional options.
+type maintypeOption func(*MainTypeMutation)
+
+// newMainTypeMutation creates new mutation for the MainType entity.
+func newMainTypeMutation(c config, op Op, opts ...maintypeOption) *MainTypeMutation {
+	m := &MainTypeMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeMainType,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withMainTypeID sets the ID field of the mutation.
+func withMainTypeID(id int) maintypeOption {
+	return func(m *MainTypeMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *MainType
+		)
+		m.oldValue = func(ctx context.Context) (*MainType, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().MainType.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withMainType sets the old MainType of the mutation.
+func withMainType(node *MainType) maintypeOption {
+	return func(m *MainTypeMutation) {
+		m.oldValue = func(context.Context) (*MainType, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m MainTypeMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m MainTypeMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *MainTypeMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *MainTypeMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().MainType.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetLabel sets the "label" field.
+func (m *MainTypeMutation) SetLabel(s string) {
+	m.label = &s
+}
+
+// Label returns the value of the "label" field in the mutation.
+func (m *MainTypeMutation) Label() (r string, exists bool) {
+	v := m.label
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLabel returns the old "label" field's value of the MainType entity.
+// If the MainType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MainTypeMutation) OldLabel(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLabel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLabel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLabel: %w", err)
+	}
+	return oldValue.Label, nil
+}
+
+// ResetLabel resets all changes to the "label" field.
+func (m *MainTypeMutation) ResetLabel() {
+	m.label = nil
+}
+
+// SetColor sets the "color" field.
+func (m *MainTypeMutation) SetColor(s string) {
+	m.color = &s
+}
+
+// Color returns the value of the "color" field in the mutation.
+func (m *MainTypeMutation) Color() (r string, exists bool) {
+	v := m.color
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldColor returns the old "color" field's value of the MainType entity.
+// If the MainType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MainTypeMutation) OldColor(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldColor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldColor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldColor: %w", err)
+	}
+	return oldValue.Color, nil
+}
+
+// ResetColor resets all changes to the "color" field.
+func (m *MainTypeMutation) ResetColor() {
+	m.color = nil
+}
+
+// AddMemoryIDs adds the "memories" edge to the Memory entity by ids.
+func (m *MainTypeMutation) AddMemoryIDs(ids ...int) {
+	if m.memories == nil {
+		m.memories = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.memories[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMemories clears the "memories" edge to the Memory entity.
+func (m *MainTypeMutation) ClearMemories() {
+	m.clearedmemories = true
+}
+
+// MemoriesCleared reports if the "memories" edge to the Memory entity was cleared.
+func (m *MainTypeMutation) MemoriesCleared() bool {
+	return m.clearedmemories
+}
+
+// RemoveMemoryIDs removes the "memories" edge to the Memory entity by IDs.
+func (m *MainTypeMutation) RemoveMemoryIDs(ids ...int) {
+	if m.removedmemories == nil {
+		m.removedmemories = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.memories, ids[i])
+		m.removedmemories[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMemories returns the removed IDs of the "memories" edge to the Memory entity.
+func (m *MainTypeMutation) RemovedMemoriesIDs() (ids []int) {
+	for id := range m.removedmemories {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MemoriesIDs returns the "memories" edge IDs in the mutation.
+func (m *MainTypeMutation) MemoriesIDs() (ids []int) {
+	for id := range m.memories {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMemories resets all changes to the "memories" edge.
+func (m *MainTypeMutation) ResetMemories() {
+	m.memories = nil
+	m.clearedmemories = false
+	m.removedmemories = nil
+}
+
+// AddSubTypeIDs adds the "sub_types" edge to the SubType entity by ids.
+func (m *MainTypeMutation) AddSubTypeIDs(ids ...int) {
+	if m.sub_types == nil {
+		m.sub_types = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.sub_types[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSubTypes clears the "sub_types" edge to the SubType entity.
+func (m *MainTypeMutation) ClearSubTypes() {
+	m.clearedsub_types = true
+}
+
+// SubTypesCleared reports if the "sub_types" edge to the SubType entity was cleared.
+func (m *MainTypeMutation) SubTypesCleared() bool {
+	return m.clearedsub_types
+}
+
+// RemoveSubTypeIDs removes the "sub_types" edge to the SubType entity by IDs.
+func (m *MainTypeMutation) RemoveSubTypeIDs(ids ...int) {
+	if m.removedsub_types == nil {
+		m.removedsub_types = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.sub_types, ids[i])
+		m.removedsub_types[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSubTypes returns the removed IDs of the "sub_types" edge to the SubType entity.
+func (m *MainTypeMutation) RemovedSubTypesIDs() (ids []int) {
+	for id := range m.removedsub_types {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SubTypesIDs returns the "sub_types" edge IDs in the mutation.
+func (m *MainTypeMutation) SubTypesIDs() (ids []int) {
+	for id := range m.sub_types {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSubTypes resets all changes to the "sub_types" edge.
+func (m *MainTypeMutation) ResetSubTypes() {
+	m.sub_types = nil
+	m.clearedsub_types = false
+	m.removedsub_types = nil
+}
+
+// Where appends a list predicates to the MainTypeMutation builder.
+func (m *MainTypeMutation) Where(ps ...predicate.MainType) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the MainTypeMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *MainTypeMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.MainType, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *MainTypeMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *MainTypeMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (MainType).
+func (m *MainTypeMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *MainTypeMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.label != nil {
+		fields = append(fields, maintype.FieldLabel)
+	}
+	if m.color != nil {
+		fields = append(fields, maintype.FieldColor)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *MainTypeMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case maintype.FieldLabel:
+		return m.Label()
+	case maintype.FieldColor:
+		return m.Color()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *MainTypeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case maintype.FieldLabel:
+		return m.OldLabel(ctx)
+	case maintype.FieldColor:
+		return m.OldColor(ctx)
+	}
+	return nil, fmt.Errorf("unknown MainType field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MainTypeMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case maintype.FieldLabel:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLabel(v)
+		return nil
+	case maintype.FieldColor:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetColor(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MainType field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *MainTypeMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *MainTypeMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MainTypeMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown MainType numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *MainTypeMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *MainTypeMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *MainTypeMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown MainType nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *MainTypeMutation) ResetField(name string) error {
+	switch name {
+	case maintype.FieldLabel:
+		m.ResetLabel()
+		return nil
+	case maintype.FieldColor:
+		m.ResetColor()
+		return nil
+	}
+	return fmt.Errorf("unknown MainType field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *MainTypeMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.memories != nil {
+		edges = append(edges, maintype.EdgeMemories)
+	}
+	if m.sub_types != nil {
+		edges = append(edges, maintype.EdgeSubTypes)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *MainTypeMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case maintype.EdgeMemories:
+		ids := make([]ent.Value, 0, len(m.memories))
+		for id := range m.memories {
+			ids = append(ids, id)
+		}
+		return ids
+	case maintype.EdgeSubTypes:
+		ids := make([]ent.Value, 0, len(m.sub_types))
+		for id := range m.sub_types {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *MainTypeMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.removedmemories != nil {
+		edges = append(edges, maintype.EdgeMemories)
+	}
+	if m.removedsub_types != nil {
+		edges = append(edges, maintype.EdgeSubTypes)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *MainTypeMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case maintype.EdgeMemories:
+		ids := make([]ent.Value, 0, len(m.removedmemories))
+		for id := range m.removedmemories {
+			ids = append(ids, id)
+		}
+		return ids
+	case maintype.EdgeSubTypes:
+		ids := make([]ent.Value, 0, len(m.removedsub_types))
+		for id := range m.removedsub_types {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *MainTypeMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedmemories {
+		edges = append(edges, maintype.EdgeMemories)
+	}
+	if m.clearedsub_types {
+		edges = append(edges, maintype.EdgeSubTypes)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *MainTypeMutation) EdgeCleared(name string) bool {
+	switch name {
+	case maintype.EdgeMemories:
+		return m.clearedmemories
+	case maintype.EdgeSubTypes:
+		return m.clearedsub_types
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *MainTypeMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown MainType unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *MainTypeMutation) ResetEdge(name string) error {
+	switch name {
+	case maintype.EdgeMemories:
+		m.ResetMemories()
+		return nil
+	case maintype.EdgeSubTypes:
+		m.ResetSubTypes()
+		return nil
+	}
+	return fmt.Errorf("unknown MainType edge %s", name)
+}
+
+// MemoryMutation represents an operation that mutates the Memory nodes in the graph.
+type MemoryMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *int
+	label            *string
+	description      *string
+	price            *float64
+	addprice         *float64
+	created_at       *time.Time
+	updated_at       *time.Time
+	clearedFields    map[string]struct{}
+	main_type        *int
+	clearedmain_type bool
+	sub_type         *int
+	clearedsub_type  bool
+	done             bool
+	oldValue         func(context.Context) (*Memory, error)
+	predicates       []predicate.Memory
+}
+
+var _ ent.Mutation = (*MemoryMutation)(nil)
+
+// memoryOption allows management of the mutation configuration using functional options.
+type memoryOption func(*MemoryMutation)
+
+// newMemoryMutation creates new mutation for the Memory entity.
+func newMemoryMutation(c config, op Op, opts ...memoryOption) *MemoryMutation {
+	m := &MemoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeMemory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withMemoryID sets the ID field of the mutation.
+func withMemoryID(id int) memoryOption {
+	return func(m *MemoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Memory
+		)
+		m.oldValue = func(ctx context.Context) (*Memory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Memory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withMemory sets the old Memory of the mutation.
+func withMemory(node *Memory) memoryOption {
+	return func(m *MemoryMutation) {
+		m.oldValue = func(context.Context) (*Memory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m MemoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m MemoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *MemoryMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *MemoryMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Memory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetLabel sets the "label" field.
+func (m *MemoryMutation) SetLabel(s string) {
+	m.label = &s
+}
+
+// Label returns the value of the "label" field in the mutation.
+func (m *MemoryMutation) Label() (r string, exists bool) {
+	v := m.label
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLabel returns the old "label" field's value of the Memory entity.
+// If the Memory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemoryMutation) OldLabel(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLabel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLabel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLabel: %w", err)
+	}
+	return oldValue.Label, nil
+}
+
+// ResetLabel resets all changes to the "label" field.
+func (m *MemoryMutation) ResetLabel() {
+	m.label = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *MemoryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *MemoryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Memory entity.
+// If the Memory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemoryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *MemoryMutation) ResetDescription() {
+	m.description = nil
+}
+
+// SetPrice sets the "price" field.
+func (m *MemoryMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *MemoryMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the Memory entity.
+// If the Memory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemoryMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *MemoryMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *MemoryMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *MemoryMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *MemoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *MemoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Memory entity.
+// If the Memory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *MemoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *MemoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *MemoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Memory entity.
+// If the Memory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *MemoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetMainTypeID sets the "main_type" edge to the MainType entity by id.
+func (m *MemoryMutation) SetMainTypeID(id int) {
+	m.main_type = &id
+}
+
+// ClearMainType clears the "main_type" edge to the MainType entity.
+func (m *MemoryMutation) ClearMainType() {
+	m.clearedmain_type = true
+}
+
+// MainTypeCleared reports if the "main_type" edge to the MainType entity was cleared.
+func (m *MemoryMutation) MainTypeCleared() bool {
+	return m.clearedmain_type
+}
+
+// MainTypeID returns the "main_type" edge ID in the mutation.
+func (m *MemoryMutation) MainTypeID() (id int, exists bool) {
+	if m.main_type != nil {
+		return *m.main_type, true
+	}
+	return
+}
+
+// MainTypeIDs returns the "main_type" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// MainTypeID instead. It exists only for internal usage by the builders.
+func (m *MemoryMutation) MainTypeIDs() (ids []int) {
+	if id := m.main_type; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMainType resets all changes to the "main_type" edge.
+func (m *MemoryMutation) ResetMainType() {
+	m.main_type = nil
+	m.clearedmain_type = false
+}
+
+// SetSubTypeID sets the "sub_type" edge to the SubType entity by id.
+func (m *MemoryMutation) SetSubTypeID(id int) {
+	m.sub_type = &id
+}
+
+// ClearSubType clears the "sub_type" edge to the SubType entity.
+func (m *MemoryMutation) ClearSubType() {
+	m.clearedsub_type = true
+}
+
+// SubTypeCleared reports if the "sub_type" edge to the SubType entity was cleared.
+func (m *MemoryMutation) SubTypeCleared() bool {
+	return m.clearedsub_type
+}
+
+// SubTypeID returns the "sub_type" edge ID in the mutation.
+func (m *MemoryMutation) SubTypeID() (id int, exists bool) {
+	if m.sub_type != nil {
+		return *m.sub_type, true
+	}
+	return
+}
+
+// SubTypeIDs returns the "sub_type" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SubTypeID instead. It exists only for internal usage by the builders.
+func (m *MemoryMutation) SubTypeIDs() (ids []int) {
+	if id := m.sub_type; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSubType resets all changes to the "sub_type" edge.
+func (m *MemoryMutation) ResetSubType() {
+	m.sub_type = nil
+	m.clearedsub_type = false
+}
+
+// Where appends a list predicates to the MemoryMutation builder.
+func (m *MemoryMutation) Where(ps ...predicate.Memory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the MemoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *MemoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Memory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *MemoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *MemoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Memory).
+func (m *MemoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *MemoryMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.label != nil {
+		fields = append(fields, memory.FieldLabel)
+	}
+	if m.description != nil {
+		fields = append(fields, memory.FieldDescription)
+	}
+	if m.price != nil {
+		fields = append(fields, memory.FieldPrice)
+	}
+	if m.created_at != nil {
+		fields = append(fields, memory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, memory.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *MemoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case memory.FieldLabel:
+		return m.Label()
+	case memory.FieldDescription:
+		return m.Description()
+	case memory.FieldPrice:
+		return m.Price()
+	case memory.FieldCreatedAt:
+		return m.CreatedAt()
+	case memory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *MemoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case memory.FieldLabel:
+		return m.OldLabel(ctx)
+	case memory.FieldDescription:
+		return m.OldDescription(ctx)
+	case memory.FieldPrice:
+		return m.OldPrice(ctx)
+	case memory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case memory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown Memory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MemoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case memory.FieldLabel:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLabel(v)
+		return nil
+	case memory.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case memory.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case memory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case memory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Memory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *MemoryMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, memory.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *MemoryMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case memory.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MemoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case memory.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Memory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *MemoryMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *MemoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *MemoryMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Memory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *MemoryMutation) ResetField(name string) error {
+	switch name {
+	case memory.FieldLabel:
+		m.ResetLabel()
+		return nil
+	case memory.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case memory.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case memory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case memory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown Memory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *MemoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.main_type != nil {
+		edges = append(edges, memory.EdgeMainType)
+	}
+	if m.sub_type != nil {
+		edges = append(edges, memory.EdgeSubType)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *MemoryMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case memory.EdgeMainType:
+		if id := m.main_type; id != nil {
+			return []ent.Value{*id}
+		}
+	case memory.EdgeSubType:
+		if id := m.sub_type; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *MemoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *MemoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *MemoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedmain_type {
+		edges = append(edges, memory.EdgeMainType)
+	}
+	if m.clearedsub_type {
+		edges = append(edges, memory.EdgeSubType)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *MemoryMutation) EdgeCleared(name string) bool {
+	switch name {
+	case memory.EdgeMainType:
+		return m.clearedmain_type
+	case memory.EdgeSubType:
+		return m.clearedsub_type
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *MemoryMutation) ClearEdge(name string) error {
+	switch name {
+	case memory.EdgeMainType:
+		m.ClearMainType()
+		return nil
+	case memory.EdgeSubType:
+		m.ClearSubType()
+		return nil
+	}
+	return fmt.Errorf("unknown Memory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *MemoryMutation) ResetEdge(name string) error {
+	switch name {
+	case memory.EdgeMainType:
+		m.ResetMainType()
+		return nil
+	case memory.EdgeSubType:
+		m.ResetSubType()
+		return nil
+	}
+	return fmt.Errorf("unknown Memory edge %s", name)
+}
+
+// SubTypeMutation represents an operation that mutates the SubType nodes in the graph.
+type SubTypeMutation struct {
+	config
+	op                Op
+	typ               string
+	id                *int
+	label             *string
+	color             *string
+	clearedFields     map[string]struct{}
+	main_types        *int
+	clearedmain_types bool
+	memories          map[int]struct{}
+	removedmemories   map[int]struct{}
+	clearedmemories   bool
+	done              bool
+	oldValue          func(context.Context) (*SubType, error)
+	predicates        []predicate.SubType
+}
+
+var _ ent.Mutation = (*SubTypeMutation)(nil)
+
+// subtypeOption allows management of the mutation configuration using functional options.
+type subtypeOption func(*SubTypeMutation)
+
+// newSubTypeMutation creates new mutation for the SubType entity.
+func newSubTypeMutation(c config, op Op, opts ...subtypeOption) *SubTypeMutation {
+	m := &SubTypeMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeSubType,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withSubTypeID sets the ID field of the mutation.
+func withSubTypeID(id int) subtypeOption {
+	return func(m *SubTypeMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *SubType
+		)
+		m.oldValue = func(ctx context.Context) (*SubType, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().SubType.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withSubType sets the old SubType of the mutation.
+func withSubType(node *SubType) subtypeOption {
+	return func(m *SubTypeMutation) {
+		m.oldValue = func(context.Context) (*SubType, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m SubTypeMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m SubTypeMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *SubTypeMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *SubTypeMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().SubType.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetLabel sets the "label" field.
+func (m *SubTypeMutation) SetLabel(s string) {
+	m.label = &s
+}
+
+// Label returns the value of the "label" field in the mutation.
+func (m *SubTypeMutation) Label() (r string, exists bool) {
+	v := m.label
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLabel returns the old "label" field's value of the SubType entity.
+// If the SubType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubTypeMutation) OldLabel(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLabel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLabel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLabel: %w", err)
+	}
+	return oldValue.Label, nil
+}
+
+// ResetLabel resets all changes to the "label" field.
+func (m *SubTypeMutation) ResetLabel() {
+	m.label = nil
+}
+
+// SetColor sets the "color" field.
+func (m *SubTypeMutation) SetColor(s string) {
+	m.color = &s
+}
+
+// Color returns the value of the "color" field in the mutation.
+func (m *SubTypeMutation) Color() (r string, exists bool) {
+	v := m.color
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldColor returns the old "color" field's value of the SubType entity.
+// If the SubType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubTypeMutation) OldColor(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldColor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldColor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldColor: %w", err)
+	}
+	return oldValue.Color, nil
+}
+
+// ResetColor resets all changes to the "color" field.
+func (m *SubTypeMutation) ResetColor() {
+	m.color = nil
+}
+
+// SetMainTypesID sets the "main_types" edge to the MainType entity by id.
+func (m *SubTypeMutation) SetMainTypesID(id int) {
+	m.main_types = &id
+}
+
+// ClearMainTypes clears the "main_types" edge to the MainType entity.
+func (m *SubTypeMutation) ClearMainTypes() {
+	m.clearedmain_types = true
+}
+
+// MainTypesCleared reports if the "main_types" edge to the MainType entity was cleared.
+func (m *SubTypeMutation) MainTypesCleared() bool {
+	return m.clearedmain_types
+}
+
+// MainTypesID returns the "main_types" edge ID in the mutation.
+func (m *SubTypeMutation) MainTypesID() (id int, exists bool) {
+	if m.main_types != nil {
+		return *m.main_types, true
+	}
+	return
+}
+
+// MainTypesIDs returns the "main_types" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// MainTypesID instead. It exists only for internal usage by the builders.
+func (m *SubTypeMutation) MainTypesIDs() (ids []int) {
+	if id := m.main_types; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMainTypes resets all changes to the "main_types" edge.
+func (m *SubTypeMutation) ResetMainTypes() {
+	m.main_types = nil
+	m.clearedmain_types = false
+}
+
+// AddMemoryIDs adds the "memories" edge to the Memory entity by ids.
+func (m *SubTypeMutation) AddMemoryIDs(ids ...int) {
+	if m.memories == nil {
+		m.memories = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.memories[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMemories clears the "memories" edge to the Memory entity.
+func (m *SubTypeMutation) ClearMemories() {
+	m.clearedmemories = true
+}
+
+// MemoriesCleared reports if the "memories" edge to the Memory entity was cleared.
+func (m *SubTypeMutation) MemoriesCleared() bool {
+	return m.clearedmemories
+}
+
+// RemoveMemoryIDs removes the "memories" edge to the Memory entity by IDs.
+func (m *SubTypeMutation) RemoveMemoryIDs(ids ...int) {
+	if m.removedmemories == nil {
+		m.removedmemories = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.memories, ids[i])
+		m.removedmemories[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMemories returns the removed IDs of the "memories" edge to the Memory entity.
+func (m *SubTypeMutation) RemovedMemoriesIDs() (ids []int) {
+	for id := range m.removedmemories {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MemoriesIDs returns the "memories" edge IDs in the mutation.
+func (m *SubTypeMutation) MemoriesIDs() (ids []int) {
+	for id := range m.memories {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMemories resets all changes to the "memories" edge.
+func (m *SubTypeMutation) ResetMemories() {
+	m.memories = nil
+	m.clearedmemories = false
+	m.removedmemories = nil
+}
+
+// Where appends a list predicates to the SubTypeMutation builder.
+func (m *SubTypeMutation) Where(ps ...predicate.SubType) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the SubTypeMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *SubTypeMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.SubType, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *SubTypeMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *SubTypeMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (SubType).
+func (m *SubTypeMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *SubTypeMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.label != nil {
+		fields = append(fields, subtype.FieldLabel)
+	}
+	if m.color != nil {
+		fields = append(fields, subtype.FieldColor)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *SubTypeMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case subtype.FieldLabel:
+		return m.Label()
+	case subtype.FieldColor:
+		return m.Color()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *SubTypeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case subtype.FieldLabel:
+		return m.OldLabel(ctx)
+	case subtype.FieldColor:
+		return m.OldColor(ctx)
+	}
+	return nil, fmt.Errorf("unknown SubType field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SubTypeMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case subtype.FieldLabel:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLabel(v)
+		return nil
+	case subtype.FieldColor:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetColor(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SubType field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *SubTypeMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *SubTypeMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SubTypeMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown SubType numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *SubTypeMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *SubTypeMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *SubTypeMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown SubType nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *SubTypeMutation) ResetField(name string) error {
+	switch name {
+	case subtype.FieldLabel:
+		m.ResetLabel()
+		return nil
+	case subtype.FieldColor:
+		m.ResetColor()
+		return nil
+	}
+	return fmt.Errorf("unknown SubType field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *SubTypeMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.main_types != nil {
+		edges = append(edges, subtype.EdgeMainTypes)
+	}
+	if m.memories != nil {
+		edges = append(edges, subtype.EdgeMemories)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *SubTypeMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case subtype.EdgeMainTypes:
+		if id := m.main_types; id != nil {
+			return []ent.Value{*id}
+		}
+	case subtype.EdgeMemories:
+		ids := make([]ent.Value, 0, len(m.memories))
+		for id := range m.memories {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *SubTypeMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.removedmemories != nil {
+		edges = append(edges, subtype.EdgeMemories)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *SubTypeMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case subtype.EdgeMemories:
+		ids := make([]ent.Value, 0, len(m.removedmemories))
+		for id := range m.removedmemories {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *SubTypeMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedmain_types {
+		edges = append(edges, subtype.EdgeMainTypes)
+	}
+	if m.clearedmemories {
+		edges = append(edges, subtype.EdgeMemories)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *SubTypeMutation) EdgeCleared(name string) bool {
+	switch name {
+	case subtype.EdgeMainTypes:
+		return m.clearedmain_types
+	case subtype.EdgeMemories:
+		return m.clearedmemories
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *SubTypeMutation) ClearEdge(name string) error {
+	switch name {
+	case subtype.EdgeMainTypes:
+		m.ClearMainTypes()
+		return nil
+	}
+	return fmt.Errorf("unknown SubType unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *SubTypeMutation) ResetEdge(name string) error {
+	switch name {
+	case subtype.EdgeMainTypes:
+		m.ResetMainTypes()
+		return nil
+	case subtype.EdgeMemories:
+		m.ResetMemories()
+		return nil
+	}
+	return fmt.Errorf("unknown SubType edge %s", name)
+}
 
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {

@@ -6,6 +6,8 @@ import (
 	"github.com/LucasMadranges/MapMemory/auth"
 	"github.com/LucasMadranges/MapMemory/ent"
 	"github.com/LucasMadranges/MapMemory/internal/config"
+	"github.com/LucasMadranges/MapMemory/mainType"
+	"github.com/LucasMadranges/MapMemory/subType"
 	"github.com/LucasMadranges/MapMemory/user"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -40,6 +42,8 @@ func main() {
 	/* NOTE : Routes */
 	auth.RegisterAuthRoutes(app, client)
 	user.RegisterUserRoutes(app, client)
+	mainType.RegisterMainTypeRoutes(app, client)
+	subType.RegisterSubTypeRoutes(app, client)
 
 	log.Fatal(app.Listen(":4000"))
 }

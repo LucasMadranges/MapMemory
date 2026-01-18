@@ -3,7 +3,12 @@
 package ent
 
 import (
+	"time"
+
+	"github.com/LucasMadranges/MapMemory/ent/maintype"
+	"github.com/LucasMadranges/MapMemory/ent/memory"
 	"github.com/LucasMadranges/MapMemory/ent/schema"
+	"github.com/LucasMadranges/MapMemory/ent/subtype"
 	"github.com/LucasMadranges/MapMemory/ent/user"
 	"github.com/google/uuid"
 )
@@ -12,6 +17,138 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	maintypeFields := schema.MainType{}.Fields()
+	_ = maintypeFields
+	// maintypeDescLabel is the schema descriptor for label field.
+	maintypeDescLabel := maintypeFields[0].Descriptor()
+	// maintype.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	maintype.LabelValidator = func() func(string) error {
+		validators := maintypeDescLabel.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(label string) error {
+			for _, fn := range fns {
+				if err := fn(label); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// maintypeDescColor is the schema descriptor for color field.
+	maintypeDescColor := maintypeFields[1].Descriptor()
+	// maintype.ColorValidator is a validator for the "color" field. It is called by the builders before save.
+	maintype.ColorValidator = func() func(string) error {
+		validators := maintypeDescColor.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+			validators[2].(func(string) error),
+		}
+		return func(color string) error {
+			for _, fn := range fns {
+				if err := fn(color); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	memoryFields := schema.Memory{}.Fields()
+	_ = memoryFields
+	// memoryDescLabel is the schema descriptor for label field.
+	memoryDescLabel := memoryFields[0].Descriptor()
+	// memory.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	memory.LabelValidator = func() func(string) error {
+		validators := memoryDescLabel.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(label string) error {
+			for _, fn := range fns {
+				if err := fn(label); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// memoryDescDescription is the schema descriptor for description field.
+	memoryDescDescription := memoryFields[1].Descriptor()
+	// memory.DefaultDescription holds the default value on creation for the description field.
+	memory.DefaultDescription = memoryDescDescription.Default.(string)
+	// memory.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
+	memory.DescriptionValidator = func() func(string) error {
+		validators := memoryDescDescription.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(description string) error {
+			for _, fn := range fns {
+				if err := fn(description); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// memoryDescPrice is the schema descriptor for price field.
+	memoryDescPrice := memoryFields[2].Descriptor()
+	// memory.PriceValidator is a validator for the "price" field. It is called by the builders before save.
+	memory.PriceValidator = memoryDescPrice.Validators[0].(func(float64) error)
+	// memoryDescCreatedAt is the schema descriptor for created_at field.
+	memoryDescCreatedAt := memoryFields[3].Descriptor()
+	// memory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	memory.DefaultCreatedAt = memoryDescCreatedAt.Default.(func() time.Time)
+	// memoryDescUpdatedAt is the schema descriptor for updated_at field.
+	memoryDescUpdatedAt := memoryFields[4].Descriptor()
+	// memory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	memory.DefaultUpdatedAt = memoryDescUpdatedAt.Default.(func() time.Time)
+	// memory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	memory.UpdateDefaultUpdatedAt = memoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	subtypeFields := schema.SubType{}.Fields()
+	_ = subtypeFields
+	// subtypeDescLabel is the schema descriptor for label field.
+	subtypeDescLabel := subtypeFields[0].Descriptor()
+	// subtype.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	subtype.LabelValidator = func() func(string) error {
+		validators := subtypeDescLabel.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(label string) error {
+			for _, fn := range fns {
+				if err := fn(label); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// subtypeDescColor is the schema descriptor for color field.
+	subtypeDescColor := subtypeFields[1].Descriptor()
+	// subtype.ColorValidator is a validator for the "color" field. It is called by the builders before save.
+	subtype.ColorValidator = func() func(string) error {
+		validators := subtypeDescColor.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+			validators[2].(func(string) error),
+		}
+		return func(color string) error {
+			for _, fn := range fns {
+				if err := fn(color); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescFirstname is the schema descriptor for firstname field.
