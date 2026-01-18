@@ -16,9 +16,19 @@ export default function LateralMapForm({
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [mainTypes, setMainTypes] = useState<MultiSelectTypes[]>([]);
-  const [selectedMainTypes, setSelectedMainTypes] = useState<MultiSelectTypes[]>([]);
+  const [selectedMainTypes, setSelectedMainTypes] = useState<MultiSelectTypes>({
+    id: null,
+    color: '',
+    label: '',
+    value: undefined,
+  });
   const [subTypes, setSubTypes] = useState<MultiSelectTypes[]>([]);
-  const [selectedSubTypes, setSelectedSubTypes] = useState<MultiSelectTypes[]>([]);
+  const [selectedSubTypes, setSelectedSubTypes] = useState<MultiSelectTypes>({
+    id: null,
+    color: '',
+    label: '',
+    value: undefined,
+  });
   const [subTypesDisabled, setSubTypesDisabled] = useState(true);
 
   useEffect(() => {
@@ -34,22 +44,30 @@ export default function LateralMapForm({
     getMainTypes();
   }, []);
 
-  console.log(mainTypes);
-  console.log(selectedMainTypes);
+  console.log('MainTypes:', mainTypes);
+  console.log('SelectedMainTypes:', selectedMainTypes);
 
-  /*  useEffect(() => {
+  useEffect(() => {
     async function getSubTypes() {
+      if (!selectedMainTypes?.id) {
+        setSubTypes([]);
+        setSubTypesDisabled(true);
+        return;
+      }
+
       try {
-        const response = await clientApi.get(`/subTypes/${selectedMainTypes[0].value}`);
+        setSubTypes(selectedMainTypes?.edges?.sub_types);
+        console.log('SubTypes data:', subTypes);
         setSubTypesDisabled(false);
-        setSubTypes(response.data);
       } catch (error) {
         console.error('Erreur lors du chargement des sous-catégories:', error);
+        setSubTypes([]);
+        setSubTypesDisabled(true);
       }
     }
 
     getSubTypes();
-  }, [selectedMainTypes]);*/
+  }, [selectedMainTypes?.id]);
 
   return (
     <div className={'flex-1'}>

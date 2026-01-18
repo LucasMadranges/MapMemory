@@ -1,11 +1,11 @@
 import { AxiosError } from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { api } from '../../../utils/api/api';
+import { api } from '../../../../utils/api/api';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, { params }: { params: { mainTypeId: string } }) {
   try {
-    const mainTypeId = request.nextUrl.searchParams.get('mainTypeId');
+    const { mainTypeId } = params;
 
     if (!mainTypeId) {
       return NextResponse.json({ error: 'mainTypeId is required' }, { status: 400 });
@@ -15,6 +15,9 @@ export async function GET(request: NextRequest) {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
+
+    console.log('API data');
+    console.log(data);
 
     return NextResponse.json(data);
   } catch (error) {

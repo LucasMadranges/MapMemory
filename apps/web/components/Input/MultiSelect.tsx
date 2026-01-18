@@ -22,8 +22,10 @@ export default function MultiSelect({
   options: MultiSelectTypes[];
   label?: string;
   placeholder: string;
-  value: MultiSelectTypes[];
-  setValue: React.Dispatch<React.SetStateAction<MultiSelectTypes[]>>;
+  value: MultiSelectTypes | MultiSelectTypes[];
+  setValue:
+    | React.Dispatch<React.SetStateAction<MultiSelectTypes>>
+    | React.Dispatch<React.SetStateAction<MultiSelectTypes[]>>;
   errorMessage?: string | undefined;
   className?: string;
   disabled?: boolean;
@@ -36,8 +38,8 @@ export default function MultiSelect({
         instanceId={name}
         name={'label'}
         id={'label'}
-        value={value}
-        onChange={(newValue) => setValue(newValue as MultiSelectTypes[])}
+        value={value ?? (type === 'multi' ? [] : null)}
+        onChange={(newValue) => setValue(newValue as never)}
         placeholder={placeholder}
         options={options}
         isDisabled={disabled}
